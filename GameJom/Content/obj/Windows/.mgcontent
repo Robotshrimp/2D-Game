@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/jiaao/OneDrive/GameJom/GameJom/Content/../../../Pictures/Bogos Font.png</File>
+    <File>C:/Users/jiaao/OneDrive/GameJom/GameJom/Content/../../../Pictures/font(hold).png</File>
+    <File>C:/Users/jiaao/OneDrive/GameJom/GameJom/Content/../../../Pictures/font(pressed).png</File>
+    <File>C:/Users/jiaao/OneDrive/GameJom/GameJom/Content/../../../Pictures/Font.png</File>
+    <File>C:/Users/jiaao/OneDrive/GameJom/GameJom/Content/BasicShape.png</File>
+    <File>C:/Users/jiaao/OneDrive/GameJom/GameJom/Content/transparent.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File>Bogos Font.png</File>
+    <File>font(hold).png</File>
+    <File>font(pressed).png</File>
+    <File>Font.png</File>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>

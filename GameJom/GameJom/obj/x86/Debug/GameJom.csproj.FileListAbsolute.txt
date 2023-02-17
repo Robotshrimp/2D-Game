@@ -1,0 +1,2 @@
+C:\Users\jiaao\Downloads\Game-main\GameJom\GameJom\obj\x86\Debug\GameJom.csprojAssemblyReference.cache
+C:\Users\jiaao\Downloads\Game-main\GameJom\GameJom\obj\x86\Debug\GameJom.csproj.CoreCompileInputs.cache
