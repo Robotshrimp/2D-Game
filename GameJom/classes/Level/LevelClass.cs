@@ -13,7 +13,8 @@ namespace GameJom
     public class LevelClass: Game1
 
     { 
-        List<Room> Rooms= new List<Room>();
+        protected List<Room> Rooms= new List<Room>();
+        int CurrentRoom;
         List<Texture2D> GraphicsAssets;
         public LevelClass()
         {}
@@ -39,33 +40,20 @@ namespace GameJom
             string[] roomData = data.Split('&');
             foreach (string Room in roomData)
             {
-                Rooms.Add(new Room(Room, this));
+                if(Room != "")
+                {
+                    Rooms.Add(new Room(Room, this));
+                }
             }
-        }
-        public void AddRoom()
-        {
-            // TODO: takes a set of cordnet and place a new room at that location(might be good to allow rooms to overlap to have mid room transitions
         }
         public void Runtime()
         {
-            foreach (Room room in Rooms)
+            foreach (Room room in Rooms) // systematicly updates each room, any room updates MUST be here with exception of special rooms that must be singled out
             {
-                if (room.Clicked(Mouse.GetState().Position, Mouse.GetState().MiddleButton == ButtonState.Pressed))
-                {
-                    // TODO: make pop up system and require confermation before deletion
-                }
+                
             }
+            Rooms[CurrentRoom].load();
             // TODO: updates the rooms
-        }
-        public void Save(string saveLocation) // output any level information from runtime to folder
-        {
-            // code to convert every room to text format
-            string roomfile = Rooms[0].Save();
-            for(int n = 1; n < Rooms.Count; n++)
-            {
-                roomfile += '&' + Rooms[n].Save();
-            }
-            // there's actrually no reason to save anything other than the room files, the texture files are only needed to load in and has no change done to them in runtime 
         }
     }
 }

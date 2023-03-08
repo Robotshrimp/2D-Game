@@ -69,15 +69,12 @@ namespace GameJom
         {
             return (yIntercept + (slope * x));
         }
-
-
-
-
+        
         public void DrawLine()
         {
-            // might be useful to have specific function for draw
+            // TODO add integration for automated draw
             spriteBatch.Begin();
-            spriteBatch.Draw(Game1.BasicTexture, null, new Rectangle(start.X, start.Y, length, thiccness), null, new Vector2(0, 0), angle, null, Color.Black);
+            spriteBatch.Draw(Game1.BasicTexture, null, new Rectangle(start.X, start.Y, length, thiccness), null, new Vector2(0, 0), angle, null, Color.White);
             spriteBatch.End();
         }
     }

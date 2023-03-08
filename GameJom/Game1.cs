@@ -70,14 +70,16 @@ namespace GameJom
         Texture2D Text1;
         Texture2D Text2;
         Texture2D Text3;
+        Texture2D Griddy;
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             BasicTexture = Content.Load<Texture2D>("BasicShape");
             clas.Load("bad poggie"); 
-            Text1 = Content.Load<Texture2D>("Font");
+            Text1 = Content.Load<Texture2D>("font(hold)");
             Text2 = Content.Load<Texture2D>("font(hold)");
             Text3 = Content.Load<Texture2D>("font(pressed)");
+            Griddy = Content.Load<Texture2D>("transparent");
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
         }
@@ -126,13 +128,15 @@ namespace GameJom
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        
+
+        float test = 0;
+        float roati = 0;
         protected override void Draw(GameTime gameTime)
         {
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
             // Background color
-            GraphicsDevice.Clear(Color.Gray);
+            GraphicsDevice.Clear(Color.Black);
             if (GameState == 2)
             {
                 GraphicsDevice.Clear(Color.Black);
@@ -150,9 +154,53 @@ namespace GameJom
             MainCamera.mDraw(new Rectangle(-1500, -1500, 100, 100), BasicTexture);
             MainCamera.mDraw(Player, BasicTexture, Color.Gray);
 
+
+
+            spriteBatch.End();
+
+            #region 3d
+
+            _3D_Because_Why_Not.Cuboid cube = new _3D_Because_Why_Not.Cuboid();
+            //cube.DrawCuboid(new Vector3((float)Math.Cos(test), (float)Math.Sin(test), (float)Math.Sin(test) + 15), new Vector3(2, 2, 2), 100, 5, 3, new Vector2(-test, test));
+            if (Keyboard.GetState().IsKeyDown(Keys.H))
+            {
+                roati += (float).03;
+            }
+            cube.DrawCuboid(new Vector3(1, -3, 8), new Vector3(2, 2, 2), 100, 5, 3, new Vector3(-test - (float)Math.PI / 3, (float)Math.PI / 5, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-3, -3, 8), new Vector3(2, 2, 2), 100, 5, 3, new Vector3(test , (float)Math.PI / 5, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(1, 1, 8), new Vector3(2, 2, 2), 100, 5, 3, new Vector3(-test, (float)Math.PI / 5, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-3, 1, 8), new Vector3(2, 2, 2), 100, 5, 3, new Vector3(test + (float)Math.PI / 3, (float)Math.PI / 5, (float)Math.PI / 4));
+
+            cube.DrawCuboid(new Vector3(-1, -1, 7), new Vector3(2, 2, 2), 100, 5, 3, new Vector3(test, (float)Math.PI / 5, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-1, -1, 8), new Vector3(2, 2, 2), 100, 5, 3, new Vector3(test * 2, (float)Math.PI / 5, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-1, -1, 9), new Vector3(2, 2, 2), 100, 5, 3, new Vector3(test * 3, (float)Math.PI / 5, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-1, -1, 10), new Vector3(2, 2, 2), 100, 5, 3, new Vector3(test * 4, (float)Math.PI / 5, (float)Math.PI / 4));
+
+            //cube.DrawCuboid(new Vector3(-(float)0.5 + 3 * (float)Math.Cos(test * 16), -(float)0.5, 10 + 3 * (float)Math.Sin(test * 16)), new Vector3(1, 1, 1), 100, 5, 3, new Vector3(-test * 3, (float)Math.PI / 5, (float)Math.PI / 4));
+            //cube.DrawCuboid(new Vector3(-(float)0.5 + 4 * (float)Math.Cos(test * 12), -(float)0.5, 10 + 4 * (float)Math.Sin(test * 12)), new Vector3(1, 1, 1), 100, 5, 3, new Vector3(-test * 4, (float)Math.PI / 5, (float)Math.PI / 4));
+            //cube.DrawCuboid(new Vector3(-(float)0.5 + 5 * (float)Math.Cos(test * 8), -(float)0.5, 10 + 5 * (float)Math.Sin(test * 8)), new Vector3(1, 1, 1), 100, 5, 3, new Vector3(-test * 5, (float)Math.PI / 5, (float)Math.PI / 4));
+            //cube.DrawCuboid(new Vector3(-(float)0.5 + 6 * (float)Math.Cos(test * 4), -(float)0.5, 10 + 6 * (float)Math.Sin(test * 4)), new Vector3(1, 1, 1), 100, 5, 3, new Vector3(-test * 6, (float)Math.PI / 5, (float)Math.PI / 4));
+            double n = 0.4;
+            cube.DrawCuboid(new Vector3(-(float)0.5 - 3 * (float)Math.Cos(test + 4 * n), -(float)0.5 + 3 * (float)Math.Cos(test + 4 * n), 10 + 3 * (float)Math.Sin(test + 4 * n)), new Vector3(1, 1, 1), 100, 5, 3, new Vector3(-test * 3, (float)Math.PI / 5, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-(float)0.5 - 4 * (float)Math.Cos(test + 3 * n), -(float)0.5 + 3 * (float)Math.Cos(test + 3 * n), 10 + 4 * (float)Math.Sin(test + 3 * n)), new Vector3(1, 1, 1), 100, 5, 3, new Vector3(-test * 4, (float)Math.PI / 5, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-(float)0.5 - 5 * (float)Math.Cos(test + 2 * n), -(float)0.5 + 3 * (float)Math.Cos(test + 2 * n), 10 + 5 * (float)Math.Sin(test + 2 * n)), new Vector3(1, 1, 1), 100, 5, 3, new Vector3(-test * 5, (float)Math.PI / 5, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-(float)0.5 - 6 * (float)Math.Cos(test + 1 * n), -(float)0.5 + 3 * (float)Math.Cos(test + 1 * n), 10 + 6 * (float)Math.Sin(test + 1 * n)), new Vector3(1, 1, 1), 100, 5, 3, new Vector3(-test * 6, (float)Math.PI / 5, (float)Math.PI / 4));
+
+            cube.DrawCuboid(new Vector3(-(float)0.5 + 3 * (float)Math.Cos(test + 4 * n), -(float)0.5 + 3 * (float)Math.Cos(test + 4 * n), 10 - 3 * (float)Math.Sin(test + 4 * n)), new Vector3(1, 1, 1), 100, 5, 3, new Vector3(-test * 3, (float)Math.PI / 5, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-(float)0.5 + 4 * (float)Math.Cos(test + 3 * n), -(float)0.5 + 3 * (float)Math.Cos(test + 3 * n), 10 - 4 * (float)Math.Sin(test + 3 * n)), new Vector3(1, 1, 1), 100, 5, 3, new Vector3(-test * 4, (float)Math.PI / 5, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-(float)0.5 + 5 * (float)Math.Cos(test + 2 * n), -(float)0.5 + 3 * (float)Math.Cos(test + 2 * n), 10 - 5 * (float)Math.Sin(test + 2 * n)), new Vector3(1, 1, 1), 100, 5, 3, new Vector3(-test * 5, (float)Math.PI / 5, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-(float)0.5 + 6 * (float)Math.Cos(test + 1 * n), -(float)0.5 + 3 * (float)Math.Cos(test + 1 * n), 10 - 6 * (float)Math.Sin(test + 1 * n)), new Vector3(1, 1, 1), 100, 5, 3, new Vector3(-test * 6, (float)Math.PI / 5, (float)Math.PI / 4));
+
+            test += (float)0.01;
+
+            #endregion
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
+
+
             #region UI
 
-            textFormat.Print(Base, XMousePos.ToString() + "  "+Base.DisplayRectangle(new Rectangle(XMousePos, YMousePos, 30, 40)).Y.ToString(), new Point());
+            //textFormat.Print(Base, XMousePos.ToString() + "  "+Base.DisplayRectangle(new Rectangle(XMousePos, YMousePos, 30, 40)).Y.ToString() + " " + roati, new Point());
             Button bobama = new Button(Base, textFormat, new Point(0, 200), "bobama", GameState == 2);
             bobama.TextButtonUpdate(Text3);
             if (bobama.pressedLeft)
@@ -179,6 +227,8 @@ namespace GameJom
                 Exit();
             }
 
+            InfiniTexture inf = new InfiniTexture(MainCamera);
+            inf.griddify(new Point(96, 96), Griddy, new Point());
 
             Base.mDraw(new Rectangle(XMousePos, YMousePos, 30, 40), BasicTexture);
             spriteBatch.Draw(BasicTexture, new Rectangle(0, 0, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
@@ -186,49 +236,7 @@ namespace GameJom
             spriteBatch.End();
             #endregion
 
-            /*
-            _3D_Because_Why_Not._3D_Renderer _3DEngine = new _3D_Because_Why_Not._3D_Renderer(100);
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                _3DEngine.UpdateLocation(new Vector3(-0.05f, 0, 0));
-                //_3DEngine.UpdateDirection(new Vector2(0.02f, 0));
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                _3DEngine.UpdateLocation(new Vector3(0.05f, 0, 0));
-                //_3DEngine.UpdateDirection(new Vector2(-0.02f, 0));
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                _3DEngine.UpdateLocation(new Vector3(0,  0, -0.05f));
-                //_3DEngine.UpdateDirection(new Vector2(0, 0.02f));
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                _3DEngine.UpdateLocation(new Vector3(0,0, 0.05f));
-                //_3DEngine.UpdateDirection(new Vector2(0, -0.02f));
-            int depth = 10;
-            int depth2 = 12;
-            Vector3 corner1_1 = new Vector3(1, 1, depth);
-            Vector3 corner1_2 = new Vector3(-1, 1, depth);
-            Vector3 corner1_3 = new Vector3(-1, -1, depth);
-            Vector3 corner1_4 = new Vector3(1, -1, depth);
-            Vector3 corner2_1 = new Vector3(1, 1, depth2);
-            Vector3 corner2_2 = new Vector3(-1, 1, depth2);
-            Vector3 corner2_3 = new Vector3(-1, -1, depth2);
-            Vector3 corner2_4 = new Vector3(1, -1, depth2);
-            _3DEngine.renderLine(corner1_1, corner2_1, 3).DrawLine();
-            _3DEngine.renderLine(corner1_2, corner2_2, 3).DrawLine();
-            _3DEngine.renderLine(corner1_4, corner2_4, 3).DrawLine();
-            _3DEngine.renderLine(corner1_3, corner2_3, 3).DrawLine();
-
-            _3DEngine.renderLine(corner1_1, corner1_2, 3).DrawLine();
-            _3DEngine.renderLine(corner1_1, corner1_4, 3).DrawLine();
-            _3DEngine.renderLine(corner1_3, corner1_2, 3).DrawLine();
-            _3DEngine.renderLine(corner1_3, corner1_4, 3).DrawLine();
-
-            _3DEngine.renderLine(corner2_1, corner2_2, 3).DrawLine();
-            _3DEngine.renderLine(corner2_1, corner2_4, 3).DrawLine();
-            _3DEngine.renderLine(corner2_3, corner2_2, 3).DrawLine();
-            _3DEngine.renderLine(corner2_3, corner2_4, 3).DrawLine();
-            AutomatedLine line = new AutomatedLine(new AutomatedDraw());
-            line.DrawLine(_3DEngine.renderLine(corner1_3, corner2_3, 3));
-            */
-            LineClass linedraw = new LineClass(new Point(1, 2), new Point(3, 3), 3);
-            linedraw.Function(-10);
+            
             //linedraw.DrawLine();
             //Base.draw(new Rectangle(300, 300, 1000, 300), PlayerTexture);
             base.Draw(gameTime);

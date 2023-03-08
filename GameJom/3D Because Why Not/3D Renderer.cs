@@ -82,9 +82,19 @@ namespace GameJom._3D_Because_Why_Not
             return angleLocation;
         }
 
-        public LineClass renderLine(Vector3 start, Vector3 end, int thiccness = 1)
+        public void RenderLine(Vector3 start, Vector3 end, int thiccness = 1)
         {
-            return new LineClass(ScreenProjection(CoordnetConvert(start)), ScreenProjection(CoordnetConvert(end)), thiccness);
+            new LineClass(ScreenProjection(CoordnetConvert(start)), ScreenProjection(CoordnetConvert(end)), thiccness).DrawLine();
+        }
+        public void RenderSegmentedLine(Vector3 start, Vector3 end, int segments, int thiccness = 1)
+        {
+            Vector3 beginning = start;
+            for(int n = 0; n < segments; n++)
+            {
+                Vector3 traversed = new Vector3((end.X - start.X) / segments, (end.Y - start.Y) / segments, (end.Z - start.Z) / segments);
+                RenderLine(beginning, beginning + traversed, thiccness);
+                beginning += traversed;
+            }
         }
     }
 }

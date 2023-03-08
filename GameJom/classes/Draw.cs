@@ -12,8 +12,8 @@ namespace GameJom
         static Point CalculationScreenSize = Game1.calculationScreenSize;
         //constructor variables
 
-        Rectangle DisplayLocation;//bounding box of where the sprites will be rendered, anythng outside this rectangle is not drawn
-        Point Centering; // 
+        public Rectangle DisplayLocation;//bounding box of where the sprites will be rendered, anythng outside this rectangle is not drawn
+        public Point Centering; // 
         Color Color;
         public double Zoom;
         public bool Drawn;
@@ -112,7 +112,7 @@ namespace GameJom
 
 
 
-        public Rectangle DisplayRectangle(Rectangle locationShape)
+        public Rectangle DisplayRectangle(Rectangle locationShape) //changes the rectangle as it is represented in the computational side into the rechtangle as it should be on the screen
         {
 
             return new Rectangle(
