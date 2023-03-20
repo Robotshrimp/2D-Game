@@ -5,13 +5,12 @@ namespace GameJom
 {
     public class PrintManager
     {
-        Texture2D font;
+        static Texture2D font = Game1.Text1;
         int spacing;
         Color color;
         public Point fontSize;
-        public PrintManager(Texture2D Font, int Spacing, Color Color, Point FontSize)
+        public PrintManager(int Spacing, Color Color, Point FontSize)
         {
-            this.font = Font;
             this.spacing = Spacing;
             this.color = Color;
             this.fontSize = FontSize;
@@ -61,7 +60,7 @@ namespace GameJom
 
         public void D_printCharacter(AutomatedDraw Draw,Rectangle Location, Texture2D Font, char Character, Color Color)
         {
-            Draw.mDraw(Location, Font, letterFinder(Character), Color);
+            Draw.Draw(Location, Font, letterFinder(Character), Color);
         }
 
         public Rectangle letterIndex(Point letterCoord)

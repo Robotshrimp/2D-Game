@@ -37,9 +37,9 @@ namespace GameJom
         {
             bool StartHigher = false;
             bool EndHigher = false;
-            if (CrossingLine.start.Y > TraversedLine.Function(CrossingLine.start.X))
+            if (CrossingLine.Start.Y > TraversedLine.Function(CrossingLine.Start.X))
                 StartHigher = true;
-            if (CrossingLine.end.Y > TraversedLine.Function(CrossingLine.end.X))
+            if (CrossingLine.End.Y > TraversedLine.Function(CrossingLine.End.X))
                 StartHigher = true;
             if (StartHigher != EndHigher)
             {

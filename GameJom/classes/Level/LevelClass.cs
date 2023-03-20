@@ -7,21 +7,23 @@ using Microsoft.Xna.Framework;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
 
 namespace GameJom
 {
-    public class LevelClass: Game1
+    public class LevelClass
 
     { 
         protected List<Room> Rooms= new List<Room>();
         int CurrentRoom;
-        List<Texture2D> GraphicsAssets;
+        protected string location;
+        protected List<Texture2D> GraphicsAssets;
         public LevelClass()
         {}
-        public void Load(string Folder) // input any level information from folder to program runtime
+        public void Load(string Folder, ContentManager Content) // input any level information from folder to program runtime
         {
             //this code creates the level template if no level of such name exists
-            string location = @"Content/Levels/" + Folder; // expected level folder location
+            location = @"Content/Levels/" + Folder; // expected level folder location
             if (!Directory.Exists(location)) // level folder, texture folder, and room text file creation
             {
                 Directory.CreateDirectory(location);
@@ -50,9 +52,9 @@ namespace GameJom
         {
             foreach (Room room in Rooms) // systematicly updates each room, any room updates MUST be here with exception of special rooms that must be singled out
             {
+                room.RuntimeUpdate();
                 
             }
-            Rooms[CurrentRoom].load();
             // TODO: updates the rooms
         }
     }

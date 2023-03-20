@@ -5,18 +5,15 @@ using System;
 
 namespace GameJom
 {
-    class LineClass
+    public class LineClass
     {
-
-        Collision collison;
-        static SpriteBatch spriteBatch = Game1.spriteBatch;
-        public Point start { get; private set; }
-        public Point end { get; private set; }
+        public Point Start { get; private set; }
+        public Point End { get; private set; }
         public int thiccness;
 
 
 
-        Point relativePosition;
+        public Point relativePosition;
         public int length;
         public float angle;
         public float slope;
@@ -25,16 +22,16 @@ namespace GameJom
         public LineClass(Point Start, Point End, int Thiccness = 1)
         {
             this.thiccness = Thiccness;
-            this.start = Start;
-            this.end = End;
-            this.relativePosition = this.RelativePosition(start, end);
+            this.Start = Start;
+            this.End = End;
+            this.relativePosition = this.RelativePosition(this.Start, this.End);
             this.length = this.Length(relativePosition);
             this.angle = this.Angle(relativePosition, length);
             this.slope = (float)relativePosition.Y / (float)relativePosition.X;
-            this.yIntercept = start.Y - start.X * slope;
+            this.yIntercept = this.Start.Y - this.Start.X * slope;
         }
 
-        public Point endFinder(Point Start, float Angle, int Length)
+        public Point EndFinder(Point Start, float Angle, int Length)
         {
             int x = (int)(Math.Cos(angle) * length);
             int y = (int)(Math.Sin(angle) * length);
@@ -68,14 +65,6 @@ namespace GameJom
         public float Function(float x)
         {
             return (yIntercept + (slope * x));
-        }
-        
-        public void DrawLine()
-        {
-            // TODO add integration for automated draw
-            spriteBatch.Begin();
-            spriteBatch.Draw(Game1.BasicTexture, null, new Rectangle(start.X, start.Y, length, thiccness), null, new Vector2(0, 0), angle, null, Color.White);
-            spriteBatch.End();
         }
     }
 }

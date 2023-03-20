@@ -45,7 +45,7 @@ namespace GameJom
 
         // the draw code that coombines individrual draw parameters and constructor parameters and draws the result
 
-        public void mDraw(Rectangle locationShape, Texture2D texture, Rectangle usedTexture, Color color)
+        public void Draw(Rectangle locationShape, Texture2D texture, Rectangle usedTexture, Color color)
         {
             if (Drawn)
             {
@@ -64,15 +64,23 @@ namespace GameJom
             }
         }
         // overload
-        public void mDraw(Rectangle locationShape, Texture2D texture, Color color)
+        public void Draw(Rectangle locationShape, Texture2D texture, Color color)
         {
-            mDraw(locationShape, texture, new Rectangle(0, 0, texture.Width, texture.Height), color);
+            Draw(locationShape, texture, new Rectangle(0, 0, texture.Width, texture.Height), color);
         }
-        public void mDraw(Rectangle locationShape, Texture2D texture)
+        public void Draw(Rectangle locationShape, Texture2D texture)
         {
-            mDraw(locationShape, texture, Color);
+            Draw(locationShape, texture, Color);
         }
 
+        public void DrawLine(LineClass line)
+        {
+            // TODO add integration for automated draw
+            line = new LineClass(DisPoint(line.Start), DisPoint(line.End), line.thiccness);
+            spriteBatch.Begin();
+            spriteBatch.Draw(Game1.BasicTexture, null, new Rectangle(line.Start, new Point(line.length, line.thiccness)), null, new Vector2(0, 0), line.angle, null, Color.White);
+            spriteBatch.End();
+        }
 
         public Rectangle RatioRectangle(Vector2 Location, Vector2 Size)// 
         {
@@ -82,27 +90,27 @@ namespace GameJom
         }
 
 
-        public Point PointScale(Point point)
+        public Point DisPoint(Point point)
         {
             return new Point(
-                (int)((point.X - Centering.X) * ScreenSizeAdjustment * Zoom + DisplayLocation.Width / 2) + DisplayLocation.X ,
-                (int)((point.Y - Centering.Y) * ScreenSizeAdjustment * Zoom + DisplayLocation.Height / 2) + DisplayLocation.Y);
+                (int)((point.X - Centering.X) * ScreenSizeAdjustment / Zoom + DisplayLocation.Width / 2) + DisplayLocation.X ,
+                (int)((point.Y - Centering.Y) * ScreenSizeAdjustment / Zoom + DisplayLocation.Height / 2) + DisplayLocation.Y);
         }
 
-        public Point PointUnScale(Point point)
+        public Point CalcPoint(Point point)
         {
             return new Point(
-                (int)((point.X - DisplayLocation.X - DisplayLocation.Width / 2) / (ScreenSizeAdjustment * Zoom)) + Centering.X,
-                (int)((point.Y - DisplayLocation.Y - DisplayLocation.Height / 2) / (ScreenSizeAdjustment * Zoom)) + Centering.Y);
+                (int)((point.X - DisplayLocation.X - DisplayLocation.Width / 2) / ScreenSizeAdjustment * Zoom) + Centering.X,
+                (int)((point.Y - DisplayLocation.Y - DisplayLocation.Height / 2) / ScreenSizeAdjustment * Zoom) + Centering.Y);
         }
 
         public int LenScale(int len)
         {
-            return (int)(len * ScreenSizeAdjustment * Zoom);
+            return (int)(len * ScreenSizeAdjustment / Zoom);
         }
         public int LenUnScale(int len)
         {
-            return (int)(len / (ScreenSizeAdjustment * Zoom));
+            return (int)(len / ScreenSizeAdjustment * Zoom);
         }
 
 
@@ -116,20 +124,18 @@ namespace GameJom
         {
 
             return new Rectangle(
-                    PointScale(locationShape.Location),
+                    DisPoint(locationShape.Location),
                     new Point(LenScale(locationShape.Width), LenScale(locationShape.Height))
                     );
         }
 
         //for calculating where Calculation Rechtangle would be for the given
 
-        public Rectangle DisplayToCalculation(Rectangle displayShape)
+        public Rectangle CalculationRectangle(Rectangle displayShape)
         {
             return new Rectangle(
-                (int)((displayShape.X - DisplayLocation.X - DisplayLocation.Width / 2) / (ScreenSizeAdjustment * Zoom)) + Centering.X,
-                (int)((displayShape.Y - DisplayLocation.Y - DisplayLocation.Height / 2) / (ScreenSizeAdjustment * Zoom)) + Centering.Y,
-                (int)(displayShape.Width / (ScreenSizeAdjustment * Zoom)),
-                (int)(displayShape.Height / (ScreenSizeAdjustment * Zoom))
+                CalcPoint(displayShape.Location),
+                new Point(LenUnScale(displayShape.Width), LenUnScale(displayShape.Height))
                 );
 
         }

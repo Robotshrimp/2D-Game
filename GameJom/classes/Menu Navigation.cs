@@ -6,26 +6,31 @@ namespace GameJom
 {
     public class Menu
     {
+        Dictionary<string, int> buttonName= new Dictionary<string, int>();
         public List<Button> buttons;
-        Texture2D printParam;
-        Texture2D hoverPrint;
-        Texture2D pressPrint;
+        static Texture2D printParam;
+        static Texture2D hoverPrint;
+        static Texture2D pressPrint;
         int spacing;
         bool loaded;
         public Menu(AutomatedDraw DrawParameter, PrintManager Print, string[] Buttons, Point Location, int Spacing, 
-            Texture2D PrintParam, Texture2D HoverPrint, Texture2D PressPrint,
             bool Loaded = true)
         {
             this.buttons = new List<Button>();
             for (int n = 0; n < Buttons.Length; n++)
             {
-                this.buttons.Add(new Button(DrawParameter, Print, new Point(Location.X, Location.Y + ((n - 1) * spacing) + (n  * Print.fontSize.Y)), Buttons[n], true));
+                this.buttons.Add(new Button(DrawParameter, Print, new Point(Location.X, Location.Y + ((n - 1) * spacing) + (n  * Print.fontSize.Y)), Buttons[n], Loaded));
+                buttonName.Add(Buttons[n], n);
             }
-            this.printParam = PrintParam;
-            this.hoverPrint = HoverPrint;
-            this.pressPrint = PressPrint;
             this.spacing = Spacing;
             this.loaded = Loaded;
+        }
+        public void Initialize(Texture2D PrintParam, Texture2D HoverPrint, Texture2D PressPrint)
+        {
+            printParam = PrintParam;
+            hoverPrint = HoverPrint;
+            pressPrint = PressPrint;
+
         }
 
 
@@ -44,6 +49,11 @@ namespace GameJom
                 }
             }
         }
+
+        public bool check(string button)
+        {
+            return buttons[buttonName[button]].PressedCheck();
+        }
     }
     public class AdvButton
     {
@@ -57,7 +67,7 @@ namespace GameJom
             this.hovered = Hovered;
             this.pressed = Pressed;
         }
-        public void drawbutton(Button button)
+        public void Drawbutton(Button button)
         {
             if (button.PressedCheck())
             { button.TextButtonUpdate(pressed); }
@@ -96,8 +106,6 @@ namespace GameJom
         }
         public Button(AutomatedDraw DrawParameters, PrintManager PrintParam, Point TextButtonLocation, string Text, bool Loaded = true)
         {
-            if (Text == "start")
-            { }
             this.drawButton = DrawParameters;
             this.printParam = PrintParam;
             this.loaded = Loaded;
@@ -112,7 +120,7 @@ namespace GameJom
             {
                 pressedLeft = false;
                 pressedRight = false;
-                drawButton.mDraw(button, texture);
+                drawButton.Draw(button, texture);
                 PressedCheck();
             }
         }

@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 
 namespace GameJom
 {
-    public class Room : Game1
+    public class Room
     {
         public enum DataChunks
         {
@@ -17,17 +19,19 @@ namespace GameJom
             grphicalFlare = 2,
 
         }
-        public List<int[,]> TileMaps;
+        public List<int[,]> TileMaps = new List<int[,]>();
         public Rectangle RoomSize;
         public Point DesiredCameraLocation;
+        public LevelClass Preset;
         public Room(string components, LevelClass preset)
         {
+            this.Preset = preset;
             if (components != "")
             {
                 string[] data = components.Split('.');
                 // room data
                 string[] vars = data[(int)DataChunks.room].Split(',');
-                Rectangle room = new Rectangle (int.Parse(vars[0]), int.Parse(vars[1]), int.Parse(vars[2]), int.Parse(vars[3]));
+                RoomSize = new Rectangle (int.Parse(vars[0]), int.Parse(vars[1]), int.Parse(vars[2]), int.Parse(vars[3]));
                 // tilemap data
                 // use room dimenstions to determine where each tile go, this means tiles are stored as 1D not 2d array
                 string[] totalRoomTileData = data[(int)DataChunks.tiles].Split(',');
@@ -36,13 +40,13 @@ namespace GameJom
                 int currentRow = 0;
                 foreach(string tilemapData in totalRoomTileData)
                 {
-                    TileMaps[currentMap] = new int[room.Height,room.Width];
+                    TileMaps.Add(new int[RoomSize.Height,RoomSize.Width]);
                     string[] tiles = tilemapData.Split(' ');
-                    foreach (string tile in totalRoomTileData)
+                    foreach (string tile in tiles)
                     {
-                        if (currentRow > room.Height)
+                        if (currentRow >= RoomSize.Height)
                             break;
-                        if (currentTile > room.Width)
+                        if (currentTile >= RoomSize.Width)
                         {
                             currentRow += 1;
                             currentTile = 0;
@@ -54,30 +58,58 @@ namespace GameJom
                 }
             }
         }
-        public void fill(ref int[,] tileMap, Rectangle fill, int fillNum)
+        public Room(Rectangle Size, LevelClass preset)
         {
-            for(int n = 0; n < fill.Height; n++)
+            this.Preset = preset;
+            int[,] initializationMap = new int[Size.Height, Size.Width];
+            Fill(ref initializationMap, new Rectangle(new Point(), Size.Size), 0);
+            TileMaps.Add(initializationMap);
+            RoomSize = Size;
+        }
+        public static void Fill(ref int[,] tileMap, Rectangle fill, int fillNum)
+        {
+            if (fill.X >= 0 &&
+               fill.Y >= 0 &&
+               fill.Right < tileMap.GetLength(1) &
+               fill.Bottom < tileMap.GetLength(0))
             {
-                for (int m = 0; m < fill.Width; m++)
+                for (int n = 0; n < fill.Height; n++)
                 {
-                    tileMap[fill.Y + n, fill.X + m] = fillNum;
+                    for (int m = 0; m < fill.Width; m++)
+                    {
+                        tileMap[fill.Y + n, fill.X + m] = fillNum;
+                    }
                 }
             }
         }
         // playtime
-        public void load()
+        public void RuntimeUpdate()
         {
             // add ingame interations for when the room is loaded
         }
-
-        // editing functions, ignore if coding playtime features
-        protected void Edit(Point location, int selectedTileMap, int value = 1) // Edits the tilemap
+        public void Draw(AutomatedDraw drawParam, GridTexture gridParam, Texture2D tileTexture)
         {
-            if(location.Y < TileMaps[selectedTileMap].GetLength(0) && location.Y >= 0 && 
-               location.X < TileMaps[selectedTileMap].GetLength(1) && location.X >= 0)
+            foreach (int[,] tilemap in TileMaps)
             {
-                TileMaps[selectedTileMap][location.Y, location.X] = value;
+                for (int n = 0; n < tilemap.GetLength(0); n++)
+                {
+                    for (int m = 0; m < tilemap.GetLength(1); m++)
+                    {
+                        if (tilemap[n,m] == 1)
+                        {
+                            drawParam.Draw(gridParam.GridToScreen(new Rectangle(RoomSize.Location + new Point(m,n), new Point (1,1))), tileTexture);
+                        }
+                    }
+                }
             }
+        }
+        // editing functions, ignore if coding playtime features
+        public void Edit(Point location, int selectedTileMap = 0, int value = 1) // Edits the tilemap
+        {
+            //if(RoomSize.Intersects(new Rectangle(location + RoomSize.Location, new Point(0,0))))
+            //{
+                TileMaps[selectedTileMap][location.Y, location.X] = value;
+            //}
         }
         protected void Resize(Point targetSize, int selectedTileMap) // creates a new array that replaces the old one that retains the information
         {
@@ -104,11 +136,11 @@ namespace GameJom
                         saveData += TileMaps[h][n, m] + " ";
                     }
                 }
-                saveData.TrimEnd(' ');
+                saveData = saveData.Remove(saveData.Length-1);
                 saveData += ',';
             }
 
-            saveData.TrimEnd(',');
+            saveData = saveData.Remove(saveData.Length - 1, 1);
             saveData += ".";
             return saveData; // place holder
         }

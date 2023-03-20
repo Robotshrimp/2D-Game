@@ -44,7 +44,7 @@ namespace GameJom
                 float angle = Side.angle - MovementLine.angle;
                 float newMovement = (float)(Math.Cos(angle) * MovementLine.length);
                 
-                Point newLocation = Side.endFinder(intersectionLocation, angle, (int)(Math.Cos(angle) * new LineClass(intersectionLocation, MovementLine.end).length)); 
+                Point newLocation = Side.EndFinder(intersectionLocation, angle, (int)(Math.Cos(angle) * new LineClass(intersectionLocation, MovementLine.End).length)); 
             }
             return Corner + Direction;
         }

@@ -46,15 +46,14 @@
     <Compile Include="3D Because Why Not\Cuboid.cs" />
     <Compile Include="3D Because Why Not\Triangle.cs" />
     <Compile Include="classes\Level\OnHold Image to Level pipeline.cs" />
-    <Compile Include="classes\Level\procedrual texture.cs" />
+    <Compile Include="classes\Level\GridTexture.cs" />
     <Compile Include="classes\Level\RoomClass.cs" />
     <Compile Include="classes\Level\LevelClass.cs" />
     <Compile Include="Foundational Classes\limit.cs" />
-    <Compile Include="Lines%28not coke%29\AutomatedLine.cs" />
     <Compile Include="classes\Collision.cs" />
     <Compile Include="Foundational Classes\OverlapCheck.cs" />
     <Compile Include="classes\KeyboardInput.cs" />
-    <Compile Include="Lines%28not coke%29\LineClass.cs" />
+    <Compile Include="classes\LineClass.cs" />
     <Compile Include="classes\Level\LevelEditor.cs" />
     <Compile Include="Text\Print.cs" />
     <Compile Include="Foundational Classes\Linear Algebruh.cs" />

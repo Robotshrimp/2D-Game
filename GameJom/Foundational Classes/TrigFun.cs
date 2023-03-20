@@ -9,6 +9,12 @@ namespace GameJom
         {
             return Math.Sqrt(Bases.X * Bases.X + Bases.Y * Bases.Y);
         }
+        public static float DistanceFinder(Vector3 start, Vector3 end)
+        {
+            Vector3 diff = start - end;
+            return (float)pythag_hypotenus(new Vector2((float)pythag_hypotenus(new Vector2(diff.X, diff.Y)), diff.Z));
+
+        }
         public static float Angle2(Vector2 Coordnet) // find the angle of the 2d coordnet from the positive x axis
         {
             double length = pythag_hypotenus(Coordnet);
@@ -33,19 +39,25 @@ namespace GameJom
             double hypotenus = pythag_hypotenus(new Vector2(Coordnet.Z, Coordnet.X));
             return new Vector2((float)XZAngle, Angle2(new Vector2((float)hypotenus, Coordnet.Y))/*this is only for calculating the angle on the z axis, values outside of 90 to -90 degree should be impossible because then the angle on the x-y plain would change instead*/);
         }
-        public Vector3 Rotate3D(Vector3 staringPoint,Vector3 focalPoint, Vector3 rotations)
+        public static Vector3 Rotate3D(Vector3 staringPoint,Vector3 focalPoint, Vector3 baseRotations)
         {
             staringPoint -= focalPoint;
-            Vector2 zypoint = rotate(new Vector2(staringPoint.Z, staringPoint.Y), rotations.Z);
+            Vector2 zypoint = rotate(new Vector2(staringPoint.Z, staringPoint.Y), baseRotations.Z);
             staringPoint.Z = zypoint.X;
             staringPoint.Y = zypoint.Y;
-            Vector2 xypoint = rotate(new Vector2(staringPoint.X, staringPoint.Y), rotations.Y);
+            Vector2 xypoint = rotate(new Vector2(staringPoint.X, staringPoint.Y), baseRotations.Y);
             staringPoint.X = xypoint.X;
             staringPoint.Y = xypoint.Y;
-            Vector2 xzpoint = rotate(new Vector2(staringPoint.X, staringPoint.Z), rotations.X);
+            Vector2 xzpoint = rotate(new Vector2(staringPoint.X, staringPoint.Z), baseRotations.X);
             staringPoint.X = xzpoint.X;
             staringPoint.Z = xzpoint.Y;
             return staringPoint + focalPoint;
+        }
+        public static Vector3 rotate3Dw2D(Vector3 focalPoint, float distance,Vector2 rotaion)
+        {
+            float z = (float)Math.Cos(rotaion.X);
+            float y = (float)Math.Cos(rotaion.Y);
+            return new Vector3(focalPoint.X - distance * (float)Math.Sin(rotaion.X) * y, focalPoint.Y - distance * (float)Math.Sin(rotaion.Y), focalPoint.Z - distance * (z * y));
         }
         public static Vector2 rotate(Vector2 startingPoint, float rotation) // finds the location of a point after rotation
         {
