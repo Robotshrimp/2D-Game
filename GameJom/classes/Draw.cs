@@ -37,8 +37,8 @@ namespace GameJom
         {
 
         }
-        public AutomatedDraw()
-            : this(Game1.ScreenBounds, Color.White)
+        public AutomatedDraw(bool drawn = true, double zoom = 1)
+            : this(Game1.ScreenBounds, Color.White, drawn, zoom)
         {
             
         }
@@ -76,10 +76,10 @@ namespace GameJom
         public void DrawLine(LineClass line)
         {
             // TODO add integration for automated draw
-            line = new LineClass(DisPoint(line.Start), DisPoint(line.End), line.thiccness);
-            spriteBatch.Begin();
-            spriteBatch.Draw(Game1.BasicTexture, null, new Rectangle(line.Start, new Point(line.length, line.thiccness)), null, new Vector2(0, 0), line.angle, null, Color.White);
-            spriteBatch.End();
+            line = new LineClass(DisplayPoint(line.Start), DisplayPoint(line.End), line.thiccness);
+#pragma warning disable CS0618 // Type or member is obsolete
+            spriteBatch.Draw(texture: Game1.BasicTexture, destinationRectangle: new Rectangle(line.Start, new Point(line.length, line.thiccness)), rotation: line.angle, color: Color.White);
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         public Rectangle RatioRectangle(Vector2 Location, Vector2 Size)// 
@@ -90,7 +90,7 @@ namespace GameJom
         }
 
 
-        public Point DisPoint(Point point)
+        public Point DisplayPoint(Point point)
         {
             return new Point(
                 (int)((point.X - Centering.X) * ScreenSizeAdjustment / Zoom + DisplayLocation.Width / 2) + DisplayLocation.X ,
@@ -124,7 +124,7 @@ namespace GameJom
         {
 
             return new Rectangle(
-                    DisPoint(locationShape.Location),
+                    DisplayPoint(locationShape.Location),
                     new Point(LenScale(locationShape.Width), LenScale(locationShape.Height))
                     );
         }

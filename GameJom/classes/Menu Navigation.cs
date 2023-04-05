@@ -13,17 +13,16 @@ namespace GameJom
         static Texture2D pressPrint;
         int spacing;
         bool loaded;
-        public Menu(AutomatedDraw DrawParameter, PrintManager Print, string[] Buttons, Point Location, int Spacing, 
-            bool Loaded = true)
+        public Menu(AutomatedDraw DrawParameter, PrintManager Print, string[] Buttons, Point Location, int Spacing)
         {
             this.buttons = new List<Button>();
+            this.loaded = DrawParameter.Drawn;
             for (int n = 0; n < Buttons.Length; n++)
             {
-                this.buttons.Add(new Button(DrawParameter, Print, new Point(Location.X, Location.Y + ((n - 1) * spacing) + (n  * Print.fontSize.Y)), Buttons[n], Loaded));
+                this.buttons.Add(new Button(DrawParameter, Print, new Point(Location.X, Location.Y + ((n - 1) * spacing) + (n  * Print.fontSize.Y)), Buttons[n], loaded));
                 buttonName.Add(Buttons[n], n);
             }
             this.spacing = Spacing;
-            this.loaded = Loaded;
         }
         public void Initialize(Texture2D PrintParam, Texture2D HoverPrint, Texture2D PressPrint)
         {
@@ -52,7 +51,11 @@ namespace GameJom
 
         public bool check(string button)
         {
-            return buttons[buttonName[button]].PressedCheck();
+            if(loaded)
+            {
+                return buttons[buttonName[button]].PressedCheck();
+            }
+            return false;
         }
     }
     public class AdvButton

@@ -53,9 +53,31 @@ namespace GameJom
             {
                 for (int m = gridRec.Left; m < gridRec.Right; m++)
                 {
-                    DrawParameter.Draw(new Rectangle(m * Grid.Width, n * Grid.Height, Grid.Width, Grid.Height), cellTexture);
+                    DrawParameter.Draw(GridToScreen(new Rectangle(m, n, 1, 1)), cellTexture);
                 }
             }
+        }
+        public void ModularTexture(Texture2D wallTexture, Rectangle gridArea)
+        {
+            for (int n = gridArea.Top; n < gridArea.Bottom; n++)
+            {
+                for (int m = gridArea.Left; m < gridArea.Right; m++)
+                {
+                    Point Selection = new Point(1, 1);
+                    if (n == gridArea.Top)
+                        Selection.Y -= 1;
+                    if (n == gridArea.Bottom - 1)
+                        Selection.Y += 1;
+                    if (m == gridArea.Left)
+                        Selection.X -= 1;
+                    if (m == gridArea.Right - 1)
+                        Selection.X += 1;
+                    Point dividedSize = new Point((int)(wallTexture.Width / 3), (int)(wallTexture.Height / 3));
+                    Point remainderSize = new Point(wallTexture.Width - (2 * dividedSize.X), wallTexture.Height - (2 * dividedSize.Y));
+                    DrawParameter.Draw(GridToScreen(new Rectangle(m, n, 1, 1)), wallTexture, new Rectangle(Selection.X * dividedSize.X, Selection.Y * dividedSize.Y, remainderSize.X, remainderSize.X), Color.White);
+                }
+            }
+
         }
     }
 }

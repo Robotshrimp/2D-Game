@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 using System.Collections.Generic;
 using System;
+using System.IO;
 
 namespace GameJom
 {
@@ -13,17 +14,22 @@ namespace GameJom
     public class Game1 : Game
     {
         public static GraphicsDeviceManager graphics;
+        public static GraphicsDevice graphicsDevice;
         public static SpriteBatch spriteBatch;
+
         public static double ScreenSizeAdjustment = 1;
-        public static Point calculationScreenSize = new Point(3840, 2160);
+        public static readonly Point calculationScreenSize = new Point(3840, 2160);
         public static Rectangle ScreenBounds;
+
         public static int GameState = 1;
         public enum states
         {
             menu = 1,
             playArea = 2,
-            editor = 3
+            editor = 3,
+            levelSelect= 4,
         }
+        public readonly Rectangle GridSize = new Rectangle(0,0,96,96);
         public static bool Paused = false;
         public static MouseState mouseState;
         public int XMousePos;
@@ -39,13 +45,6 @@ namespace GameJom
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
-
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
         protected override void Initialize()
         {
             // loads any squishing you would need to do to the game to not deform with different resolutions
@@ -69,23 +68,21 @@ namespace GameJom
             this.IsMouseVisible = false;
             base.Initialize();
         }
-
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-
         public static Texture2D Text1;
         Texture2D Text2;
         Texture2D Text3;
         public static Texture2D Griddy;
-
+        public static Dictionary<string, Texture2D> Assets;
        
         protected override void LoadContent()
         {
-            //editor = new LevelEditor(EditorGraphics, new Rectangle(0, 0, 96, 96));
             editor.Load("bad poggie", Content);
             // Create a new SpriteBatch, which can be used to draw textures.
+            string[] files = Directory.GetFiles(@"Content/Assets");
+            foreach (string file in files)
+            {
+                Assets.Add(file, Content.Load<Texture2D>(file));
+            }
             BasicTexture = Content.Load<Texture2D>("BasicShape");
             clas.Load("bad poggie", Content); 
             Text1 = Content.Load<Texture2D>("font(hold)");
@@ -105,15 +102,7 @@ namespace GameJom
 
             // TODO: Unload any non ContentManager content here
         }
-
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        /// 
         AutomatedDraw EditorGraphics;
-        //LevelEditor editor = new LevelEditor("bad poggie");
         protected override void Update(GameTime gameTime)
         {
             mouseState = Mouse.GetState();
@@ -146,31 +135,23 @@ namespace GameJom
                     editorZoom += .02;
                 if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
                     editorZoom -= .02;
-                if(XMousePos == 0)
-                {
-
-                }
+            }
+            if (GameState == (int)states.playArea)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.W))
+                    Player.Y -= 10;
+                if (Keyboard.GetState().IsKeyDown(Keys.S))
+                    Player.Y += 10;
+                if (Keyboard.GetState().IsKeyDown(Keys.A))
+                    Player.X -= 10;
+                if (Keyboard.GetState().IsKeyDown(Keys.D))
+                    Player.X += 10;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.W))
-                Player.Y -= 10;
-            if (Keyboard.GetState().IsKeyDown(Keys.S))
-                Player.Y += 10;
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
-                Player.X -= 10;
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
-                Player.X += 10;
-
-            LinearAlgebruh.MatrixTransform(new float[,] { { 0, 1 }, { 1, 0 } }, new float[] { 1, 0 });
             base.Update(gameTime);
 
             
         }
-
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
 
         float test = 0;
         float roati = 0;
@@ -185,11 +166,11 @@ namespace GameJom
             GraphicsDevice.Clear(Color.Black);
             if (GameState == (int)states.playArea)
             {
-                GraphicsDevice.Clear(Color.Black);
+                GraphicsDevice.Clear(Color.White);
             }
             else if (GameState == (int)states.editor)
             {
-                GraphicsDevice.Clear(Color.Gray);
+                GraphicsDevice.Clear(Color.Black);
             }
             // Draw parameters
             AutomatedDraw MainCamera = new AutomatedDraw(ScreenBounds, new Point(Player.X + (Player.Width / 2), Player.Y + Player.Height / 2), Color.White, GameState == (int)states.playArea, Parallax.ParallaxZoom(10));
@@ -197,16 +178,15 @@ namespace GameJom
             EditorGraphics = new AutomatedDraw(ScreenBounds, editorcenter, Color.White, GameState == (int)states.editor, editorZoom);
             AutomatedDraw Base = new AutomatedDraw();
 
-            //Fonts
-            PrintManager textFormat = new PrintManager(20, Color.White, new Point(100, 200));
-
-            MainCamera.Draw(new Rectangle(0, 0, 1000, 1000), BasicTexture);
+            //MainCamera.Draw(new Rectangle(0, 0, 1000, 1000), BasicTexture);
             MainCamera.Draw(MainCamera.RatioRectangle(new Vector2(0, 0.1f), new Vector2(0, 0.1f)), BasicTexture);
             MainCamera.Draw(new Rectangle(-1500, -1500, 100, 100), BasicTexture);
-            MainCamera.Draw(Player, BasicTexture, Color.Gray);
+            //MainCamera.Draw(Player, BasicTexture, Color.Gray);
 
 
-            
+            clas.Runtime(MainCamera, new Rectangle(0, 0, 96, 96));
+
+
 
 
             EditorGraphics = new AutomatedDraw(ScreenBounds, editorcenter, Color.White, GameState == (int)states.editor, editorZoom);
@@ -226,15 +206,44 @@ namespace GameJom
             spriteBatch.End();
 
 
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
 
 
+            #region UI
 
 
+            //Fonts
+            PrintManager textFormat = new PrintManager(20, Color.White, new Point(40, 80));
+            //textFormat.Print(Base, XMousePos.ToString() + "  "+Base.DisplayRectangle(new Rectangle(XMousePos, YMousePos, 30, 40)).Y.ToString() + " " + roati, new Point());
+            Button bobama = new Button(Base, textFormat, new Point(0, 200), "bobama", GameState == (int)states.playArea);
+            bobama.TextButtonUpdate(Text3);
+            if (bobama.pressedLeft)
+            {
+                GameState = (int)states.menu;
+            }
 
-
-
+            AutomatedDraw MainMenu = new AutomatedDraw(GameState == (int)states.menu);
+            Menu menu = new Menu(MainMenu, textFormat, new string[] { "Start", "Level Editor", "Settings", "Credits", "Exit", "borgus" }, new Point(300, 300), 10);
+            menu.Initialize(Text3, Text2, Text3);
+            menu.MenuUpdate();
+            if (menu.check("Start"))
+            {
+                GameState = (int)states.playArea;
+            }
+            if (menu.check("Level Editor"))
+            {
+                GameState = (int)states.editor;
+            }
+            if (menu.check("Settings"))
+            {
+                textFormat.Print(Base, Text3, "JAck", new Point(1200, 1000));
+            }
+            if (menu.check("Exit"))
+            {
+                Exit();
+            }
             #region 3d
-            _3D_Because_Why_Not.Renderer3D rend = new _3D_Because_Why_Not.Renderer3D(MainCamera);
+            _3D_Because_Why_Not.Renderer3D rend = new _3D_Because_Why_Not.Renderer3D(MainMenu);
             rend.UpdateDirection(new Vector3(0, roati, -roati));
             //rend.UpdateDirection(new Vector3(0, broati, - roati));
             float z = (float)Math.Cos(broati);
@@ -245,7 +254,8 @@ namespace GameJom
             rend.UpdateLocation(new Vector3(0, 0 - 16 * (float)Math.Sin(roati), 16 - 16 * (float)Math.Cos(roati)));
             _3D_Because_Why_Not.Cuboid cube = new _3D_Because_Why_Not.Cuboid(rend);
             //cube.DrawCuboid(new Vector3((float)Math.Cos(test), (float)Math.Sin(test), (float)Math.Sin(test) + 15), new Vector3(2, 2, 2), 100, 5, 3, new Vector2(-test, test));
-            roati += (float).03;
+            roati += (float).001;
+            test += (float).001;
             /*
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
@@ -292,49 +302,11 @@ namespace GameJom
             cube.DrawCuboid(new Vector3(+5 * (float)Math.Cos(test + 2 * n), +3 * (float)Math.Cos(test + 2 * n), 16 - 5 * (float)Math.Sin(test + 2 * n)), new Vector3(1, 1, 1), 5, 3, new Vector3(-test * 5, (float)Math.PI / 5, (float)Math.PI / 4));
             cube.DrawCuboid(new Vector3(+6 * (float)Math.Cos(test + 1 * n), +3 * (float)Math.Cos(test + 1 * n), 16 - 6 * (float)Math.Sin(test + 1 * n)), new Vector3(1, 1, 1), 5, 3, new Vector3(-test * 6, (float)Math.PI / 5, (float)Math.PI / 4));
 
-            test += (float)0.02;
 
             #endregion
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
 
-
-            #region UI
-
-            //textFormat.Print(Base, XMousePos.ToString() + "  "+Base.DisplayRectangle(new Rectangle(XMousePos, YMousePos, 30, 40)).Y.ToString() + " " + roati, new Point());
-            Button bobama = new Button(Base, textFormat, new Point(0, 200), "bobama", GameState == (int)states.playArea);
-            bobama.TextButtonUpdate(Text3);
-            if (bobama.pressedLeft)
-            {
-                GameState = (int)states.menu;
-            }
-
-            if (GameState == (int)states.menu)
-            {
-                Menu menu = new Menu(Base, textFormat, new string[] { "Start", "Level Editor", "Settings", "Credits", "Exit", "borgus" }, new Point(300, 300), 10, GameState == (int)states.menu);
-                menu.Initialize(Text1, Text2, Text3);
-                menu.MenuUpdate();
-                if (menu.check("Start"))
-                {
-                    GameState = (int)states.playArea;
-                }
-                if (menu.check("Level Editor"))
-                {
-                    GameState = (int)states.editor;
-                }
-                if (menu.check("Settings"))
-                {
-                    textFormat.Print(Base, Text3, "JAck", new Point(1200, 1000));
-                }
-                if (menu.buttons[4].PressedCheck())
-                {
-                    Exit();
-                }
-
-            }
-            
-
-            Base.Draw(new Rectangle(XMousePos, YMousePos, 30, 40), BasicTexture);
+            Base.Draw(new Rectangle(XMousePos, YMousePos, 15, 20), BasicTexture);
             spriteBatch.Draw(BasicTexture, new Rectangle(0, 0, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
             spriteBatch.Draw(BasicTexture, new Rectangle(0, ScreenBounds.Bottom, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
             spriteBatch.End();

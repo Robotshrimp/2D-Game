@@ -79,8 +79,9 @@ C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\bin\Windows\x86\Debug\
 C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\bin\Windows\x86\Debug\SharpDX.Direct3D11.xml
 C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\bin\Windows\x86\Debug\SharpDX.Direct2D1.xml
 C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\bin\Windows\x86\Debug\SharpDX.XInput.xml
-C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\obj\x86\Debug\GameJom.csprojAssemblyReference.cache
 C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\obj\x86\Debug\GameJom.csproj.CoreCompileInputs.cache
 C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\obj\x86\Debug\GameJom.csproj.CopyComplete
 C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\obj\x86\Debug\GameJom.exe
 C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\obj\x86\Debug\GameJom.pdb
+C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\bin\Windows\x86\Debug\Content\tile test format.xnb
+C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\obj\x86\Debug\GameJom.csproj.AssemblyReference.cache

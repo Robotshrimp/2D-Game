@@ -7,9 +7,6 @@ using System.IO;
 
 namespace GameJom
 {
-    class testing
-    { 
-}
     class LevelEditor : LevelClass
     {
         public AutomatedDraw DrawParam;
@@ -37,22 +34,26 @@ namespace GameJom
         #region (back)rooms
         public void AddRoomCheck()
         {
-                Rectangle roomSelection = new Rectangle();
-                //
-                if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                    DrawParam.Draw(GridManager.GridToScreen(RectangleSelection(Mouse.GetState().Position, Mouse.GetState().LeftButton == ButtonState.Pressed)), Game1.BasicTexture);
-                if (!(Mouse.GetState().LeftButton == ButtonState.Pressed) && previouseMousePressedState == true)
+            Rectangle roomSelection = RectangleSelection(Mouse.GetState().Position, Mouse.GetState().LeftButton == ButtonState.Pressed);
+            //
+            Color selectionColor = Color.Green;
+
+            foreach (Room n in Rooms)
+            {
+                if(n.RoomSize.Intersects(roomSelection) ||
+                    GridManager.GridToScreen(roomSelection).Width < Game1.calculationScreenSize.X ||
+                    GridManager.GridToScreen(roomSelection).Height < Game1.calculationScreenSize.Y)
                 {
-                    roomSelection = RectangleSelection(Mouse.GetState().Position, Mouse.GetState().LeftButton == ButtonState.Pressed);
-                    foreach (Room n in Rooms)
-                    {
-                        if(n.RoomSize.Intersects(roomSelection))
-                        {
-                            return;
-                        }
-                    }
-                    Rooms.Add(new Room(roomSelection, this));
-                
+                    selectionColor = Color.Red;
+                }
+            };
+            if (!(Mouse.GetState().LeftButton == ButtonState.Pressed) && previouseMousePressedState == true && selectionColor == Color.Green)
+            {
+                Rooms.Add(new Room(roomSelection, this));
+            }
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed) 
+            {
+                DrawParam.Draw(GridManager.GridToScreen(RectangleSelection(Mouse.GetState().Position, Mouse.GetState().LeftButton == ButtonState.Pressed)), Game1.BasicTexture, selectionColor);
             }
             // TODO: takes a set of cordnet and place a new room at that location(might be good to allow rooms to overlap to have mid room transitions
         }
@@ -96,7 +97,7 @@ namespace GameJom
             this.DrawParam = drawParam;
             GridManager = new GridTexture(drawParam, Grid);
             GridManager.Griddify(Game1.Griddy);
-            AutomatedDraw Base = new AutomatedDraw(); Menu menu = new Menu(Base, new PrintManager(10, Color.White, new Point(40, 80)), new string[] { "room", "tiles" }, new Point(20, 20), 15, true);
+            AutomatedDraw Base = new AutomatedDraw(); Menu menu = new Menu(Base, new PrintManager(10, Color.White, new Point(30, 60)), new string[] { "room", "tiles" }, new Point(20, 20), 15);
                 //tiles
             if (brushState == (int)AvaliableBrushes.tile)
             {
@@ -105,7 +106,6 @@ namespace GameJom
                 {
                     if (SelectRoom(Mouse.GetState().Position, ref n))
                     {
-                        // edit not triggering, find out why
                         Rooms[n].Edit(GridManager.GridPoint(drawParam.CalcPoint(Mouse.GetState().Position)) - Rooms[n].RoomSize.Location);
                     }
                 }
@@ -113,14 +113,16 @@ namespace GameJom
                 {
                     if (SelectRoom(Mouse.GetState().Position, ref n))
                     {
-                        // edit not triggering, find out why
-                        Rooms[n].Edit(GridManager.GridPoint(drawParam.CalcPoint(Mouse.GetState().Position)) - Rooms[n].RoomSize.Location, 0, 0);
+                        Rooms[n].Edit(GridManager.GridPoint(drawParam.CalcPoint(Mouse.GetState().Position)) - Rooms[n].RoomSize.Location, 0, Room.empty);
                     }
                 }
-
                 foreach (Room room in Rooms)
                 {
-                    room.Draw(drawParam, GridManager, Game1.BasicTexture);
+                    GridManager.ModularTexture(Game1.Griddy, room.RoomSize);
+                }
+                foreach (Room room in Rooms)
+                {
+                    room.Draw(drawParam, GridManager.Grid);
                 }
             }
 
@@ -134,7 +136,7 @@ namespace GameJom
                 }
                 foreach (Room room in Rooms)
                 {
-                    drawParam.Draw(GridManager.GridToScreen(room.RoomSize), Game1.BasicTexture);
+                    GridManager.ModularTexture(Game1.Griddy, room.RoomSize);
                 }
             }
             Base.Draw(new Rectangle(0, 0, 300, 10000), Game1.BasicTexture, Color.Gray);

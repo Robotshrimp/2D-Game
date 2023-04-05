@@ -45,7 +45,6 @@
     <Compile Include="3D Because Why Not\3D Renderer.cs" />
     <Compile Include="3D Because Why Not\Cuboid.cs" />
     <Compile Include="3D Because Why Not\Triangle.cs" />
-    <Compile Include="classes\Level\OnHold Image to Level pipeline.cs" />
     <Compile Include="classes\Level\GridTexture.cs" />
     <Compile Include="classes\Level\RoomClass.cs" />
     <Compile Include="classes\Level\LevelClass.cs" />
@@ -78,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
+    <None Include=".editorconfig" />
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>

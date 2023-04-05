@@ -12,12 +12,14 @@ using Microsoft.Xna.Framework.Content;
 namespace GameJom
 {
     public class LevelClass
-
     { 
         protected List<Room> Rooms= new List<Room>();
         int CurrentRoom;
         protected string location;
-        protected List<Texture2D> GraphicsAssets;
+        public static List<Texture2D> DecorationAssets = new List<Texture2D>();
+        public static List<Texture2D> TileSetAssets = new List<Texture2D>();
+        public static List<Texture2D> BackgroundAssets = new List<Texture2D>();
+        
         public LevelClass()
         {}
         public void Load(string Folder, ContentManager Content) // input any level information from folder to program runtime
@@ -27,15 +29,20 @@ namespace GameJom
             if (!Directory.Exists(location)) // level folder, texture folder, and room text file creation
             {
                 Directory.CreateDirectory(location);
-                File.Create(location + @"/Rooms.txt");
-                Directory.CreateDirectory(location + @"/GraphicsAssets");
+                File.Create(location + @"/Rooms.txt").Dispose();
             }
 
             // accessing texture files by foreach loop
-            string[] files = Directory.GetFiles(location + @"/GraphicsAssets");
-            foreach (string file in files)
+            DirectoryInfo d = new DirectoryInfo(@"Content/Assets/TileSets");
+            if (!d.Exists) 
             {
-                GraphicsAssets.Add(Content.Load<Texture2D>(file));
+                d.Create();
+            }
+            FileInfo[] files = d.GetFiles("*.xnb");
+            foreach (FileInfo file in files) 
+            {
+                string key = Path.GetFileNameWithoutExtension(file.Name);
+                TileSetAssets.Add(Content.Load<Texture2D>(d.FullName + "/" + key));
             }
             // accessing room data through file split and foreach loop
             string data = File.ReadAllText(location + @"/Rooms.txt");
@@ -47,13 +54,17 @@ namespace GameJom
                     Rooms.Add(new Room(Room, this));
                 }
             }
+            foreach (Room room in Rooms) 
+            {
+                room.Reload();
+            }
         }
-        public void Runtime()
+        public void Runtime(AutomatedDraw drawParam, Rectangle grid)
         {
             foreach (Room room in Rooms) // systematicly updates each room, any room updates MUST be here with exception of special rooms that must be singled out
             {
                 room.RuntimeUpdate();
-                
+                room.Draw(drawParam,  grid);
             }
             // TODO: updates the rooms
         }

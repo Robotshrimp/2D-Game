@@ -26,7 +26,7 @@ namespace GameJom
             this.End = End;
             this.relativePosition = this.RelativePosition(this.Start, this.End);
             this.length = this.Length(relativePosition);
-            this.angle = this.Angle(relativePosition, length);
+            this.angle = (float)this.Angle(relativePosition, length);
             this.slope = (float)relativePosition.Y / (float)relativePosition.X;
             this.yIntercept = this.Start.Y - this.Start.X * slope;
         }
@@ -53,12 +53,12 @@ namespace GameJom
         }
         public float Angle(Point RelativePosition, int Length)
         {
-            float Angle = (float)Math.Asin((double)RelativePosition.Y / Length);
+            double Angle = Math.Asin((double)RelativePosition.Y / Length);
             if (RelativePosition.X < 0)
             {
-                Angle = (float)((Math.PI) - Angle);
+                Angle = ((Math.PI) - Angle);
             }
-            return Angle;
+            return (float)Angle;
         }
 
 
