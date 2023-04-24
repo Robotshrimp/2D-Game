@@ -66,12 +66,6 @@ namespace GameJom
             }
         }
         #endregion
-        #region tiles
-        void drawtile(int paint)
-        {
-
-        }
-        #endregion
         bool SelectRoom(Point selectionLocation, ref int room)
         {
             for (int n = 0; n < Rooms.Count; n++)
@@ -92,28 +86,52 @@ namespace GameJom
             }
             return false;
         }
+        int Layer = 0;
         public void Edit(Rectangle Grid, AutomatedDraw drawParam)
         {
             this.DrawParam = drawParam;
             GridManager = new GridTexture(drawParam, Grid);
             GridManager.Griddify(Game1.Griddy);
-            AutomatedDraw Base = new AutomatedDraw(); Menu menu = new Menu(Base, new PrintManager(10, Color.White, new Point(30, 60)), new string[] { "room", "tiles" }, new Point(20, 20), 15);
-                //tiles
+            AutomatedDraw Base = new AutomatedDraw(); 
+            Menu menu = new Menu(Base, new FontSettings(10, Color.White, new Point(30, 60)), Game1.testFonts);
+            //tiles
+            Menu LayerSelecter = new Menu(drawParam, new FontSettings(10, Color.White, new Point(30, 60)), Game1.testFonts);
             if (brushState == (int)AvaliableBrushes.tile)
             {
+                foreach (Room room in Rooms)
+                {
+                    int lineSize = 0; 
+                    for (int l = 0; l <= room.TotalLayers; l++)
+                    {
+
+                        if (l == room.TotalLayers)
+                        {
+                            if (LayerSelecter.ButtonPressedLeftAt(new Rectangle(GridManager.GridToScreen(room.RoomSize).Location + new Point(lineSize, -LayerSelecter.printParam.fontSize.Y), new Point(0, 0)), null, "add"))
+                            {
+                                room.SelectedLayer = l;
+                                room.AddTilemap();
+                            }
+                        }
+                        else if (LayerSelecter.ButtonPressedLeftAt(new Rectangle(GridManager.GridToScreen(room.RoomSize).Location + new Point(lineSize, -LayerSelecter.printParam.fontSize.Y), new Point(0, 0)), null, (l + 1) + " "))
+                            room.SelectedLayer = l;
+
+                        lineSize += LayerSelecter.ButtonSize(new Rectangle(), " " + (l + 1) + " ").Width;
+                    }
+                }
                 int n = 0;
                 if(Mouse.GetState().LeftButton == ButtonState.Pressed)
                 {
                     if (SelectRoom(Mouse.GetState().Position, ref n))
                     {
                         Rooms[n].Edit(GridManager.GridPoint(drawParam.CalcPoint(Mouse.GetState().Position)) - Rooms[n].RoomSize.Location);
+                        Rooms[n].Edit(GridManager.GridPoint(drawParam.CalcPoint(Mouse.GetState().Position)) - Rooms[n].RoomSize.Location, 0, 1);
                     }
                 }
                 if (Mouse.GetState().RightButton == ButtonState.Pressed)
                 {
                     if (SelectRoom(Mouse.GetState().Position, ref n))
                     {
-                        Rooms[n].Edit(GridManager.GridPoint(drawParam.CalcPoint(Mouse.GetState().Position)) - Rooms[n].RoomSize.Location, 0, Room.empty);
+                        Rooms[n].Edit(GridManager.GridPoint(drawParam.CalcPoint(Mouse.GetState().Position)) - Rooms[n].RoomSize.Location, Room.empty);
                     }
                 }
                 foreach (Room room in Rooms)
@@ -141,12 +159,11 @@ namespace GameJom
             }
             Base.Draw(new Rectangle(0, 0, 300, 10000), Game1.BasicTexture, Color.Gray);
             //brush sellection
-            menu.MenuUpdate();
-            if (menu.check("room"))
+            if (menu.ButtonPressedLeftAt(new Rectangle(), null, "room"))
             {
                 brushState = (int)AvaliableBrushes.room;
             }
-            if (menu.check("tiles"))
+            if (menu.ButtonPressedLeftAt(new Rectangle(0, 100, 0, 0), null, "tiles"))
             {
                 brushState = (int)AvaliableBrushes.tile;
             }

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using GameJom.classes;
 
 namespace GameJom
 {
@@ -69,8 +70,8 @@ namespace GameJom
             base.Initialize();
         }
         public static Texture2D Text1;
-        Texture2D Text2;
-        Texture2D Text3;
+        public static Texture2D Text2;
+        public static Texture2D Text3;
         public static Texture2D Griddy;
         public static Dictionary<string, Texture2D> Assets;
        
@@ -85,9 +86,10 @@ namespace GameJom
             }
             BasicTexture = Content.Load<Texture2D>("BasicShape");
             clas.Load("bad poggie", Content); 
-            Text1 = Content.Load<Texture2D>("font(hold)");
+            Text1 = Content.Load<Texture2D>("font(pressed)");
             Text2 = Content.Load<Texture2D>("font(hold)");
-            Text3 = Content.Load<Texture2D>("font(pressed)");
+            Text3 = Content.Load<Texture2D>("Font");
+            testFonts = new FontTexture(Text1, Text2, Text3);
             Griddy = Content.Load<Texture2D>("transparent");
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
@@ -138,16 +140,16 @@ namespace GameJom
             }
             if (GameState == (int)states.playArea)
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.W))
-                    Player.Y -= 10;
-                if (Keyboard.GetState().IsKeyDown(Keys.S))
-                    Player.Y += 10;
-                if (Keyboard.GetState().IsKeyDown(Keys.A))
-                    Player.X -= 10;
-                if (Keyboard.GetState().IsKeyDown(Keys.D))
-                    Player.X += 10;
+                if (InputManager.SingleTapCheck(Keys.W))
+                    Player.Y -= 100;
+                if (InputManager.SingleTapCheck(Keys.S))
+                    Player.Y += 100;
+                if (InputManager.SingleTapCheck(Keys.A))
+                    Player.X -= 100;
+                if (InputManager.SingleTapCheck(Keys.D))
+                    Player.X += 100;
             }
-
+            InputManager.Update();
             base.Update(gameTime);
 
             
@@ -158,6 +160,8 @@ namespace GameJom
         float broati = 0;
         LevelEditor editor = new LevelEditor();
 
+        public static FontSettings textFormat = new FontSettings(20, Color.White, new Point(40, 80));
+        public static FontTexture testFonts;
         protected override void Draw(GameTime gameTime)
         {
 
@@ -166,7 +170,7 @@ namespace GameJom
             GraphicsDevice.Clear(Color.Black);
             if (GameState == (int)states.playArea)
             {
-                GraphicsDevice.Clear(Color.White);
+                GraphicsDevice.Clear(Color.LightGray);
             }
             else if (GameState == (int)states.editor)
             {
@@ -203,44 +207,39 @@ namespace GameJom
 
             }
 
-            spriteBatch.End();
-
-
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
-
 
             #region UI
 
 
             //Fonts
-            PrintManager textFormat = new PrintManager(20, Color.White, new Point(40, 80));
             //textFormat.Print(Base, XMousePos.ToString() + "  "+Base.DisplayRectangle(new Rectangle(XMousePos, YMousePos, 30, 40)).Y.ToString() + " " + roati, new Point());
-            Button bobama = new Button(Base, textFormat, new Point(0, 200), "bobama", GameState == (int)states.playArea);
-            bobama.TextButtonUpdate(Text3);
-            if (bobama.pressedLeft)
+
+            AutomatedDraw MainMenu = new AutomatedDraw(GameState == (int)states.menu);
+            Menu menu = new Menu(MainMenu, textFormat, testFonts);
+
+            if (GameState == (int)states.playArea && menu.ButtonPressedLeftAt(new Rectangle(0, 200, 0,0), null, "Exit"))
             {
                 GameState = (int)states.menu;
             }
 
-            AutomatedDraw MainMenu = new AutomatedDraw(GameState == (int)states.menu);
-            Menu menu = new Menu(MainMenu, textFormat, new string[] { "Start", "Level Editor", "Settings", "Credits", "Exit", "borgus" }, new Point(300, 300), 10);
-            menu.Initialize(Text3, Text2, Text3);
-            menu.MenuUpdate();
-            if (menu.check("Start"))
+            if (GameState == (int)states.menu)
             {
-                GameState = (int)states.playArea;
-            }
-            if (menu.check("Level Editor"))
-            {
-                GameState = (int)states.editor;
-            }
-            if (menu.check("Settings"))
-            {
-                textFormat.Print(Base, Text3, "JAck", new Point(1200, 1000));
-            }
-            if (menu.check("Exit"))
-            {
-                Exit();
+                if (menu.ButtonPressedLeftAt(new Rectangle(300, 300, 0, 0), BasicTexture, "Start"))
+                {
+                    GameState = (int)states.playArea;
+                }
+                if (menu.ButtonPressedLeftAt(new Rectangle(300, 500, 0, 0), null, "Level Editor"))
+                {
+                    GameState = (int)states.editor;
+                }
+                if (menu.ButtonPressedLeftAt(new Rectangle(300, 700, 0, 0), null, "Settings"))
+                {
+                    textFormat.Print(Base, Text3, "JAck", new Point(1200, 1000));
+                }
+                if (menu.ButtonPressedLeftAt(new Rectangle(300, 900, 0, 0), null, "Exit"))
+                {
+                    Exit();
+                }
             }
             #region 3d
             _3D_Because_Why_Not.Renderer3D rend = new _3D_Because_Why_Not.Renderer3D(MainMenu);

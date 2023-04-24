@@ -84,4 +84,5 @@ C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\obj\x86\Debug\GameJom.
 C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\obj\x86\Debug\GameJom.exe
 C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\obj\x86\Debug\GameJom.pdb
 C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\bin\Windows\x86\Debug\Content\tile test format.xnb
+C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\bin\Windows\x86\Debug\Content\Opaque.xnb
 C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\obj\x86\Debug\GameJom.csproj.AssemblyReference.cache

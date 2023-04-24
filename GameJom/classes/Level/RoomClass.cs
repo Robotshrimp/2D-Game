@@ -55,15 +55,18 @@ namespace GameJom
             {Tiles.bottom, new Point(0, 1)},
             {Tiles.bottomRight, new Point(1,1)}
         };
+        public const int empty = -1;
 
+        const int DataLayers = 2;
+        const int TileLayer = 0;
+        const int TileSetLayer = 1;
 
-
-        public List<int[,]> TileMaps = new List<int[,]>();
+        public int SelectedLayer = 0;
+        public int TotalLayers = 0;
+        public List<int[,,]> TileMaps = new List<int[,,]>();
         public Rectangle RoomSize;
         public Point DesiredCameraLocation;
         public LevelClass Preset;
-        public const int empty = -1;
-
         public static List<Texture2D> DecorationAssets = LevelClass.DecorationAssets;
         public static List<Texture2D> TileSetAssets = LevelClass.TileSetAssets;
         public static List<Texture2D> BackgroundAssets = LevelClass.BackgroundAssets;
@@ -78,26 +81,42 @@ namespace GameJom
                 RoomSize = new Rectangle(int.Parse(vars[0]), int.Parse(vars[1]), int.Parse(vars[2]), int.Parse(vars[3]));
                 // tilemap data
                 // use room dimenstions to determine where each tile go, this means tiles are stored as 1D not 2d array
-                string[] totalRoomTileData = data[(int)DataChunks.tiles].Split(',');
+                string[] totalRoomTileData = data[(int)DataChunks.tiles].Split(';');
                 int currentMap = 0;
                 int currentTile = 0;
                 int currentCollum = 0;
+                int currentDataLayer = 0;
                 foreach (string tilemapData in totalRoomTileData)
                 {
-                    TileMaps.Add(new int[RoomSize.Width, RoomSize.Height]);
+                    TotalLayers++;
+                    int[,,] blankLayer = new int[RoomSize.Width, RoomSize.Height, DataLayers];
+                    Fill(ref blankLayer, RoomSize);
+                    TileMaps.Add(blankLayer);
                     string[] tiles = tilemapData.Split(' ');
                     foreach (string tile in tiles)
                     {
-                        if (currentCollum >= RoomSize.Width)
-                            break;
                         if (currentTile >= RoomSize.Height)
                         {
                             currentCollum += 1;
                             currentTile = 0;
                         }
-                        TileMaps[currentMap][currentCollum, currentTile] = int.Parse(tile);
+                        if (currentCollum >= RoomSize.Width)
+                        {
+                            currentDataLayer += 1;
+                            currentCollum = 0;
+                        }
+                        if (currentDataLayer >= DataLayers)
+                        {
+                            currentDataLayer = 0;
+                            break;
+                        }
+
+                        TileMaps[currentMap][currentCollum, currentTile, currentDataLayer] = int.Parse(tile);
                         currentTile += 1;
                     }
+                    currentTile = 0;
+                    currentDataLayer = 0;
+                    currentCollum = 0;
                     currentMap += 1;
                 }
                 LoadTexture();
@@ -106,10 +125,8 @@ namespace GameJom
         public Room(Rectangle Size, LevelClass preset)
         {
             this.Preset = preset;
-            int[,] initializationMap = new int[Size.Width, Size.Height];
-            Fill(ref initializationMap, new Rectangle(new Point(), Size.Size), empty);
-            TileMaps.Add(initializationMap);
             RoomSize = Size;
+            AddTilemap();
             LoadTexture();
         }
         private void LoadTexture()
@@ -118,7 +135,14 @@ namespace GameJom
             TileSetAssets = LevelClass.TileSetAssets;
             BackgroundAssets = LevelClass.BackgroundAssets;
         }
-        public static void Fill(ref int[,] tileMap, Rectangle fill, int fillNum)
+        public void AddTilemap()
+        {
+            TotalLayers += 1;
+            int[,,] initializationMap = new int[RoomSize.Width, RoomSize.Height, DataLayers];
+            Fill(ref initializationMap, new Rectangle(new Point(), RoomSize.Size));
+            TileMaps.Add(initializationMap);
+        }
+        public static void Fill(ref int[,,] tileMap, Rectangle fill, int fillNum = empty, int layer = 0)
         {
             if (fill.X >= 0 &&
                fill.Y >= 0 &&
@@ -129,7 +153,7 @@ namespace GameJom
                 {
                     for (int y = 0; y < fill.Height; y++)
                     {
-                        tileMap[fill.X + x, fill.Y + y] = fillNum;
+                        tileMap[fill.X + x, fill.Y + y, layer] = fillNum;
                     }
                 }
             }
@@ -145,25 +169,27 @@ namespace GameJom
         {
             DrawParam = drawParam;
             GridParam = new GridTexture(drawParam, grid);
-            foreach (int[,] tilemap in TileMaps)
+            int currentTilemap = 0;
+            foreach (int[,,] tilemap in TileMaps)
             {
                 for (int x = 0; x < tilemap.GetLength(0); x++)
                 {
                     for (int y = 0; y < tilemap.GetLength(1); y++)
                     {
-                        if (tilemap[x, y] != empty)
+                        if (tilemap[x, y, TileLayer] != empty)
                         {
-                            DrawTile(0, new Point(x, y), TileSetAssets[0]);
+                            DrawTile(currentTilemap, new Point(x, y), TileSetAssets[tilemap[x, y, TileSetLayer]]);
                         }
                     }
                 }
+                currentTilemap += 1;
             }
         }
         public void DrawTile(int tileMap,Point location, Texture2D tileSet)
         {
             Point tileTextureSize = new Point(tileSet.Width / 4, tileSet.Height / 5);
             Rectangle selection;
-            int tileData = TileMaps[tileMap][location.X, location.Y];
+            int tileData = TileMaps[tileMap][location.X, location.Y, TileLayer];
             int mainTileData = tileData & ((int)Tiles.left + (int)Tiles.right + (int)Tiles.top + (int)Tiles.bottom);
             int y = mainTileData / 4;
             int x = mainTileData - y * 4;
@@ -180,17 +206,14 @@ namespace GameJom
             if (cornerTextureCheck(tileData, Tiles.bottomLeft))
             {
                 DrawParam.Draw(GridParam.GridToScreen(new Rectangle(RoomSize.Location + location, new Point(1, 1))), tileSet, new Rectangle(tileTextureSize.X * 2, tileTextureSize.Y * 4, tileTextureSize.X, tileTextureSize.Y), Color.White);
-
             }
             if (cornerTextureCheck(tileData,Tiles.bottomRight))
             {
                 DrawParam.Draw(GridParam.GridToScreen(new Rectangle(RoomSize.Location + location, new Point(1, 1))), tileSet, new Rectangle(tileTextureSize.X * 3, tileTextureSize.Y * 4, tileTextureSize.X, tileTextureSize.Y), Color.White);
-
             }
         }
         private bool cornerTextureCheck(int tileData, Tiles corner)
         {
-
             if (corner == (corner & cardnelTiles))
                 return false;
             Point cornerTileLocation = TileValueToLocation[corner];
@@ -207,22 +230,26 @@ namespace GameJom
             return false;
         }
         // editing functions, ignore if coding playtime features
-        private bool inBounds(Point index, int[,] array)
+        private bool inBounds(Point index, int[,,] array, int dataType = TileLayer)
         {
-            return (index.Y >= 0) && (index.Y < array.GetLength(1) && (index.X >= 0) && (index.X < array.GetLength(0)));
+            return ((dataType >= 0 && dataType < array.GetLength(2)) && (index.Y >= 0 && index.Y < array.GetLength(1)) && (index.X >= 0 && index.X < array.GetLength(0)));
         }
-        public void Edit(Point Location, int selectedTileMap = 0, int value = 1) // Edits the tilemap much like updateTileData but calls the updateTileData for all surounding filled tiles
+        public void Edit(Point Location, int value = 0, int dataType = 0) // Edits the tilemap much like updateTileData but calls the updateTileData for all surounding filled tiles
         {
-            if (!inBounds(Location, TileMaps[selectedTileMap]))
+            while (SelectedLayer >= TileMaps.Count)
+            {
+                AddTilemap();
+            }
+            if (!inBounds(Location, TileMaps[SelectedLayer], dataType))
                 return;
-            TileMaps[selectedTileMap][Location.X, Location.Y] = value;
+            TileMaps[SelectedLayer][Location.X, Location.Y, dataType] = value;
             foreach (Point point in LocationToTileValue.Keys)
             {
-                updateTileData(selectedTileMap, Location + point);
+                updateTileLayerData(SelectedLayer, Location + point);
             }
             if (value != -1)
             {
-                updateTileData(selectedTileMap, Location);
+                updateTileLayerData(SelectedLayer, Location);
             }
         }
         public void Reload()
@@ -233,35 +260,38 @@ namespace GameJom
                 {
                     for (int y = 0; y < TileMaps[tilemap].GetLength(1); y++)
                     {
-                        updateTileData(tilemap, new Point(x,y));
+                        updateTileLayerData(tilemap, new Point(x,y));
                     }
                 }
             }
         }
-        private void updateTileData(int tilemap, Point location)
+        private void updateTileLayerData(int tilemap, Point location)
         {
-            if (!inBounds(location, TileMaps[tilemap]) || TileMaps[tilemap][location.X, location.Y] == empty)
+            if (!inBounds(location, TileMaps[tilemap]) || TileMaps[tilemap][location.X, location.Y, TileLayer] == empty)
             {
                 return;
             }
             int tileData = 0;
             foreach (Point point in LocationToTileValue.Keys)
             {
-                if (!inBounds(location + point, TileMaps[tilemap]) || TileMaps[tilemap][location.X + point.X, location.Y + point.Y] != empty)
+                if (!inBounds(location + point, TileMaps[tilemap]) || TileMaps[tilemap][location.X + point.X, location.Y + point.Y, TileLayer] != empty)
                 {
                     tileData |= (int)LocationToTileValue[point];
                 }
             }
-            TileMaps[tilemap][location.X, location.Y] = tileData;
+            TileMaps[tilemap][location.X, location.Y, TileLayer] = tileData;
         }
         protected void Resize(Point targetSize, int selectedTileMap) // creates a new array that replaces the old one that retains the information
         {
-            int[,] newArray = new int[targetSize.Y, targetSize.X];
-            for(int n = 0; n < Math.Min(TileMaps[selectedTileMap].GetLength(0), newArray.GetLength(0)); n++)
+            int[,,] newArray = new int[targetSize.Y, targetSize.X, DataLayers];
+            for(int x = 0; x < Math.Min(TileMaps[selectedTileMap].GetLength(0), newArray.GetLength(0)); x++)
             {
-                for (int m = 0; m < Math.Min(TileMaps[selectedTileMap].GetLength(1), newArray.GetLength(1)); m++)
+                for (int y = 0; y < Math.Min(TileMaps[selectedTileMap].GetLength(1), newArray.GetLength(1)); y++)
                 {
-                    newArray[n, m] = TileMaps[selectedTileMap][n, m];
+                    for (int z = 0; z < Math.Min(TileMaps[selectedTileMap].GetLength(2), newArray.GetLength(2)); z++)
+                    {
+                        newArray[x, y, z] = TileMaps[selectedTileMap][x, y, z];
+                    }
                 }
             }
             TileMaps[selectedTileMap] = newArray;
@@ -272,15 +302,19 @@ namespace GameJom
             saveData += RoomSize.X + "," + RoomSize.Y + "," + RoomSize.Width + "," + RoomSize.Height + ".";
             for (int h = 0; h < TileMaps.Count; h++)
             {
-                for (int n = 0; n < TileMaps[h].GetLength(0); n++)
+
+                for (int z = 0; z < TileMaps[h].GetLength(2); z++)
                 {
-                    for (int m = 0; m < TileMaps[h].GetLength(1); m++)
+                    for (int x = 0; x < TileMaps[h].GetLength(0); x++)
                     {
-                        saveData += TileMaps[h][n, m] + " ";
+                        for (int y = 0; y < TileMaps[h].GetLength(1); y++)
+                        {
+                            saveData += TileMaps[h][x, y, z] + " ";
+                        }
                     }
                 }
                 saveData = saveData.Remove(saveData.Length-1);
-                saveData += ',';
+                saveData += ';';
             }
 
             saveData = saveData.Remove(saveData.Length - 1, 1);

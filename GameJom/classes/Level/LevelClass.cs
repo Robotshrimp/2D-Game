@@ -27,10 +27,9 @@ namespace GameJom
             //this code creates the level template if no level of such name exists
             location = @"Content/Levels/" + Folder; // expected level folder location
             if (!Directory.Exists(location)) // level folder, texture folder, and room text file creation
-            {
                 Directory.CreateDirectory(location);
+            if (!File.Exists(location + @"/Rooms.txt"))
                 File.Create(location + @"/Rooms.txt").Dispose();
-            }
 
             // accessing texture files by foreach loop
             DirectoryInfo d = new DirectoryInfo(@"Content/Assets/TileSets");
