@@ -18,6 +18,7 @@ namespace GameJom
             room = 0,
             tiles = 1,
             grphicalFlare = 2,
+            properties = 3,
 
         }
         private enum Tiles
@@ -64,6 +65,7 @@ namespace GameJom
         public int SelectedLayer = 0;
         public int TotalLayers = 0;
         public List<int[,,]> TileMaps = new List<int[,,]>();
+        public List<int> CollisionLayers = new List<int>();
         public Rectangle RoomSize;
         public Point DesiredCameraLocation;
         public LevelClass Preset;
@@ -118,6 +120,8 @@ namespace GameJom
                     currentDataLayer = 0;
                     currentCollum = 0;
                     currentMap += 1;
+                    
+
                 }
                 LoadTexture();
             }
@@ -131,6 +135,7 @@ namespace GameJom
         }
         private void LoadTexture()
         {
+            //passes assets from level to rooms
             DecorationAssets = LevelClass.DecorationAssets;
             TileSetAssets = LevelClass.TileSetAssets;
             BackgroundAssets = LevelClass.BackgroundAssets;
@@ -194,22 +199,23 @@ namespace GameJom
             int y = mainTileData / 4;
             int x = mainTileData - y * 4;
             selection = new Rectangle(new Point(tileTextureSize.X * x, tileTextureSize.Y * y), tileTextureSize);
-            DrawParam.Draw(GridParam.GridToScreen(new Rectangle(RoomSize.Location + location, new Point(1, 1))), tileSet, new Rectangle(tileTextureSize.X * x, tileTextureSize.Y * y, tileTextureSize.X, tileTextureSize.Y), Color.White);
+            Rectangle drawArea = new Rectangle(RoomSize.Location + location - new Point(1, 1), new Point(3, 3));
+            DrawParam.Draw(GridParam.GridToScreen(drawArea), tileSet, new Rectangle(tileTextureSize.X * x, tileTextureSize.Y * y, tileTextureSize.X, tileTextureSize.Y), Color.White);
             if(cornerTextureCheck(tileData, Tiles.topLeft))
             {
-                DrawParam.Draw(GridParam.GridToScreen(new Rectangle(RoomSize.Location + location, new Point(1, 1))), tileSet, new Rectangle(tileTextureSize.X * 0, tileTextureSize.Y * 4, tileTextureSize.X, tileTextureSize.Y), Color.White);
+                DrawParam.Draw(GridParam.GridToScreen(drawArea), tileSet, new Rectangle(tileTextureSize.X * 0, tileTextureSize.Y * 4, tileTextureSize.X, tileTextureSize.Y), Color.White);
             }
             if (cornerTextureCheck(tileData, Tiles.topRight))
             {
-                DrawParam.Draw(GridParam.GridToScreen(new Rectangle(RoomSize.Location + location, new Point(1, 1))), tileSet, new Rectangle(tileTextureSize.X * 1, tileTextureSize.Y * 4, tileTextureSize.X, tileTextureSize.Y), Color.White);
+                DrawParam.Draw(GridParam.GridToScreen(drawArea), tileSet, new Rectangle(tileTextureSize.X * 1, tileTextureSize.Y * 4, tileTextureSize.X, tileTextureSize.Y), Color.White);
             }
             if (cornerTextureCheck(tileData, Tiles.bottomLeft))
             {
-                DrawParam.Draw(GridParam.GridToScreen(new Rectangle(RoomSize.Location + location, new Point(1, 1))), tileSet, new Rectangle(tileTextureSize.X * 2, tileTextureSize.Y * 4, tileTextureSize.X, tileTextureSize.Y), Color.White);
+                DrawParam.Draw(GridParam.GridToScreen(drawArea), tileSet, new Rectangle(tileTextureSize.X * 2, tileTextureSize.Y * 4, tileTextureSize.X, tileTextureSize.Y), Color.White);
             }
             if (cornerTextureCheck(tileData,Tiles.bottomRight))
             {
-                DrawParam.Draw(GridParam.GridToScreen(new Rectangle(RoomSize.Location + location, new Point(1, 1))), tileSet, new Rectangle(tileTextureSize.X * 3, tileTextureSize.Y * 4, tileTextureSize.X, tileTextureSize.Y), Color.White);
+                DrawParam.Draw(GridParam.GridToScreen(drawArea), tileSet, new Rectangle(tileTextureSize.X * 3, tileTextureSize.Y * 4, tileTextureSize.X, tileTextureSize.Y), Color.White);
             }
         }
         private bool cornerTextureCheck(int tileData, Tiles corner)

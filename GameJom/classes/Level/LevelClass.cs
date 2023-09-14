@@ -40,7 +40,7 @@ namespace GameJom
             FileInfo[] files = d.GetFiles("*.xnb");
             foreach (FileInfo file in files) 
             {
-                string key = Path.GetFileNameWithoutExtension(file.Name);
+                string key = Path.GetFileNameWithoutExtension(file.Name);//gets name of file
                 TileSetAssets.Add(Content.Load<Texture2D>(d.FullName + "/" + key));
             }
             // accessing room data through file split and foreach loop

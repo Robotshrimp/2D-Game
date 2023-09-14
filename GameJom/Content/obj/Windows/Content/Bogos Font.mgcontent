@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/Bogos Font.png</SourceFile>
-  <SourceTime>2022-09-21T08:54:43.2749812-07:00</SourceTime>
+  <SourceTime>2022-09-21T08:54:43-07:00</SourceTime>
   <DestFile>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/bin/Windows/Content/Bogos Font.xnb</DestFile>
-  <DestTime>2023-02-27T13:54:21.9189959-08:00</DestTime>
+  <DestTime>2023-09-14T09:33:37.4620737-07:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2018-12-08T08:35:54-08:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -13,7 +13,8 @@
     <AssemblyName>GameJom</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -45,22 +46,27 @@
     <Compile Include="3D Because Why Not\3D Renderer.cs" />
     <Compile Include="3D Because Why Not\Cuboid.cs" />
     <Compile Include="3D Because Why Not\Triangle.cs" />
+    <Compile Include="classes\Data Storage and Management\AssetStorage.cs" />
     <Compile Include="classes\InputManager.cs" />
     <Compile Include="classes\Level\GridTexture.cs" />
     <Compile Include="classes\Level\RoomClass.cs" />
     <Compile Include="classes\Level\LevelClass.cs" />
+    <Compile Include="classes\Screens\HomeScreen.cs" />
+    <Compile Include="classes\Screens\IScreen.cs" />
+    <Compile Include="classes\Screens\ScreenManager.cs" />
+    <Compile Include="DataManager.cs" />
     <Compile Include="Foundational Classes\limit.cs" />
     <Compile Include="classes\Collision.cs" />
     <Compile Include="Foundational Classes\OverlapCheck.cs" />
     <Compile Include="classes\KeyboardInput.cs" />
-    <Compile Include="classes\LineClass.cs" />
+    <Compile Include="classes\Basic Graphics\LineClass.cs" />
     <Compile Include="classes\Level\LevelEditor.cs" />
     <Compile Include="classes\Print.cs" />
     <Compile Include="Foundational Classes\Linear Algebruh.cs" />
     <Compile Include="Foundational Classes\TrigFun.cs" />
     <Compile Include="classes\Menu Navigation.cs" />
-    <Compile Include="classes\Draw.cs" />
-    <Compile Include="classes\Paralax.cs" />
+    <Compile Include="classes\Basic Graphics\Draw.cs" />
+    <Compile Include="classes\Basic Graphics\Paralax.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,6 +85,7 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include=".editorconfig" />
+    <None Include="app.config" />
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>

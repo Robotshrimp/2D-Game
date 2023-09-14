@@ -113,7 +113,11 @@ namespace GameJom
                             }
                         }
                         else if (LayerSelecter.ButtonPressedLeftAt(new Rectangle(GridManager.GridToScreen(room.RoomSize).Location + new Point(lineSize, -LayerSelecter.printParam.fontSize.Y), new Point(0, 0)), null, (l + 1) + " "))
+                        {
+                            if (room.SelectedLayer == l)
+
                             room.SelectedLayer = l;
+                        }
 
                         lineSize += LayerSelecter.ButtonSize(new Rectangle(), " " + (l + 1) + " ").Width;
                     }

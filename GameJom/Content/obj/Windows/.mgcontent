@@ -6,6 +6,7 @@
   <SourceFiles>
     <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/BasicShape.png</File>
     <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/Bogos Font.png</File>
+    <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/corrupted Opaque.png</File>
     <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/font(hold).png</File>
     <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/font(pressed).png</File>
     <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/Font.png</File>
@@ -14,6 +15,7 @@
     <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/transparent.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

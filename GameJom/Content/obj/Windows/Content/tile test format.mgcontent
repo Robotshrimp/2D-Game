@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/tile test format.png</SourceFile>
-  <SourceTime>2023-04-03T09:52:16.2552464-07:00</SourceTime>
+  <SourceTime>2023-04-03T09:52:16-07:00</SourceTime>
   <DestFile>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/bin/Windows/Content/tile test format.xnb</DestFile>
-  <DestTime>2023-04-03T09:54:31.2579156-07:00</DestTime>
+  <DestTime>2023-09-14T09:33:37.5490769-07:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2018-12-08T08:35:54-08:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

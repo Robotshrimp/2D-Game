@@ -34,14 +34,21 @@ namespace GameJom._3D_Because_Why_Not
         }
 
         
-
+        // camera manipulation(walter white reference) code
         public void UpdateLocation(Vector3 newLocation)
         {
             CameraLocation = newLocation;
         }
-        public void UpdateDirection(Vector3 Rotation) // fix plz UwU *nuzzles*
+        public void UpdateDirection(Vector3 Rotation)
         {
             CameraDirection = Rotation;
+        }
+        // advanced camera manipulation 
+        public void LookAt(Vector3 location)
+        {
+            Vector3 relativePos = location - CameraLocation;
+            Vector2 direction = TrigFun.Angle3(relativePos);
+            UpdateDirection(new Vector3(direction.Y, direction.X, CameraDirection.Z));
         }
         private Point ScreenProjection(Vector2 Angle)
         {
@@ -53,8 +60,7 @@ namespace GameJom._3D_Because_Why_Not
         }
         public Vector2 CoordnetConvert(Vector3 coordnetLocation)
         {
-            coordnetLocation -= CameraLocation;
-            Vector2 angleLocation = TrigFun.Angle3(TrigFun.Rotate3D(coordnetLocation, new Vector3(0,0,0), CameraDirection)); // fix screen rotation later
+            Vector2 angleLocation = TrigFun.Angle3(TrigFun.RotateAxies3D(coordnetLocation, CameraLocation, CameraDirection)); // fix screen rotation later
             return angleLocation;
         }
 
