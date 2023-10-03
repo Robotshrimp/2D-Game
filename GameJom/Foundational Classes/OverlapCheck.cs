@@ -6,9 +6,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GameJom
 {
-    class OverlapCheck
+    static class OverlapCheck
     {
-        public bool Overlapped(Rectangle Base, Rectangle Selection)
+        static public bool Overlapped(Rectangle Base, Rectangle Selection) // boolian value on if the rectangles overlap
         {
             if (Selection.Bottom > Base.Top &&
                 Selection.Left > Base.Right &&
@@ -17,29 +17,21 @@ namespace GameJom
                 return true;
             return false;
         }
-        public Point IntersectionLocation(LineClass Line1, LineClass Line2)
+        static public Point IntersectionLocation(LineClass Line1, LineClass Line2) // point denoting where two lines intersect if they continued indefinitly
         {
             float x = Line1.slope - Line2.slope;
             float num = Line2.yIntercept - Line1.slope;
             float location = num / x;
 
-            return new Point((int)location, (int)Line1.Function(location));
+            return new Point((int)location, (int)Line1.LinearFunction(location));
         }
-        public bool Intersect(LineClass CrossingLine, LineClass TraversedLine)
-        {
-            if (LineCross(CrossingLine, TraversedLine) && LineCross(CrossingLine, TraversedLine))
-            {
-                return true;
-            }
-            return false;
-        }
-        public bool LineCross(LineClass CrossingLine, LineClass TraversedLine)
+        static public bool CheckIntersect(LineClass CrossingLine, LineClass TraversedLine) // bool denoting if two lines intercept, needs to be checked before checking intersection between two line segments as Intersection location assumes line go on indefinitly
         {
             bool StartHigher = false;
             bool EndHigher = false;
-            if (CrossingLine.Start.Y > TraversedLine.Function(CrossingLine.Start.X))
+            if (CrossingLine.Start.Y > TraversedLine.LinearFunction(CrossingLine.Start.X))
                 StartHigher = true;
-            if (CrossingLine.End.Y > TraversedLine.Function(CrossingLine.End.X))
+            if (CrossingLine.End.Y > TraversedLine.LinearFunction(CrossingLine.End.X))
                 StartHigher = true;
             if (StartHigher != EndHigher)
             {
@@ -47,7 +39,7 @@ namespace GameJom
             }
             return false;
         }
-        public Rectangle OverlappedArea(Rectangle Base, Rectangle Selection)
+        static public Rectangle OverlappedArea(Rectangle Base, Rectangle Selection) // gets the overlaping area between two rectangles
         {
             if (Overlapped(Base, Selection))
                 return new Rectangle();

@@ -36,7 +36,7 @@ namespace GameJom
         public static MouseState mouseState;
         public int XMousePos;
         public int YMousePos;
-        public static Texture2D BasicTexture;
+        public static Texture2D BlankTexture;
         public static LevelClass clas = new LevelClass();
 
         Rectangle Player = new Rectangle(0, 0, 96, 96);
@@ -49,20 +49,20 @@ namespace GameJom
         }
         protected override void Initialize()
         {
-            // loads any squishing you would need to do to the game to not deform with different resolutions
-            AssetStorage.graphicsDevice = GraphicsDevice;
+            // adjusts draw parameters to scale to system screen size
+            graphicsDevice = GraphicsDevice;
             graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-            double num = (double)graphics.PreferredBackBufferWidth / 3840;
-            if (num > (double)graphics.PreferredBackBufferHeight / 2160)
+            double ScaleModifier = (double)graphics.PreferredBackBufferWidth / 3840;
+            if (ScaleModifier > (double)graphics.PreferredBackBufferHeight / 2160)
             {
-                num = (double)graphics.PreferredBackBufferHeight / 2160;
+                ScaleModifier = (double)graphics.PreferredBackBufferHeight / 2160;
             }
             ScreenBounds = new Rectangle(
-                (int)((graphics.PreferredBackBufferWidth - 3840 * num) / 2), 
-                (int)((graphics.PreferredBackBufferHeight - 2160 * num) / 2), 
-                (int)(3840 * num), (int)(2160 * num));
-            ScreenSizeAdjustment = num;
+                (int)((graphics.PreferredBackBufferWidth - 3840 * ScaleModifier) / 2), 
+                (int)((graphics.PreferredBackBufferHeight - 2160 * ScaleModifier) / 2), 
+                (int)(3840 * ScaleModifier), (int)(2160 * ScaleModifier));
+            ScreenSizeAdjustment = ScaleModifier;
 
             // graphical parameters
 
@@ -78,6 +78,7 @@ namespace GameJom
        
         protected override void LoadContent()
         {
+            AssetStorage.LoadAllContentAssets();
             editor.Load("bad poggie", Content);
             // Create a new SpriteBatch, which can be used to draw textures.
             string[] files = Directory.GetFiles(@"Content/Assets");
@@ -85,8 +86,7 @@ namespace GameJom
             {
                 Assets.Add(file, Content.Load<Texture2D>(file));
             }
-            //BasicTexture = Content.Load<Texture2D>("BasicShape");
-            BasicTexture = AssetStorage.LoadPNGTexture("BasicShape");
+            BlankTexture = (Texture2D)AssetStorage.ContentAssets.Storage["BasicShape"];
             clas.Load("bad poggie", Content); 
             Text1 = Content.Load<Texture2D>("font(pressed)");
             Text2 = Content.Load<Texture2D>("font(hold)");
@@ -95,6 +95,7 @@ namespace GameJom
             testFonts = new FontTexture(Text1, Text2, Text3);
             Griddy = Content.Load<Texture2D>("transparent");
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            testFontPreset = new FontPreset(AssetStorage.ContentAssets.SearchForFolder("TestFont"));
             // TODO: use this.Content to load your game content here
         }
 
@@ -163,15 +164,21 @@ namespace GameJom
         float roati = 0;
         float broati = 0;
         LevelEditor editor = new LevelEditor();
-
+        int bgGradientChange = 100;
+        int direction = 1;
         public static FontSettings textFormat = new FontSettings(20, Color.White, new Point(40, 80));
         public static FontTexture testFonts;
+        public FontPreset testFontPreset;
         protected override void Draw(GameTime gameTime)
         {
-
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
             // Background color
-            GraphicsDevice.Clear(Color.Black);
+            if (bgGradientChange >= 200)
+                direction = -1;
+            if (bgGradientChange <= 100)
+                direction = 1;
+            bgGradientChange += direction;
+            graphicsDevice.Clear(new Color(bgGradientChange, 0, 255));
             if (GameState == (int)states.playArea)
             {
                 GraphicsDevice.Clear(Color.LightGray);
@@ -187,8 +194,8 @@ namespace GameJom
             AutomatedDraw Base = new AutomatedDraw();
 
             //MainCamera.Draw(new Rectangle(0, 0, 1000, 1000), BasicTexture);
-            MainCamera.Draw(MainCamera.RatioRectangle(new Vector2(0, 0.1f), new Vector2(0, 0.1f)), BasicTexture);
-            MainCamera.Draw(new Rectangle(-1500, -1500, 100, 100), BasicTexture);
+            MainCamera.Draw(MainCamera.RatioRectangle(new Vector2(0, 0.1f), new Vector2(0, 0.1f)), BlankTexture);
+            MainCamera.Draw(new Rectangle(-1500, -1500, 100, 100), BlankTexture);
             //MainCamera.Draw(Player, BasicTexture, Color.Gray);
 
 
@@ -201,17 +208,13 @@ namespace GameJom
 
 
 
-
-
-
-
             if (GameState == (int)states.editor)
             {
                 editor.Edit(new Rectangle(0, 0, 96, 96), EditorGraphics);
 
             }
 
-
+            testFontPreset.Print("balalalalaAOGNMSAOI SUIIIIIIII", new Point(100, 100));
             #region UI
 
 
@@ -303,9 +306,9 @@ namespace GameJom
             #endregion
 
 
-            Base.Draw(new Rectangle(XMousePos, YMousePos, 15, 20), BasicTexture);
-            spriteBatch.Draw(BasicTexture, new Rectangle(0, 0, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
-            spriteBatch.Draw(BasicTexture, new Rectangle(0, ScreenBounds.Bottom, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
+            Base.Draw(new Rectangle(XMousePos, YMousePos, 15, 20), BlankTexture);
+            spriteBatch.Draw(BlankTexture, new Rectangle(0, 0, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
+            spriteBatch.Draw(BlankTexture, new Rectangle(0, ScreenBounds.Bottom, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
             spriteBatch.End();
             #endregion
 

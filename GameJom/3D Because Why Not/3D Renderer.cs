@@ -66,8 +66,7 @@ namespace GameJom._3D_Because_Why_Not
 
         public void RenderLine(Vector3 start, Vector3 end, int thiccness = 1)
         {
-            if (DrawParam.Drawn)
-                DrawParam.DrawLine(new LineClass(ScreenProjection(CoordnetConvert(start)), ScreenProjection(CoordnetConvert(end)), thiccness));
+            DrawParam.DrawLine(new LineClass(ScreenProjection(CoordnetConvert(start)), ScreenProjection(CoordnetConvert(end)), thiccness));
         }
         public void RenderSegmentedLine(Vector3 start, Vector3 end, int segments, int thiccness = 1)
         {

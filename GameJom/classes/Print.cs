@@ -15,7 +15,7 @@ namespace GameJom
             PressFont = font3;
         }
     }
-    public class FontSettings
+    public class FontSettings 
     {
         int spacing;
         Color color;

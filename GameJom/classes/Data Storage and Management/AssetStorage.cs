@@ -5,32 +5,20 @@ using System.IO;
 
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Content;
+using GameJom._3D_Because_Why_Not;
+using System.Linq;
 
 namespace GameJom
 {
     public static class AssetStorage
     {
-        public static Folder BaseTextureAssets;
-        public static GraphicsDevice graphicsDevice;
-        public static void AssetLoader(string folder/*sets target folder in content/assets*/)
+        public static Folder ContentAssets;
+        public static GraphicsDevice graphicsDevice = Game1.graphicsDevice;
+        public static void LoadAllContentAssets()
         {
-            DirectoryInfo rootDirectory = new DirectoryInfo(@"Content/Assets/" + folder); // sets accessFolder to correct target
-            if (!rootDirectory.Exists)
-            {
-                rootDirectory.Create();
-            }
-            else
-            {
-                FileInfo[] files = rootDirectory.GetFiles("*.xnb");
-                foreach (FileInfo file in files)
-                {
-                    string key = Path.GetFileNameWithoutExtension(file.Name);
-                    //TileSetAssets.Add(Content.Load<Texture2D>(rootDirectory.FullName + "/" + key));
-                }
-            }
+            ContentAssets = GetFolder("Content");
         }
-        public static Folder GetFolder(string root, ContentManager Content)
+        public static Folder GetFolder(string root) // gets all files and subfolders in the root directory and creates a Folder instance to store them
         {
             Folder Output = new Folder();
             DirectoryInfo rootDirectory = new DirectoryInfo(root); // sets rootDirectory to correct target
@@ -41,31 +29,32 @@ namespace GameJom
             string[] directories = Directory.GetDirectories(root);
             foreach (string subFolder in directories)
             {
-                Output.SubFolders.Add(subFolder, GetFolder(subFolder, Content));
+                string key = subFolder.Split(@"\".ToCharArray().Last()).Last();
+                Output.SubFolders.Add(key, GetFolder(subFolder));
             }
-            FileInfo[] textureFiles = rootDirectory.GetFiles("*.xnb");
+            FileInfo[] textureFiles = rootDirectory.GetFiles("*.png");
             foreach (FileInfo file in textureFiles)
             {
                 string key = Path.GetFileNameWithoutExtension(file.Name);
-                Output.Storage.Add(key, LoadPNGTexture(key));
+                Output.Storage.Add(key, LoadPNGTexture(root + "/" + key + ".png"));
             }
             FileInfo[] stringFiles = rootDirectory.GetFiles("*.txt");
             foreach (FileInfo file in stringFiles)
             {
                 string key = Path.GetFileNameWithoutExtension(file.Name);
-                Output.Storage.Add(key, File.ReadAllText(key));
+                Output.Storage.Add(key, File.ReadAllText(root + "/" + key + ".txt"));
             }
             //Returns a Folder output that contains all string and png texture files within the directory given in root and all sub directories
             return Output;
         }
         public static Texture2D LoadPNGTexture(string filePath) // loads the texture directly from PNG file format
         {
-            FileStream fileStream = new FileStream("Content/" + filePath + ".png", FileMode.Open);
+            FileStream fileStream = new FileStream(filePath, FileMode.Open);
             Texture2D spriteAtlas = Texture2D.FromStream(graphicsDevice, fileStream);
             fileStream.Dispose();
             return spriteAtlas;
         }
-        public static void SaveFolder(Folder folder, string root)// saves all directories and string files, string files must be pre serialized
+        public static void SaveFolder(Folder folder, string root)// saves all directories and string files, does not serialize string files
         {
             foreach(string file in folder.Storage.Keys)
             {
@@ -81,11 +70,30 @@ namespace GameJom
                 SaveFolder(folder.SubFolders[subFolder], root + "/" + subFolder);
             }
         }
+        //public static void LoadText
     }
     public class Folder
     {
-        public Dictionary<string, object> Storage = new Dictionary<string, object>();
-        public Dictionary<string,Folder> SubFolders = new Dictionary<string,Folder>();
+        public Dictionary<string, object> Storage = new Dictionary<string, object>(); // storage of all files, currently only designed to support string and texture files but can support any files using object as value. needs specification of object type before pulling from the dictionary
+        public Dictionary<string,Folder> SubFolders = new Dictionary<string,Folder>(); // storage of subfolders
+        public void AddFolderStorage(Dictionary<string, object> Addition) // adds file contents into the current folder
+        {
+            foreach (string key in Addition.Keys)
+            {
+                Storage.Add(key, Addition[key]);
+            }
+        }
+        public Folder Sum() // returns a new folder with the sum of all sub folders
+        {
+            Folder newFolder = new Folder();
+            newFolder.AddFolderStorage(Storage);
+            foreach (Folder folder in SubFolders.Values)
+            {
+                newFolder.AddFolderStorage(folder.Storage);
+                newFolder.AddFolderStorage(folder.Sum().Storage);
+            }    
+            return newFolder;
+        }
         public Folder SearchForFolder(string search)
         {
             if (SubFolders.ContainsKey(search)) // searches for folder within first layer of subfolders

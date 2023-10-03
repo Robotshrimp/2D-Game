@@ -14,7 +14,7 @@ namespace GameJom
 
 
         public Point relativePosition;
-        public int length;
+        public float length;
         public float angle;
         public float slope;
         public float yIntercept;
@@ -28,7 +28,7 @@ namespace GameJom
             this.length = this.Length(relativePosition);
             this.angle = (float)this.Angle(relativePosition, length);
             this.slope = (float)relativePosition.Y / (float)relativePosition.X;
-            this.yIntercept = this.Start.Y - this.Start.X * slope;
+            this.yIntercept = this.Start.Y - this.Start.X * slope;// gets where the line would intercept the Y axis if it continued infinitly
         }
 
         public Point EndFinder(Point Start, float Angle, int Length)
@@ -47,12 +47,16 @@ namespace GameJom
         {
             return new Point(end.X - start.X, end.Y - start.Y);
         }
-        public int Length(Point RelativePosition)
+        public float Length(Point RelativePosition)
         {
-            return (int)TrigFun.pythag_hypotenus(new Vector2(RelativePosition.X, RelativePosition.Y));// pythagorean theorem hypotenus moment
+            return (float)TrigFun.pythag_hypotenus(new Vector2(RelativePosition.X, RelativePosition.Y));// pythagorean theorem hypotenus moment
         }
-        public float Angle(Point RelativePosition, int Length)
+        public float Angle(Point RelativePosition, float Length)
         {
+            if(length == 0)
+            {
+                return 0;
+            }
             double Angle = Math.Asin((double)RelativePosition.Y / Length);
             if (RelativePosition.X < 0)
             {
@@ -62,7 +66,7 @@ namespace GameJom
         }
 
 
-        public float Function(float x)
+        public float LinearFunction(float x) // represents a linear math function
         {
             return (yIntercept + (slope * x));
         }

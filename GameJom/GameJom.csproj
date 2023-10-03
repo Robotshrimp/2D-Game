@@ -46,6 +46,8 @@
     <Compile Include="3D Because Why Not\3D Renderer.cs" />
     <Compile Include="3D Because Why Not\Cuboid.cs" />
     <Compile Include="3D Because Why Not\Triangle.cs" />
+    <Compile Include="classes\Basic Graphics\LineClass - Copy.cs" />
+    <Compile Include="classes\New Print.cs" />
     <Compile Include="classes\Data Storage and Management\AssetStorage.cs" />
     <Compile Include="classes\InputManager.cs" />
     <Compile Include="classes\Level\GridTexture.cs" />
@@ -53,8 +55,8 @@
     <Compile Include="classes\Level\LevelClass.cs" />
     <Compile Include="classes\Screens\HomeScreen.cs" />
     <Compile Include="classes\Screens\IScreen.cs" />
-    <Compile Include="classes\Screens\ScreenManager.cs" />
-    <Compile Include="DataManager.cs" />
+    <Compile Include="classes\Managers\ScreenManager.cs" />
+    <Compile Include="DataConverter.cs" />
     <Compile Include="Foundational Classes\limit.cs" />
     <Compile Include="classes\Collision.cs" />
     <Compile Include="Foundational Classes\OverlapCheck.cs" />

@@ -13,18 +13,17 @@ namespace GameJom
         {
 
         }
-        OverlapCheck overlapCheck = new OverlapCheck();
         public bool CollisionCheck(Rectangle HeavyRectangle, Point HeavyRectangleMovement, Rectangle LightRectangle, ref Point LightRectangleMovement)
         {
             Rectangle HeavyRectangleDestination = new Rectangle(HeavyRectangle.X + HeavyRectangleMovement.X, HeavyRectangle.Y + HeavyRectangleMovement.Y, HeavyRectangle.Width, HeavyRectangle.Height);
             Rectangle LightRectangleDestination = new Rectangle(LightRectangle.X + LightRectangleMovement.X, LightRectangle.Y + LightRectangleMovement.Y, LightRectangle.Width, LightRectangle.Height);
             LineClass HeavyRectanglePath = new LineClass(HeavyRectangle.Center, HeavyRectangle.Center + HeavyRectangleMovement);
             LineClass LightRectanglePath = new LineClass(LightRectangle.Center, LightRectangle.Center + LightRectangleMovement);
-            if (overlapCheck.Overlapped(HeavyRectangle, CoveredDistance(LightRectangle, LightRectangleMovement)))
+            if (OverlapCheck.Overlapped(HeavyRectangle, CoveredDistance(LightRectangle, LightRectangleMovement)))
             {
                 
             }
-            if (overlapCheck.Overlapped(HeavyRectangle, CoveredDistance(LightRectangle, LightRectangleMovement)))
+            if (OverlapCheck.Overlapped(HeavyRectangle, CoveredDistance(LightRectangle, LightRectangleMovement)))
             {
 
             }
@@ -38,9 +37,9 @@ namespace GameJom
         {
 
             LineClass MovementLine = new LineClass(Corner, Corner + Direction);
-            if (overlapCheck.Intersect(MovementLine, Side))
+            if (OverlapCheck.CheckIntersect(MovementLine, Side))
             {
-                Point intersectionLocation = overlapCheck.IntersectionLocation(MovementLine, Side);
+                Point intersectionLocation = OverlapCheck.IntersectionLocation(MovementLine, Side);
                 float angle = Side.angle - MovementLine.angle;
                 float newMovement = (float)(Math.Cos(angle) * MovementLine.length);
                 

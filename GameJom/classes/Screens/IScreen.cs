@@ -9,9 +9,8 @@ namespace GameJom
 {
     interface IScreen
     {
-
-        void initialize(string folder);// intialization, ie, getting all assets
-        void update(float delta);// update logic
-        void draw(AutomatedDraw automatedDraw);// draws all nescessary screen objects
+        void initialize();// intialization, ie, getting all assets
+        void update();// update logic
+        void draw();// draws all nescessary screen objects
     }
 }

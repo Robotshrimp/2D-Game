@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace GameJom
 {
-    public static class DataManager
+    public static class DataConverter
     {
         // data modification
         public static List<string> IntListToString(List<int> list)// do not use. placed here as reminder to use convertall

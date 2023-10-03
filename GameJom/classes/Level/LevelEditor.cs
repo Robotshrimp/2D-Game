@@ -26,7 +26,7 @@ namespace GameJom
             {
                 if (previouseMousePressedState == false)
                 {
-                    rechtangleSelectionStart = DrawParam.CalcPoint(mousePos);
+                    rechtangleSelectionStart = DrawParam.CalcPoint(mousePos); 
                 }
             }
             return GridManager.GridRectangle(new Rectangle(rechtangleSelectionStart, DrawParam.CalcPoint(mousePos) - rechtangleSelectionStart));
@@ -53,7 +53,7 @@ namespace GameJom
             }
             if (Mouse.GetState().LeftButton == ButtonState.Pressed) 
             {
-                DrawParam.Draw(GridManager.GridToScreen(RectangleSelection(Mouse.GetState().Position, Mouse.GetState().LeftButton == ButtonState.Pressed)), Game1.BasicTexture, selectionColor);
+                DrawParam.Draw(GridManager.GridToScreen(RectangleSelection(Mouse.GetState().Position, Mouse.GetState().LeftButton == ButtonState.Pressed)), Game1.BlankTexture, selectionColor);
             }
             // TODO: takes a set of cordnet and place a new room at that location(might be good to allow rooms to overlap to have mid room transitions
         }
@@ -161,7 +161,7 @@ namespace GameJom
                     GridManager.ModularTexture(Game1.Griddy, room.RoomSize);
                 }
             }
-            Base.Draw(new Rectangle(0, 0, 300, 10000), Game1.BasicTexture, Color.Gray);
+            Base.Draw(new Rectangle(0, 0, 300, 10000), Game1.BlankTexture, Color.Gray);
             //brush sellection
             if (menu.ButtonPressedLeftAt(new Rectangle(), null, "room"))
             {

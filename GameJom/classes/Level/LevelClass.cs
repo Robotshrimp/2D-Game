@@ -32,17 +32,17 @@ namespace GameJom
                 File.Create(location + @"/Rooms.txt").Dispose();
 
             // accessing texture files by foreach loop
-            DirectoryInfo d = new DirectoryInfo(@"Content/Assets/TileSets");
+            DirectoryInfo d = new DirectoryInfo(@"Content/Assets/TileSets/Green_Industrial");
             if (!d.Exists) 
             {
                 d.Create();
             }
-            FileInfo[] files = d.GetFiles("*.xnb");
+            FileInfo[] files = d.GetFiles("*.png");
             foreach (FileInfo file in files) 
             {
-                string key = Path.GetFileNameWithoutExtension(file.Name);//gets name of file
-                TileSetAssets.Add(Content.Load<Texture2D>(d.FullName + "/" + key));
+                TileSetAssets.Add(AssetStorage.LoadPNGTexture(file.FullName));
             }
+            Folder TileAssets = AssetStorage.ContentAssets.SearchForFolder("TileSets");
             // accessing room data through file split and foreach loop
             string data = File.ReadAllText(location + @"/Rooms.txt");
             string[] roomData = data.Split('&');
