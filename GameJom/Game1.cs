@@ -67,7 +67,7 @@ namespace GameJom
             // graphical parameters
 
             graphics.ApplyChanges();
-            this.IsMouseVisible = false;
+            this.IsMouseVisible = true;
             base.Initialize();
         }
         public static Texture2D Text1;
@@ -75,6 +75,7 @@ namespace GameJom
         public static Texture2D Text3;
         public static Texture2D Griddy;
         public static Dictionary<string, Texture2D> Assets;
+        private HomeScreen homeScreen = new HomeScreen();
        
         protected override void LoadContent()
         {
@@ -96,6 +97,7 @@ namespace GameJom
             Griddy = Content.Load<Texture2D>("transparent");
             spriteBatch = new SpriteBatch(GraphicsDevice);
             testFontPreset = new FontPreset(AssetStorage.ContentAssets.SearchForFolder("TestFont"));
+            homeScreen.initialize();
             // TODO: use this.Content to load your game content here
         }
 
@@ -111,6 +113,8 @@ namespace GameJom
         AutomatedDraw EditorGraphics;
         protected override void Update(GameTime gameTime)
         {
+            homeScreen.update();
+            /*
             mouseState = Mouse.GetState();
             XMousePos = (int)(mouseState.X / ScreenSizeAdjustment);
             YMousePos = (int)(mouseState.Y / ScreenSizeAdjustment);
@@ -156,7 +160,7 @@ namespace GameJom
             }
             InputManager.Update();
             base.Update(gameTime);
-
+            */
             
         }
 
@@ -171,7 +175,14 @@ namespace GameJom
         public FontPreset testFontPreset;
         protected override void Draw(GameTime gameTime)
         {
+
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
+            homeScreen.draw();
+
+            spriteBatch.Draw(BlankTexture, new Rectangle(0, 0, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
+            spriteBatch.Draw(BlankTexture, new Rectangle(0, ScreenBounds.Bottom, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
+            spriteBatch.End();
+            /*
             // Background color
             if (bgGradientChange >= 200)
                 direction = -1;
@@ -276,7 +287,7 @@ namespace GameJom
             {
                 broati += -(float).03;
             }
-            */
+            // place comment out here
             float suroundingsize = 1.5f;
             cube.DrawCuboid(new Vector3(2, -2, 14), new Vector3(suroundingsize, suroundingsize, suroundingsize), 5, 3, new Vector3((float)Math.PI / 5, -test - (float)Math.PI / 3, (float)Math.PI / 4));
             cube.DrawCuboid(new Vector3(-2, -2, 14), new Vector3(suroundingsize, suroundingsize, suroundingsize), 5, 3, new Vector3((float)Math.PI / 5, test, (float)Math.PI / 4));
@@ -310,12 +321,9 @@ namespace GameJom
 
 
             Base.Draw(new Rectangle(XMousePos, YMousePos, 15, 20), BlankTexture);
-            spriteBatch.Draw(BlankTexture, new Rectangle(0, 0, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
-            spriteBatch.Draw(BlankTexture, new Rectangle(0, ScreenBounds.Bottom, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
-            spriteBatch.End();
             #endregion
 
-            
+            */
             //linedraw.DrawLine();
             //Base.draw(new Rectangle(300, 300, 1000, 300), PlayerTexture);
             base.Draw(gameTime);

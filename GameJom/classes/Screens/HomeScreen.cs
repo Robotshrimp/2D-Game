@@ -1,41 +1,48 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Input;
-using static System.Net.Mime.MediaTypeNames;
-using System.Windows.Forms;
 
 namespace GameJom
 {
     class HomeScreen : IScreen
     {
-        Folder usedAssets;
+        Folder usedAssets = new Folder();
         
         Texture2D BlankTexture;
         FontPreset Font;
-        AutomatedDraw BaseDraw = new AutomatedDraw();
         float roati = 0;
         float test = 0;
 
+        GraphicsDevice graphicsDevice;
+
         public void initialize()
         {
-            usedAssets.AddFolderStorage(AssetStorage.ContentAssets.SearchForFolder("Fonts").Storage);
+            usedAssets.SubFolders.Add("Fonts", AssetStorage.ContentAssets.SearchForFolder("Fonts"));
             usedAssets.AddFolderStorage(AssetStorage.ContentAssets.Storage);
             BlankTexture = (Texture2D)usedAssets.Storage["BasicShape"];
-            Font = new FontPreset(usedAssets.SubFolders["TestFont"]);
-            Font.AdvancedPresets(BaseDraw, 64, Color.White, 10);
+            Font = new FontPreset(usedAssets.SubFolders["Fonts"].SubFolders["TestFont"]);
+            graphicsDevice = Game1.graphicsDevice;
         }
-        GraphicsDevice graphicsDevice = Game1.graphicsDevice;
         int bgGradient = 100;
         int changeRate = 1;
+        MouseState mouseState = new MouseState();
         public void draw()
         {
-            MouseState mouseState = new MouseState();
-            BaseDraw.Draw(new Rectangle(mouseState.X, mouseState.Y, 30, 40), BlankTexture);
+            mouseState = Mouse.GetState();
+            Rectangle pointerLocation = new Rectangle((int)((float)mouseState.X / (float)Game1.ScreenSizeAdjustment), mouseState.Y, 1,1);
+            //new Rectangle(mouseState.Position, new Point(1,1)); 
+            AutomatedDraw BaseDraw = new AutomatedDraw();
+            Font.AdvancedPresets(BaseDraw, 96, Color.White, 8);
+
+            if (OverlapCheck.Overlapped(Font.Print("Sttarten", new Point(100, 100)), pointerLocation))
+            {
+                if(Mouse.GetState().LeftButton == ButtonState.Pressed)
+                {
+
+                }
+            }
+
 
             _3D_Because_Why_Not.Renderer3D rend = new _3D_Because_Why_Not.Renderer3D(BaseDraw);
             #region 3D grapnics
@@ -80,12 +87,13 @@ namespace GameJom
                 changeRate = 1;
             bgGradient += changeRate;
             graphicsDevice.Clear(new Color(bgGradient, 0, 255));
+            BaseDraw.Draw(new Rectangle(pointerLocation.Location, new Point(30, 40)), BlankTexture);
         }
 
 
         public void update()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

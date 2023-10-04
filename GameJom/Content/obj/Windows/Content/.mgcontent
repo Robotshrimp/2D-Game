@@ -4,15 +4,15 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/BasicShape.png</File>
-    <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/Bogos Font.png</File>
-    <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/corrupted Opaque.png</File>
-    <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/font(hold).png</File>
-    <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/font(pressed).png</File>
-    <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/Font.png</File>
-    <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/Opaque.png</File>
-    <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/tile test format.png</File>
-    <File>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/transparent.png</File>
+    <File>C:/Users/jiaao/source/repos/2D-Game/GameJom/Content/BasicShape.png</File>
+    <File>C:/Users/jiaao/source/repos/2D-Game/GameJom/Content/Bogos Font.png</File>
+    <File>C:/Users/jiaao/source/repos/2D-Game/GameJom/Content/corrupted Opaque.png</File>
+    <File>C:/Users/jiaao/source/repos/2D-Game/GameJom/Content/font(hold).png</File>
+    <File>C:/Users/jiaao/source/repos/2D-Game/GameJom/Content/font(pressed).png</File>
+    <File>C:/Users/jiaao/source/repos/2D-Game/GameJom/Content/Font.png</File>
+    <File>C:/Users/jiaao/source/repos/2D-Game/GameJom/Content/Opaque.png</File>
+    <File>C:/Users/jiaao/source/repos/2D-Game/GameJom/Content/tile test format.png</File>
+    <File>C:/Users/jiaao/source/repos/2D-Game/GameJom/Content/transparent.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

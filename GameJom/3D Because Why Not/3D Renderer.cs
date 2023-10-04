@@ -25,7 +25,7 @@ namespace GameJom._3D_Because_Why_Not
             fovHorizontal = FovHorozontal;
             if (FovVertical <= 0)
             {
-                fovVertical = (int)(FovHorozontal * (2160.0 / 3840.0));
+                fovVertical = (int)(FovHorozontal * ((float)Game1.graphics.PreferredBackBufferHeight / (float)Game1.graphics.PreferredBackBufferWidth));
             }
             this.DrawParam = drawParam;
 

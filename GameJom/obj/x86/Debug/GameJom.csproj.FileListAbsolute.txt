@@ -89,3 +89,37 @@ C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\obj\x86\Debug\GameJom.
 C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\bin\Windows\x86\Debug\Content\corrupted Opaque.xnb
 C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\bin\Windows\x86\Debug\GameJom.exe.config
 C:\Users\jiaao\OneDrive\Documents\GitHub\MainGame\GameJom\obj\x86\Debug\GameJom.csproj.SuggestedBindingRedirects.cache
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\Content\BasicShape.xnb
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\Content\Bogos Font.xnb
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\Content\corrupted Opaque.xnb
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\Content\font(hold).xnb
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\Content\font(pressed).xnb
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\Content\Font.xnb
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\Content\Opaque.xnb
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\Content\tile test format.xnb
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\Content\transparent.xnb
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\GameJom.exe.config
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\GameJom.exe
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\GameJom.pdb
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\MonoGame.Framework.dll
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\SharpDX.MediaFoundation.dll
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\SharpDX.dll
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\SharpDX.XAudio2.dll
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\SharpDX.DXGI.dll
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\SharpDX.Direct3D11.dll
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\SharpDX.Direct2D1.dll
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\SharpDX.XInput.dll
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\MonoGame.Framework.xml
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\SharpDX.MediaFoundation.xml
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\SharpDX.xml
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\SharpDX.XAudio2.xml
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\SharpDX.DXGI.xml
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\SharpDX.Direct3D11.xml
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\SharpDX.Direct2D1.xml
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\bin\Windows\x86\Debug\SharpDX.XInput.xml
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\obj\x86\Debug\GameJom.csproj.AssemblyReference.cache
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\obj\x86\Debug\GameJom.csproj.SuggestedBindingRedirects.cache
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\obj\x86\Debug\GameJom.csproj.CoreCompileInputs.cache
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\obj\x86\Debug\GameJom.csproj.CopyComplete
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\obj\x86\Debug\GameJom.exe
+C:\Users\jiaao\Source\Repos\2D-Game\GameJom\obj\x86\Debug\GameJom.pdb

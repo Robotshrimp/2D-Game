@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/BasicShape.png</SourceFile>
-  <SourceTime>2022-03-14T11:37:48-07:00</SourceTime>
-  <DestFile>C:/Users/jiaao/OneDrive/Documents/GitHub/MainGame/GameJom/Content/bin/Windows/Content/BasicShape.xnb</DestFile>
-  <DestTime>2023-10-03T10:06:53.1341943-07:00</DestTime>
+  <SourceFile>C:/Users/jiaao/source/repos/2D-Game/GameJom/Content/BasicShape.png</SourceFile>
+  <SourceTime>2023-10-04T08:02:46.6198551-07:00</SourceTime>
+  <DestFile>C:/Users/jiaao/source/repos/2D-Game/GameJom/Content/bin/Windows/Content/BasicShape.xnb</DestFile>
+  <DestTime>2023-10-04T08:03:12.4167176-07:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2018-12-08T08:35:54-08:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
