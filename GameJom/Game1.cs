@@ -213,8 +213,11 @@ namespace GameJom
                 editor.Edit(new Rectangle(0, 0, 96, 96), EditorGraphics);
 
             }
-
-            testFontPreset.Print("balalalalaAOGNMSAOI SUIIIIIIII", new Point(100, 100));
+            testFontPreset.AdvancedPresets(Base, 100, Color.LightYellow, 10);
+            testFontPreset.Print("balalalalaAOGNMSAOI SUIIIIIIII    I nEEd mOOR bOULEETS", new Point(100, 100));
+            testFontPreset.Print("ABCDEFGHIJKLMNOPQRSTUVWXYZ", new Point(100, 200));
+            testFontPreset.Print("abcdefghijklmnopqrstuvwxyz", new Point(100, 300));
+            testFontPreset.Print("1234567890", new Point(100, 400));
             #region UI
 
 

@@ -55,17 +55,17 @@ namespace GameJom
                 {
 
                     Texture2D characterTexture = (Texture2D)CharType.Storage[text[n].ToString()];
-                    float FontSizeRatio = FontSize / characterTexture.Height;
+                    float FontSizeRatio = (float)FontSize / (float)characterTexture.Height;
                     DrawParam.Draw(new Rectangle(printLocation.X + LineSize, printLocation.Y, (int)(characterTexture.Bounds.Width * FontSizeRatio), FontSize),
                         characterTexture, color);
-                    LineSize += characterTexture.Width + Spacing;
+                    LineSize += (int)(characterTexture.Bounds.Width * FontSizeRatio) + Spacing;
                 }
                 else
                     LineSize += (int)FontSize / 2 + Spacing;
             }
             return new Point(LineSize, FontSize); // returns the size of the total print 
         }
-        public Point GetPrintSize(string text) // returns the size of the text if printed in the current preset
+        public Point GetPrintSize(string text) // returns the size of the text if printed in the current presetl
         {
             int totalLength = 0;
             foreach(char n in  text)
