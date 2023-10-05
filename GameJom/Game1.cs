@@ -179,7 +179,7 @@ namespace GameJom
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
             homeScreen.draw();
 
-            spriteBatch.Draw(BlankTexture, new Rectangle(0, 0, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
+            spriteBatch.Draw(BlankTexture, new Rectangle(0, 0, calculationScreenSize.X, ScreenBounds.Top), Color.Black);//
             spriteBatch.Draw(BlankTexture, new Rectangle(0, ScreenBounds.Bottom, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
             spriteBatch.End();
             /*
