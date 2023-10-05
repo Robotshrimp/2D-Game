@@ -50,9 +50,9 @@ namespace GameJom
         public static Texture2D LoadPNGTexture(string filePath) // loads the texture directly from PNG file format
         {
             FileStream fileStream = new FileStream(filePath, FileMode.Open);
-            Texture2D spriteAtlas = Texture2D.FromStream(graphicsDevice, fileStream);
+            Texture2D loadedPNG = Texture2D.FromStream(graphicsDevice, fileStream);
             fileStream.Dispose();
-            return spriteAtlas;
+            return loadedPNG;
         }
         public static void SaveFolder(Folder folder, string root)// saves all directories and string files, does not serialize string files
         {

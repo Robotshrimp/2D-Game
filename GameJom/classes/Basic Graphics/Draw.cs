@@ -99,7 +99,7 @@ namespace GameJom
             if (Drawn)
             {
                 // TODO add integration for automated draw
-                line = new LineClass(DisplayPoint(line.Start), DisplayPoint(line.End), line.thiccness);
+                line = new LineClass(/*DisplayPoint*/(line.Start), /*DisplayPoint*/(line.End), line.thiccness);// 3D renderer renders based off screen size already so no need for this extra scaling
     #pragma warning disable CS0618 // unknown bug where program thinks a location Vector2 exists in the parameters given
                 spriteBatch.Draw(texture: Game1.BlankTexture, destinationRectangle: new Rectangle(line.Start, new Point((int)line.length, line.thiccness)), rotation: line.angle, color: Color.White);
     #pragma warning restore CS0618

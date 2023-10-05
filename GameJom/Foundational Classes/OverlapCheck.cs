@@ -10,10 +10,8 @@ namespace GameJom
     {
         static public bool Overlapped(Rectangle Base, Rectangle Selection) // boolian value on if the rectangles overlap
         {
-            if (Selection.Bottom > Base.Top &&
-                Selection.Left > Base.Right &&
-                Selection.Top < Base.Bottom &&
-                Selection.Right < Base.Left)
+            if (Selection.Bottom > Base.Top && Selection.Top < Base.Bottom &&
+                Selection.Left < Base.Right && Selection.Right > Base.Left)
                 return true;
             return false;
         }

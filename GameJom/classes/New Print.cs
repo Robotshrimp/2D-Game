@@ -33,7 +33,7 @@ namespace GameJom
         }
 
 
-        public Point Print(string text, Point printLocation)
+        public Rectangle Print(string text, Point printLocation)
         {
             Folder CharType;
             int LineSize = 0; // denotes the place for the next character print
@@ -63,7 +63,7 @@ namespace GameJom
                 else
                     LineSize += (int)FontSize / 2 + Spacing;
             }
-            return new Point(LineSize, FontSize); // returns the size of the total print 
+            return DrawParam.DisplayRectangle(new Rectangle(printLocation.X, printLocation.Y, LineSize, FontSize)); // returns the size of the total print 
         }
         public Point GetPrintSize(string text) // returns the size of the text if printed in the current presetl
         {
