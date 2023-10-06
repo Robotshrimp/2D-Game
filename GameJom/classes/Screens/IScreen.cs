@@ -10,7 +10,8 @@ namespace GameJom
     interface IScreen
     {
         void initialize();// intialization, ie, getting all assets
-        void update();// update logic
+        void update();// update logic| use this to update screens?
         void draw();// draws all nescessary screen objects
+        IScreen changeScreen(); // allows the class using IScreen to return a new screen to switch to
     }
 }
