@@ -25,10 +25,11 @@ namespace GameJom
         float roati = 0;
         float test = 0;
         IScreen targetScreen; // denotes the screen to switch to if not null
+        bool endSelf = false;
 
         GraphicsDevice graphicsDevice;
 
-        public void initialize()
+        public void Initialize()
         {
             usedAssets.SubFolders.Add("Fonts", AssetStorage.ContentAssets.SearchForFolder("Fonts"));
             usedAssets.AddFolderStorage(AssetStorage.ContentAssets.Storage);
@@ -36,25 +37,21 @@ namespace GameJom
             Font = new FontPreset(usedAssets.SubFolders["Fonts"].SubFolders["TestFont"]);
             graphicsDevice = Game1.graphicsDevice;
         }
-        int bgGradient = 100;
-        int changeRate = 1;
+        float bgGradient = 10;
+        float changeRate = 0.1f;
         MouseState mouseState = new MouseState();
-        public void draw()
+        Rectangle startButton = new Rectangle();
+        Rectangle editButton = new Rectangle();
+        Rectangle pointerLocation = new Rectangle();
+        public void Draw()
         {
             mouseState = Mouse.GetState();
-            Rectangle pointerLocation = new Rectangle((int)((float)mouseState.X / (float)Game1.ScreenSizeAdjustment), mouseState.Y, 1,1); 
+            pointerLocation = new Rectangle((int)((float)mouseState.X / (float)Game1.ScreenSizeAdjustment), mouseState.Y, 1, 1);
             AutomatedDraw BaseDraw = new AutomatedDraw();
             Font.AdvancedPresets(BaseDraw, 96, Color.White, 8);
             targetScreen = null;
-            pause = false;
-            if (OverlapCheck.Overlapped(Font.Print("Start", new Point(100, 100)), pointerLocation))
-            {
-                if(Mouse.GetState().LeftButton == ButtonState.Pressed)
-                {
-                    Font.Print("received", new Point(100, 200));
-                    pause = true;
-                }
-            }
+            startButton = Font.Print("Start", new Point(100, 100));
+            editButton = Font.Print("Edit", new Point(100, 250));
 
 
             _3D_Because_Why_Not.Renderer3D rend = new _3D_Because_Why_Not.Renderer3D(BaseDraw);
@@ -92,28 +89,40 @@ namespace GameJom
 
             #endregion
 
-            if (bgGradient >= 200)
-                changeRate = -1;
-            if (bgGradient <= 100)
-                changeRate = 1;
-            bgGradient += changeRate;
-            graphicsDevice.Clear(new Color(bgGradient, 0, 255));
+            graphicsDevice.Clear(new Color((int)bgGradient, (int)bgGradient, (int)bgGradient));
             BaseDraw.Draw(new Rectangle(pointerLocation.Location, new Point(30, 40)), BlankTexture);
         }
 
 
-        public void update()
+        public void Update()
         {
             if (!pause)
             {
-            roati += (float).01;
-            test += (float).01;
-
+                roati += (float).01;
+                test += (float).01;
+                if (OverlapCheck.Overlapped(startButton, pointerLocation))
+                {
+                    if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    {
+                        pause = true;
+                    }
+                }
+                if (bgGradient >= 30)
+                    changeRate = -0.1f;
+                if (bgGradient <= 1)
+                    changeRate = 0.1f;
+                bgGradient += changeRate;
             }
         }
-        public IScreen changeScreen()
+        public IScreen newScreen()
         {
-            return targetScreen;
+            IScreen placeHolderScreen = targetScreen;
+            targetScreen = null;
+            return placeHolderScreen;
+        }
+        public bool removeSelf()
+        {
+            return endSelf;
         }
     }
 }

@@ -10,18 +10,40 @@ namespace GameJom.classes.Screens
     internal class ScreenManager
     {
         HomeScreen homeScreen;
-        IScreen usedScreen;
+        List<IScreen> usedScreens;
         public void Initalize()
         {
-            usedScreen = homeScreen;
+            foreach (IScreen usedScreen in usedScreens)
+            {
+                usedScreen.Initialize();
+            }
         }
         public void Update()
         {
-            usedScreen.update();
+
+            foreach (IScreen usedScreen in usedScreens)
+            {
+                usedScreen.Update();
+                IScreen newScreen = usedScreen.newScreen();
+                if (newScreen != null && !usedScreens.Contains(newScreen)) // gets the new screen set by usedscreen if not null
+                {
+                    usedScreen.newScreen().Initialize();
+                    usedScreens.Add(usedScreen.newScreen());
+                }
+                if(usedScreen.removeSelf()) // removed this usedScreen from usedScreens
+                {
+                    usedScreens.Remove(usedScreen);
+                }
+
+            }
         }
         public void Draw()
         {
-            usedScreen.draw();
+
+            foreach (IScreen usedScreen in usedScreens)
+            {
+                usedScreen.Draw();
+            }
         }
     }
 }

@@ -24,6 +24,8 @@ namespace GameJom
         {}
         public void Load(string Folder, ContentManager Content) // input any level information from folder to program runtime
         {
+
+            Folder UsedAssets = AssetStorage.ContentAssets.SubFolders["Levels"].SearchForFolder(Folder); // not used, add new 
             //this code creates the level template if no level of such name exists
             location = @"Content/Levels/" + Folder; // expected level folder location
             if (!Directory.Exists(location)) // level folder, texture folder, and room text file creation

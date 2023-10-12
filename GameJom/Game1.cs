@@ -97,7 +97,7 @@ namespace GameJom
             Griddy = Content.Load<Texture2D>("transparent");
             spriteBatch = new SpriteBatch(GraphicsDevice);
             testFontPreset = new FontPreset(AssetStorage.ContentAssets.SearchForFolder("TestFont"));
-            homeScreen.initialize();
+            homeScreen.Initialize();
             // TODO: use this.Content to load your game content here
         }
 
@@ -113,7 +113,7 @@ namespace GameJom
         AutomatedDraw EditorGraphics;
         protected override void Update(GameTime gameTime)
         {
-            homeScreen.update();
+            homeScreen.Update();
             /*
             mouseState = Mouse.GetState();
             XMousePos = (int)(mouseState.X / ScreenSizeAdjustment);
@@ -177,7 +177,7 @@ namespace GameJom
         {
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
-            homeScreen.draw();
+            homeScreen.Draw();
 
             spriteBatch.Draw(BlankTexture, new Rectangle(0, 0, calculationScreenSize.X, ScreenBounds.Top), Color.Black);//
             spriteBatch.Draw(BlankTexture, new Rectangle(0, ScreenBounds.Bottom, calculationScreenSize.X, ScreenBounds.Top), Color.Black);

@@ -7,7 +7,7 @@ using System.IO;
 
 namespace GameJom
 {
-    class LevelEditor : LevelClass
+    class LevelEditor : LevelClass, IScreen
     {
         public AutomatedDraw DrawParam;
         GridTexture GridManager;
@@ -20,18 +20,7 @@ namespace GameJom
             tile = 1,
 
         }
-        public Rectangle RectangleSelection(Point mousePos, bool pressedState)
-        {
-            if(pressedState == true )
-            {
-                if (previouseMousePressedState == false)
-                {
-                    rechtangleSelectionStart = DrawParam.CalcPoint(mousePos); 
-                }
-            }
-            return GridManager.GridRectangle(new Rectangle(rechtangleSelectionStart, DrawParam.CalcPoint(mousePos) - rechtangleSelectionStart));
-        }
-        #region (back)rooms
+        #region Room Edit Logic
         public void AddRoomCheck()
         {
             Rectangle roomSelection = RectangleSelection(Mouse.GetState().Position, Mouse.GetState().LeftButton == ButtonState.Pressed);
@@ -66,6 +55,18 @@ namespace GameJom
             }
         }
         #endregion
+        #region Methods Grouping
+        public Rectangle RectangleSelection(Point mousePos, bool pressedState)
+        {
+            if(pressedState == true )
+            {
+                if (previouseMousePressedState == false)
+                {
+                    rechtangleSelectionStart = DrawParam.CalcPoint(mousePos); 
+                }
+            }
+            return GridManager.GridRectangle(new Rectangle(rechtangleSelectionStart, DrawParam.CalcPoint(mousePos) - rechtangleSelectionStart));
+        }
         bool SelectRoom(Point selectionLocation, ref int room)
         {
             for (int n = 0; n < Rooms.Count; n++)
@@ -86,16 +87,22 @@ namespace GameJom
             }
             return false;
         }
+        #endregion
         int Layer = 0;
-        public void Edit(Rectangle Grid, AutomatedDraw drawParam)
+        public void Initialize()
         {
-            this.DrawParam = drawParam;
-            GridManager = new GridTexture(drawParam, Grid);
+            // unimplimented
+        }
+        public void Update()
+        {
+            // fix this
+            //this.DrawParam = drawParam;
+            GridManager = new GridTexture(DrawParam, new Rectangle(0,0,96,96));
             GridManager.Griddify(Game1.Griddy);
             AutomatedDraw Base = new AutomatedDraw(); 
             Menu menu = new Menu(Base, new FontSettings(10, Color.White, new Point(30, 60)), Game1.testFonts);
             //tiles
-            Menu LayerSelecter = new Menu(drawParam, new FontSettings(10, Color.White, new Point(30, 60)), Game1.testFonts);
+            Menu LayerSelecter = new Menu(DrawParam, new FontSettings(10, Color.White, new Point(30, 60)), Game1.testFonts);
             if (brushState == (int)AvaliableBrushes.tile)
             {
                 foreach (Room room in Rooms)
@@ -127,15 +134,15 @@ namespace GameJom
                 {
                     if (SelectRoom(Mouse.GetState().Position, ref n))
                     {
-                        Rooms[n].Edit(GridManager.GridPoint(drawParam.CalcPoint(Mouse.GetState().Position)) - Rooms[n].RoomSize.Location);
-                        Rooms[n].Edit(GridManager.GridPoint(drawParam.CalcPoint(Mouse.GetState().Position)) - Rooms[n].RoomSize.Location, 0, 1);
+                        Rooms[n].Edit(GridManager.GridPoint(DrawParam.CalcPoint(Mouse.GetState().Position)) - Rooms[n].RoomSize.Location);
+                        Rooms[n].Edit(GridManager.GridPoint(DrawParam.CalcPoint(Mouse.GetState().Position)) - Rooms[n].RoomSize.Location, 0, 1);
                     }
                 }
                 if (Mouse.GetState().RightButton == ButtonState.Pressed)
                 {
                     if (SelectRoom(Mouse.GetState().Position, ref n))
                     {
-                        Rooms[n].Edit(GridManager.GridPoint(drawParam.CalcPoint(Mouse.GetState().Position)) - Rooms[n].RoomSize.Location, Room.empty);
+                        Rooms[n].Edit(GridManager.GridPoint(DrawParam.CalcPoint(Mouse.GetState().Position)) - Rooms[n].RoomSize.Location, Room.empty);
                     }
                 }
                 foreach (Room room in Rooms)
@@ -144,7 +151,7 @@ namespace GameJom
                 }
                 foreach (Room room in Rooms)
                 {
-                    room.Draw(drawParam, GridManager.Grid);
+                    room.Draw(DrawParam, GridManager.Grid);
                 }
             }
 
@@ -161,7 +168,6 @@ namespace GameJom
                     GridManager.ModularTexture(Game1.Griddy, room.RoomSize);
                 }
             }
-            Base.Draw(new Rectangle(0, 0, 300, 10000), Game1.BlankTexture, Color.Gray);
             //brush sellection
             if (menu.ButtonPressedLeftAt(new Rectangle(), null, "room"))
             {
@@ -180,9 +186,20 @@ namespace GameJom
 
             #endregion
         }
+        public void Draw()
+        {
+            AutomatedDraw Base = new AutomatedDraw();
+            Base.Draw(new Rectangle(0, 0, 300, 10000), Game1.BlankTexture, Color.Gray);
+        }
 
-
-
+        public IScreen newScreen()
+        {
+            return null; // placeholder
+        }
+        public bool removeSelf()
+        {
+            return false; // placeholder
+        }
         public void Save() // output any level information from runtime to folder. IMPORTAINT: must only be useable in level editor
         {
             // code to convert every room to text format
