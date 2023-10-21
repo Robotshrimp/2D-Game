@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using Microsoft.Xna.Framework.Input;
+using System.Windows.Forms.VisualStyles;
 
 namespace GameJom
 {
@@ -9,33 +10,40 @@ namespace GameJom
     {
 
         //test values, remove later
+
+
+
+
+
+
+
+
+        Folder GetAssets = new Folder();
         bool pause = false;
-
-
-
-
-
-
-
-
-        Folder usedAssets = new Folder();
+        public string name = "HomeScreen";
         
         Texture2D BlankTexture;
         FontPreset Font;
         float roati = 0;
         float test = 0;
-        IScreen targetScreen; // denotes the screen to switch to if not null
+        string targetScreenName; // denotes the screen to switch to if not null
         bool endSelf = false;
 
         GraphicsDevice graphicsDevice;
 
         public void Initialize()
         {
-            usedAssets.SubFolders.Add("Fonts", AssetStorage.ContentAssets.SearchForFolder("Fonts"));
-            usedAssets.AddFolderStorage(AssetStorage.ContentAssets.Storage);
-            BlankTexture = (Texture2D)usedAssets.Storage["BasicShape"];
-            Font = new FontPreset(usedAssets.SubFolders["Fonts"].SubFolders["TestFont"]);
+            GetAssets.SubFolders.Add("Fonts", AssetStorage.ContentAssets.SearchForFolder("Fonts"));
+            GetAssets.MergeFolderStorage(AssetStorage.ContentAssets.Storage);
+            BlankTexture = (Texture2D)GetAssets.Storage["BasicShape"];
+            Font = new FontPreset(GetAssets.SubFolders["Fonts"].SubFolders["TestFont"]);
             graphicsDevice = Game1.graphicsDevice;
+            //testing
+            Folder testfolder = AssetStorage.ContentAssets.SubFolders["Levels"];
+            testfolder.ModifySubFolder("Levels/Ligma/Sugma/Gottem", GetAssets);
+            int one = 2;
+            AssetStorage.ContentAssets.Save(testfolder);
+            AssetStorage.ContentAssets.PathToFolder("Contnet/Levels/Ligma/Sugma/Gottem");
         }
         float bgGradient = 10;
         float changeRate = 0.1f;
@@ -49,7 +57,7 @@ namespace GameJom
             pointerLocation = new Rectangle((int)((float)mouseState.X / (float)Game1.ScreenSizeAdjustment), mouseState.Y, 1, 1);
             AutomatedDraw BaseDraw = new AutomatedDraw();
             Font.AdvancedPresets(BaseDraw, 96, Color.White, 8);
-            targetScreen = null;
+            targetScreenName = null;
             startButton = Font.Print("Start", new Point(100, 100));
             editButton = Font.Print("Edit", new Point(100, 250));
 
@@ -114,10 +122,10 @@ namespace GameJom
                 bgGradient += changeRate;
             }
         }
-        public IScreen newScreen()
+        public string ActivateScreen()
         {
-            IScreen placeHolderScreen = targetScreen;
-            targetScreen = null;
+            string placeHolderScreen = targetScreenName;
+            targetScreenName = null;
             return placeHolderScreen;
         }
         public bool removeSelf()

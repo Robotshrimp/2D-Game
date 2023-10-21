@@ -7,7 +7,7 @@ using System.IO;
 
 namespace GameJom
 {
-    class LevelEditor : LevelClass, IScreen
+    class LevelEditor : PlatformerLevel, IScreen
     {
         public AutomatedDraw DrawParam;
         GridTexture GridManager;
@@ -38,7 +38,7 @@ namespace GameJom
             };
             if (!(Mouse.GetState().LeftButton == ButtonState.Pressed) && previouseMousePressedState == true && selectionColor == Color.Green)
             {
-                Rooms.Add(new Room(roomSelection, this));
+                Rooms.Add(new Room(roomSelection));
             }
             if (Mouse.GetState().LeftButton == ButtonState.Pressed) 
             {
@@ -96,7 +96,6 @@ namespace GameJom
         public void Update()
         {
             // fix this
-            //this.DrawParam = drawParam;
             GridManager = new GridTexture(DrawParam, new Rectangle(0,0,96,96));
             GridManager.Griddify(Game1.Griddy);
             AutomatedDraw Base = new AutomatedDraw(); 
@@ -192,7 +191,7 @@ namespace GameJom
             Base.Draw(new Rectangle(0, 0, 300, 10000), Game1.BlankTexture, Color.Gray);
         }
 
-        public IScreen newScreen()
+        public string ActivateScreen()
         {
             return null; // placeholder
         }

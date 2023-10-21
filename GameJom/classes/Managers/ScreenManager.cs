@@ -10,29 +10,26 @@ namespace GameJom.classes.Screens
     internal class ScreenManager
     {
         HomeScreen homeScreen;
-        List<IScreen> usedScreens;
+        Dictionary<string, IScreen> UsedScreens;
+        List<string> ActiveScreens;
         public void Initalize()
         {
-            foreach (IScreen usedScreen in usedScreens)
-            {
-                usedScreen.Initialize();
-            }
+            UsedScreens.Add(homeScreen.name, homeScreen);
         }
         public void Update()
         {
 
-            foreach (IScreen usedScreen in usedScreens)
+            foreach (string activeScreen in ActiveScreens)
             {
-                usedScreen.Update();
-                IScreen newScreen = usedScreen.newScreen();
-                if (newScreen != null && !usedScreens.Contains(newScreen)) // gets the new screen set by usedscreen if not null
+                UsedScreens[activeScreen].Update();
+                string newScreen = UsedScreens[activeScreen].ActivateScreen();
+                if (newScreen != null && !ActiveScreens.Contains(newScreen)) // gets the new screen set by usedscreen if not null
                 {
-                    usedScreen.newScreen().Initialize();
-                    usedScreens.Add(usedScreen.newScreen());
+                    ActiveScreens.Add(newScreen);
                 }
-                if(usedScreen.removeSelf()) // removed this usedScreen from usedScreens
+                if (UsedScreens[activeScreen].removeSelf()) // removed this usedScreen from usedScreens
                 {
-                    usedScreens.Remove(usedScreen);
+                    ActiveScreens.Remove(activeScreen);
                 }
 
             }
@@ -40,9 +37,9 @@ namespace GameJom.classes.Screens
         public void Draw()
         {
 
-            foreach (IScreen usedScreen in usedScreens)
+            foreach (string activeScreen in ActiveScreens)
             {
-                usedScreen.Draw();
+                UsedScreens[activeScreen].Draw();
             }
         }
     }

@@ -37,7 +37,7 @@ namespace GameJom
         public int XMousePos;
         public int YMousePos;
         public static Texture2D BlankTexture;
-        public static LevelClass clas = new LevelClass();
+        public static PlatformerLevel clas ;
 
         Rectangle Player = new Rectangle(0, 0, 96, 96);
         Point editorcenter= new Point(0,0);
@@ -80,7 +80,7 @@ namespace GameJom
         protected override void LoadContent()
         {
             AssetStorage.LoadAllContentAssets();
-            editor.Load("bad poggie", Content);
+            //editor.Load("bad poggie");
             // Create a new SpriteBatch, which can be used to draw textures.
             string[] files = Directory.GetFiles(@"Content/Assets");
             foreach (string file in files)
@@ -88,7 +88,7 @@ namespace GameJom
                 Assets.Add(file, Content.Load<Texture2D>(file));
             }
             BlankTexture = (Texture2D)AssetStorage.ContentAssets.Storage["BasicShape"];
-            clas.Load("bad poggie", Content); 
+            //clas.Load("bad poggie"); 
             Text1 = Content.Load<Texture2D>("font(pressed)");
             Text2 = Content.Load<Texture2D>("font(hold)");
             Text3 = Content.Load<Texture2D>("Font");
