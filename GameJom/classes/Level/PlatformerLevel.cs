@@ -21,7 +21,7 @@ namespace GameJom
         public static Dictionary<string, int> TileSetKey = new Dictionary<string, int>();
         Folder LevelData;
         Folder UsedAssets;
-        AutomatedDraw DrawParam;
+        Camera DrawParam;
         Rectangle GridSize;
         public PlatformerLevel(Folder levelData) // input any level information from folder to program runtime
         {

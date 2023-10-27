@@ -110,7 +110,7 @@ namespace GameJom
             }
             return null;
         }
-        public Folder PathToFolder(string path) // wip
+        public Folder PathToFolder(string path)
         {
             path = path.Substring(this.Name.Length + 1);
             string[] pathFolders = path.Split('/');

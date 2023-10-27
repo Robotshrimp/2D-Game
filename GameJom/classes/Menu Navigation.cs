@@ -12,10 +12,10 @@ namespace GameJom
         public Texture2D hoverPrint;
         public Texture2D pressPrint;
         public static bool leftMouseInputLastFrame;
-        AutomatedDraw drawParam;
+        Camera drawParam;
         public FontSettings printParam;
         public bool enabled = true;
-        public Menu(AutomatedDraw DrawParameter, FontSettings Print, FontTexture Font)
+        public Menu(Camera DrawParameter, FontSettings Print, FontTexture Font)
         {
             this.drawParam = DrawParameter;
             this.printParam = Print;

@@ -29,7 +29,7 @@ namespace GameJom
 
 
 
-        public void Print(AutomatedDraw drawParam, Texture2D font, string text, Point printLocation)
+        public void Print(Camera drawParam, Texture2D font, string text, Point printLocation)
         {
             for (int n = 0; n < text.Length; n++)
             {
@@ -42,7 +42,7 @@ namespace GameJom
             }
         }
 
-        public Rectangle PrintLocation(AutomatedDraw draw, Point printLocation)
+        public Rectangle PrintLocation(Camera draw, Point printLocation)
         {
             return draw.DisplayRectangle(new Rectangle(printLocation.X , printLocation.Y, fontSize.X, fontSize.Y));
         }
@@ -59,7 +59,7 @@ namespace GameJom
 
 
 
-        public void PrintCharacter(AutomatedDraw draw,Rectangle location, Texture2D font, char character, Color color)
+        public void PrintCharacter(Camera draw,Rectangle location, Texture2D font, char character, Color color)
         {
             draw.Draw(location, font, LetterFinder(character, font), color);
         }

@@ -16,7 +16,7 @@ namespace GameJom
         int Spacing = 4; // spacing between letters as a ratio of letter width
         Color color = Color.White; // font color
         int FontSize = 32; // preset of fontSize
-        AutomatedDraw DrawParam = new AutomatedDraw();
+        Camera DrawParam = new Camera();
         Folder Font;
 
 
@@ -24,7 +24,7 @@ namespace GameJom
         {
             this.Font = font;
         }
-        public void AdvancedPresets(AutomatedDraw drawParam, int fontSize, Color color, int spacing)
+        public void AdvancedPresets(Camera drawParam, int fontSize, Color color, int spacing)
         {
             this.color = color;
             this.DrawParam = drawParam;

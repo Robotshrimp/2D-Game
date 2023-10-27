@@ -9,7 +9,7 @@ namespace GameJom._3D_Because_Why_Not
         static GraphicsDeviceManager graphics = Game1.graphics;
         static Vector3 CameraLocation = new Vector3(0, 0, 0);
         static Vector3 CameraDirection = new Vector3(0, 0, 0);
-        AutomatedDraw DrawParam;
+        Camera DrawParam;
 
 
         
@@ -20,7 +20,7 @@ namespace GameJom._3D_Because_Why_Not
           * be put away in a maximum security mental hostpital or be put down to protect the rest of society, i have
           * made a severe and continious lapse in my judgement and i will not and do not expect god to be merciful*/
 
-        public Renderer3D(AutomatedDraw drawParam, int FovHorozontal = 100, int FovVertical = 0)
+        public Renderer3D(Camera drawParam, int FovHorozontal = 100, int FovVertical = 0)
         {
             fovHorizontal = FovHorozontal;
             if (FovVertical <= 0)
@@ -64,9 +64,9 @@ namespace GameJom._3D_Because_Why_Not
             return angleLocation;
         }
 
-        public void RenderLine(Vector3 start, Vector3 end, int thiccness = 1)
+        public void RenderLine(Vector3 start, Vector3 end, int thiccness = 1, string name = null)
         {
-            DrawParam.DrawLine(new LineClass(ScreenProjection(CoordnetConvert(start)), ScreenProjection(CoordnetConvert(end)), thiccness));
+            DrawParam.DrawLine(new LineClass(ScreenProjection(CoordnetConvert(start)), ScreenProjection(CoordnetConvert(end)), thiccness), name);
         }
         public void RenderSegmentedLine(Vector3 start, Vector3 end, int segments, int thiccness = 1)
         {

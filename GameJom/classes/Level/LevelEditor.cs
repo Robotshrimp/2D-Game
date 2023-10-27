@@ -7,9 +7,9 @@ using System.IO;
 
 namespace GameJom
 {
-    class LevelEditor : PlatformerLevel, IScreen
+    class LevelEditor : PlatformerLevel
     {
-        public AutomatedDraw DrawParam;
+        public Camera DrawParam;
         GridTexture GridManager;
         Point rechtangleSelectionStart;
         bool previouseMousePressedState;
@@ -89,6 +89,11 @@ namespace GameJom
         }
         #endregion
         int Layer = 0;
+
+        public LevelEditor(Folder levelData) : base(levelData)
+        {
+        }
+
         public void Initialize()
         {
             // unimplimented
@@ -98,7 +103,7 @@ namespace GameJom
             // fix this
             GridManager = new GridTexture(DrawParam, new Rectangle(0,0,96,96));
             GridManager.Griddify(Game1.Griddy);
-            AutomatedDraw Base = new AutomatedDraw(); 
+            Camera Base = new Camera(); 
             Menu menu = new Menu(Base, new FontSettings(10, Color.White, new Point(30, 60)), Game1.testFonts);
             //tiles
             Menu LayerSelecter = new Menu(DrawParam, new FontSettings(10, Color.White, new Point(30, 60)), Game1.testFonts);
@@ -187,7 +192,7 @@ namespace GameJom
         }
         public void Draw()
         {
-            AutomatedDraw Base = new AutomatedDraw();
+            Camera Base = new Camera();
             Base.Draw(new Rectangle(0, 0, 300, 10000), Game1.BlankTexture, Color.Gray);
         }
 
@@ -195,7 +200,7 @@ namespace GameJom
         {
             return null; // placeholder
         }
-        public bool removeSelf()
+        public bool RemoveSelf()
         {
             return false; // placeholder
         }

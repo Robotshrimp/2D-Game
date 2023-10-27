@@ -75,7 +75,7 @@ namespace GameJom
         public static Texture2D Text3;
         public static Texture2D Griddy;
         public static Dictionary<string, Texture2D> Assets;
-        private HomeScreen homeScreen = new HomeScreen();
+        ScreenManager ScreenManager = new ScreenManager();
        
         protected override void LoadContent()
         {
@@ -97,7 +97,7 @@ namespace GameJom
             Griddy = Content.Load<Texture2D>("transparent");
             spriteBatch = new SpriteBatch(GraphicsDevice);
             testFontPreset = new FontPreset(AssetStorage.ContentAssets.SearchForFolder("TestFont"));
-            homeScreen.Initialize();
+            ScreenManager.Initialize();
             // TODO: use this.Content to load your game content here
         }
 
@@ -110,10 +110,10 @@ namespace GameJom
 
             // TODO: Unload any non ContentManager content here
         }
-        AutomatedDraw EditorGraphics;
+        Camera EditorGraphics;
         protected override void Update(GameTime gameTime)
         {
-            homeScreen.Update();
+            ScreenManager.Update();
             /*
             mouseState = Mouse.GetState();
             XMousePos = (int)(mouseState.X / ScreenSizeAdjustment);
@@ -167,7 +167,6 @@ namespace GameJom
         float test = 0;
         float roati = 0;
         float broati = 0;
-        LevelEditor editor = new LevelEditor();
         int bgGradientChange = 100;
         int direction = 1;
         public static FontSettings textFormat = new FontSettings(20, Color.White, new Point(40, 80));
@@ -177,7 +176,7 @@ namespace GameJom
         {
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
-            homeScreen.Draw();
+            ScreenManager.Draw();
 
             spriteBatch.Draw(BlankTexture, new Rectangle(0, 0, calculationScreenSize.X, ScreenBounds.Top), Color.Black);//
             spriteBatch.Draw(BlankTexture, new Rectangle(0, ScreenBounds.Bottom, calculationScreenSize.X, ScreenBounds.Top), Color.Black);

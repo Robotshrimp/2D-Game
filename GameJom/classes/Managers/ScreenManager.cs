@@ -5,29 +5,43 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GameJom.classes.Screens
+namespace GameJom
 {
-    internal class ScreenManager
+    public class ScreenManager
     {
-        HomeScreen homeScreen;
-        Dictionary<string, IScreen> UsedScreens;
-        List<string> ActiveScreens;
-        public void Initalize()
+        Dictionary<string, IScreen> UsedScreens = new Dictionary<string, IScreen>();
+        HashSet<string> ActiveScreens = new HashSet<string>();
+        public void Initialize()
         {
-            UsedScreens.Add(homeScreen.name, homeScreen);
+
+            HomeScreen homeScreen = new HomeScreen();
+            UsedScreens.Add(HomeScreen.name, homeScreen);
+            EditorSelectorScreen editorSelectorScreen = new EditorSelectorScreen();
+            UsedScreens.Add(EditorSelectorScreen.name, editorSelectorScreen);
+            foreach (string screen in UsedScreens.Keys)
+            {
+                UsedScreens[screen].Initialize();
+            }
+            ActiveScreens.Add(HomeScreen.name);
         }
         public void Update()
         {
-
-            foreach (string activeScreen in ActiveScreens)
+            HashSet<string> ActiveScreensThisTick = new HashSet<string>(ActiveScreens);
+            foreach (string activeScreen in ActiveScreensThisTick)
             {
                 UsedScreens[activeScreen].Update();
-                string newScreen = UsedScreens[activeScreen].ActivateScreen();
-                if (newScreen != null && !ActiveScreens.Contains(newScreen)) // gets the new screen set by usedscreen if not null
+                HashSet<string> newScreens = UsedScreens[activeScreen].ActivateScreens();
+                foreach (string newScreen in newScreens)
                 {
                     ActiveScreens.Add(newScreen);
                 }
-                if (UsedScreens[activeScreen].removeSelf()) // removed this usedScreen from usedScreens
+                HashSet<string> removeScreens = UsedScreens[activeScreen].RemoveScreens();
+                foreach (string removeScreen in removeScreens)
+                {
+                    ActiveScreens.Remove(removeScreen);
+                }
+                
+                if (UsedScreens[activeScreen].RemoveScreens().Count > 0) // removed this usedScreen from usedScreens
                 {
                     ActiveScreens.Remove(activeScreen);
                 }

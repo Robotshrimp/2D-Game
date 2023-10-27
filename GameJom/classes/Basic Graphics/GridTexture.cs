@@ -11,9 +11,9 @@ namespace GameJom
 {
     public class GridTexture
     {
-        AutomatedDraw DrawParameter;
+        Camera DrawParameter;
         public Rectangle Grid;
-        public GridTexture(AutomatedDraw drawParameter, Rectangle grid)
+        public GridTexture(Camera drawParameter, Rectangle grid)
         {
             this.DrawParameter = drawParameter;
             this.Grid = grid;

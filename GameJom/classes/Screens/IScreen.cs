@@ -12,7 +12,7 @@ namespace GameJom
         void Initialize(); // intialization, ie, getting all assets
         void Update(); // update logic| use this to update screens?
         void Draw(); // draws all nescessary screen objects
-        string ActivateScreen(); // adds new screen for screen manager to process
-        bool removeSelf(); // removed self from active screen manager screens
+        HashSet<string> ActivateScreens(); // adds new screen for screen manager to process
+        HashSet<string> RemoveScreens(); // removes any screens returned
     }
 }

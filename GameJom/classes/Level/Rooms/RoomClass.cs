@@ -155,9 +155,9 @@ namespace GameJom
         {
             // add ingame interations for when the room is loaded
         }
-        AutomatedDraw DrawParam;
+        Camera DrawParam;
         GridTexture GridParam;
-        public void Draw(AutomatedDraw drawParam, Rectangle grid)
+        public void Draw(Camera drawParam, Rectangle grid)
         {
             DrawParam = drawParam;
             GridParam = new GridTexture(drawParam, grid);
@@ -170,7 +170,7 @@ namespace GameJom
                     {
                         if (tilemap[x, y, TileLayer] != empty)
                         {
-                            DrawTile(currentTilemap, new Point(x, y), TileSetAssets[tilemap[x, y, TileSetLayer]]);
+                            //DrawTile(currentTilemap, new Point(x, y), TileSetAssets[tilemap[x, y, TileSetLayer]]);
                         }
                     }
                 }

@@ -3,10 +3,11 @@ using Microsoft.Xna.Framework;
 using System;
 using Microsoft.Xna.Framework.Input;
 using System.Windows.Forms.VisualStyles;
+using System.Collections.Generic;
 
 namespace GameJom
 {
-    class HomeScreen : IScreen
+    class HomeScreen : ScreenFromat, IScreen 
     {
 
         //test values, remove later
@@ -18,46 +19,50 @@ namespace GameJom
 
 
 
+        public static string name = "HomeScreen";
         Folder GetAssets = new Folder();
         bool pause = false;
-        public string name = "HomeScreen";
         
+
         Texture2D BlankTexture;
+        Texture2D PointerTexture;
         FontPreset Font;
         float roati = 0;
         float test = 0;
-        string targetScreenName; // denotes the screen to switch to if not null
-        bool endSelf = false;
-
         GraphicsDevice graphicsDevice;
+
+
+        AfterImage afterImage = new AfterImage(colorKeys: new List<ColorFrameData>(), trailShrinkOff: 1f);
 
         public void Initialize()
         {
             GetAssets.SubFolders.Add("Fonts", AssetStorage.ContentAssets.SearchForFolder("Fonts"));
             GetAssets.MergeFolderStorage(AssetStorage.ContentAssets.Storage);
+            GetAssets.MergeFolderStorage(AssetStorage.ContentAssets.PathToFolder("Content/Assets/UI Assets").Storage);
             BlankTexture = (Texture2D)GetAssets.Storage["BasicShape"];
+            PointerTexture = (Texture2D)GetAssets.Storage["Curser"];
             Font = new FontPreset(GetAssets.SubFolders["Fonts"].SubFolders["TestFont"]);
             graphicsDevice = Game1.graphicsDevice;
-            //testing
-            Folder testfolder = AssetStorage.ContentAssets.SubFolders["Levels"];
-            testfolder.ModifySubFolder("Levels/Ligma/Sugma/Gottem", GetAssets);
-            int one = 2;
-            AssetStorage.ContentAssets.Save(testfolder);
-            AssetStorage.ContentAssets.PathToFolder("Contnet/Levels/Ligma/Sugma/Gottem");
+            #region Afterimage trail color
+            afterImage.ColorKeys.Add(new ColorFrameData(Color.Red, 1));
+            afterImage.ColorKeys.Add(new ColorFrameData(Color.Orange, 2));
+            afterImage.ColorKeys.Add(new ColorFrameData(Color.Yellow, 3));
+            afterImage.ColorKeys.Add(new ColorFrameData(Color.Green, 4));
+            afterImage.ColorKeys.Add(new ColorFrameData(Color.Blue, 5));
+            afterImage.ColorKeys.Add(new ColorFrameData(Color.Purple, 100));
+            #endregion
         }
         float bgGradient = 10;
         float changeRate = 0.1f;
         MouseState mouseState = new MouseState();
-        Rectangle startButton = new Rectangle();
-        Rectangle editButton = new Rectangle();
-        Rectangle pointerLocation = new Rectangle();
+        Rectangle startButton, editButton, pointerLocation = new Rectangle();
         public void Draw()
         {
             mouseState = Mouse.GetState();
             pointerLocation = new Rectangle((int)((float)mouseState.X / (float)Game1.ScreenSizeAdjustment), mouseState.Y, 1, 1);
-            AutomatedDraw BaseDraw = new AutomatedDraw();
+            Camera BaseDraw = new Camera();
+            BaseDraw.CustomEffects.Add(afterImage);
             Font.AdvancedPresets(BaseDraw, 96, Color.White, 8);
-            targetScreenName = null;
             startButton = Font.Print("Start", new Point(100, 100));
             editButton = Font.Print("Edit", new Point(100, 250));
 
@@ -98,7 +103,7 @@ namespace GameJom
             #endregion
 
             graphicsDevice.Clear(new Color((int)bgGradient, (int)bgGradient, (int)bgGradient));
-            BaseDraw.Draw(new Rectangle(pointerLocation.Location, new Point(30, 40)), BlankTexture);
+            BaseDraw.Draw(new Rectangle(pointerLocation.Location, new Point(30, 40)), PointerTexture, reserveStorage: "pointer", color: Color.White);
         }
 
 
@@ -106,6 +111,7 @@ namespace GameJom
         {
             if (!pause)
             {
+                afterImage.Update();
                 roati += (float).01;
                 test += (float).01;
                 if (OverlapCheck.Overlapped(startButton, pointerLocation))
@@ -115,22 +121,20 @@ namespace GameJom
                         pause = true;
                     }
                 }
+                if (OverlapCheck.Overlapped(editButton, pointerLocation))
+                {
+                    if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    {
+                        addScreen.Add(EditorSelectorScreen.name);
+                        removeScreen.Add(name);
+                    }
+                }
                 if (bgGradient >= 30)
                     changeRate = -0.1f;
                 if (bgGradient <= 1)
                     changeRate = 0.1f;
                 bgGradient += changeRate;
             }
-        }
-        public string ActivateScreen()
-        {
-            string placeHolderScreen = targetScreenName;
-            targetScreenName = null;
-            return placeHolderScreen;
-        }
-        public bool removeSelf()
-        {
-            return endSelf;
         }
     }
 }
