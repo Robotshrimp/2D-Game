@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Runtime.Remoting.Messaging;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 
 namespace GameJom
 {
@@ -64,12 +65,10 @@ namespace GameJom
         {
             foreach(string file in folder.Storage.Keys)
             {
-                if(folder.Storage[file].GetType() == typeof(string))
-                {
-                    if (!File.Exists(file))
-                        File.Create(file).Dispose();
-                    File.WriteAllText(file, folder.Storage[file].ToString());
-                }
+                if (!File.Exists(@root + "/" + file))
+                    File.Create(@root + "/" + file).Dispose();
+                string jsonString = JsonSerializer.Serialize(folder.Storage[file]);
+                File.WriteAllText(@root + "/" + file, jsonString);
             }
             foreach(string subFolder in folder.SubFolders.Keys)
             {

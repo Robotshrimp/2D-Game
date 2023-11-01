@@ -15,5 +15,9 @@ namespace GameJom.classes.Basic_Graphics.Custom_Effects
         {
             spriteBatch.Draw(texture, destinationRectangle: destination, rotation: angle, sourceRectangle: usedTexture, color: color);
         }
+
+        public void Update()
+        {
+        }
     }
 }

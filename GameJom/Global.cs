@@ -18,5 +18,7 @@ namespace GameJom
 
         private static GraphicsDeviceManager Graphics = Game1.graphics;
         public static GraphicsDeviceManager graphics { get { return Graphics; } }
+
+        public static AfterImage afterImage = new AfterImage(colorKeys: new List<ColorFrameData>(), trailShrinkOff: 1f, afterImageDuration: 5, afterImageLength: 40, trailFadeOff: 0.889f);
     }
 }

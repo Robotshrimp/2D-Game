@@ -64,9 +64,9 @@ namespace GameJom._3D_Because_Why_Not
             return angleLocation;
         }
 
-        public void RenderLine(Vector3 start, Vector3 end, int thiccness = 1, string name = null)
+        public void RenderLine(Vector3 start, Vector3 end, int thiccness = 1)
         {
-            DrawParam.DrawLine(new LineClass(ScreenProjection(CoordnetConvert(start)), ScreenProjection(CoordnetConvert(end)), thiccness), name);
+            DrawParam.DrawLine(new LineClass(ScreenProjection(CoordnetConvert(start)), ScreenProjection(CoordnetConvert(end)), thiccness));
         }
         public void RenderSegmentedLine(Vector3 start, Vector3 end, int segments, int thiccness = 1)
         {

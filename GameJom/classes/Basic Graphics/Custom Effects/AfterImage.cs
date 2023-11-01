@@ -16,8 +16,8 @@ namespace GameJom
         Single TrailShrinkOff; // multiplied by the previous image size to produce next image size
         float TrailFadeOff; // adds this to the alpha channel of the previous image to get the next image's alpha channel value
         public List<ColorFrameData> ColorKeys = new List<ColorFrameData>(); // the key denotes the frame, the color denotes what color the sprite should be by that frame
-        Dictionary<string, List<MethodData>> TrailSprites = new Dictionary<string, List<MethodData>>(); // stored trail data of every call instance
-        public AfterImage(int afterImageLength = 20, int afterImageDuration = 1, Single trailShrinkOff = 0.9f, float trailFadeOff = 0.9f, List<ColorFrameData> colorKeys = null) 
+         List<AfterImageData> AfterImages = new List<AfterImageData>(); // stored trail data of every call instance
+        public AfterImage(int afterImageLength = 20, int afterImageDuration = 1, Single trailShrinkOff = 0.9f, Single trailFadeOff = 0.9f, List<ColorFrameData> colorKeys = null) 
         {
             AfterImageLength = afterImageLength; AfterImageDuration = afterImageDuration; TrailShrinkOff = trailShrinkOff; TrailFadeOff = trailFadeOff;  ColorKeys = colorKeys;
             if (colorKeys == null ) 
@@ -26,30 +26,32 @@ namespace GameJom
         }
         public void Draw(Rectangle destination, Texture2D texture, Rectangle usedTexture, Color color, float angle = 0, string callKey = null)
         {
-            if (callKey == null)
-                return;
-            if (!TrailSprites.ContainsKey(callKey)) // storageKeyCreator
-                TrailSprites.Add(callKey, new List<MethodData>());
-            if (tick >= AfterImageDuration)
-                TrailSprites[callKey].Insert(0, new MethodData(destination, texture));
-            for (int n = TrailSprites[callKey].Count - 1; n >= 0; n--)
-            {
-                float alphaChannel = 1f;
-                MethodData methodData = TrailSprites[callKey][n];
-                Rectangle usedRectangle = TrailSprites[callKey][n].Rectangle;
-                for (int i = 0; i <= n; i++ )
-                {
-                    usedRectangle = RechtangleManipulation.Shrink(usedRectangle, TrailShrinkOff);
-                    alphaChannel *= TrailFadeOff;
-                }
 
-                spriteBatch.Draw(texture, destinationRectangle: usedRectangle, rotation: angle, sourceRectangle: usedTexture, color:GenerateColor(color, n) * alphaChannel);
+            AfterImages.Insert(0, new AfterImageData(destination, texture, angle, usedTexture, 1, color));
+        }
+        public void DrawTrail() // handles all the actrual drawing
+        {
+            List<AfterImageData> removeList = new List<AfterImageData>();
+            foreach (AfterImageData afterImage in AfterImages)
+            {
+                afterImage.Alpha = afterImage.Alpha * TrailFadeOff;
+                afterImage.Frame++;
+                afterImage.CurrentColor = GenerateColor(afterImage.StartColor, afterImage.Frame);
+                spriteBatch.Draw(afterImage.Texture, destinationRectangle: afterImage.Rectangle, rotation: afterImage.Rotation, sourceRectangle: afterImage.UsedTexture, color: afterImage.CurrentColor * afterImage.Alpha);
+                if(afterImage.Frame == AfterImageLength)
+                {
+                    removeList.Add(afterImage);
+                }
             }
-            if (TrailSprites[callKey].Count > AfterImageLength)
-                TrailSprites[callKey].RemoveAt(AfterImageLength);
+            foreach (AfterImageData afterImage in removeList)
+            {
+                AfterImages.Remove(afterImage);
+            }
         }
         public void Update()
         {
+            if (tick > AfterImageDuration)
+                tick = 0;
             tick++;
         }
         Color GenerateColor(Color color, int frame)
@@ -83,18 +85,23 @@ namespace GameJom
         }
         string generateNewStorageKey()
         {
-            return TrailSprites.Count.ToString();
+            return AfterImages.Count.ToString();
         }
     }
-    internal class MethodData // storage class for all variables needed to run the draw method 
+    internal class AfterImageData // storage class for all variables needed to run the draw method 
     {
         public Rectangle Rectangle { get; set; }
         public Texture2D Texture { get; set; }
-
-        public MethodData(Rectangle rectangle, Texture2D texture) 
+        public float Rotation { get; set; }
+        public Rectangle UsedTexture { get; set; }
+        public Single Alpha { get; set; }
+        public Color StartColor { get; set; }
+        public Color CurrentColor { get; set; }
+        public int Frame { get; set; }
+        public AfterImageData(Rectangle rectangle, Texture2D texture, float rotation, Rectangle usedTexture, Single alpha, Color startColor, int frame = 0) 
         { 
-            Rectangle = rectangle; Texture = texture;
-        }
+            Rectangle = rectangle; Texture = texture; Rotation = rotation; UsedTexture = usedTexture; Alpha = alpha; StartColor = startColor; Frame = frame;
+            }
     }
     public class ColorFrameData // class used to store a color value and a int value used to mark the frame
     {

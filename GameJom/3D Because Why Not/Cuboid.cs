@@ -39,12 +39,12 @@ namespace GameJom._3D_Because_Why_Not
             Engine.RenderSegmentedLine(corner1_2, corner2_2, segments, thickness);
             Engine.RenderSegmentedLine(corner1_4, corner2_4, segments, thickness);
             Engine.RenderSegmentedLine(corner1_3, corner2_3, segments, thickness);
-            
+
             Engine.RenderSegmentedLine(corner1_1, corner1_2, segments, thickness);
             Engine.RenderSegmentedLine(corner1_1, corner1_4, segments, thickness);
             Engine.RenderSegmentedLine(corner1_3, corner1_2, segments, thickness);
             Engine.RenderSegmentedLine(corner1_3, corner1_4, segments, thickness);
-            
+
             Engine.RenderSegmentedLine(corner2_1, corner2_2, segments, thickness);
             Engine.RenderSegmentedLine(corner2_1, corner2_4, segments, thickness);
             Engine.RenderSegmentedLine(corner2_3, corner2_2, segments, thickness);
