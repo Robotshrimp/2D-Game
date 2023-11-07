@@ -50,6 +50,12 @@
     <Compile Include="classes\Basic Graphics\Custom Effects\BaseDraw.cs" />
     <Compile Include="classes\Basic Graphics\LineClass - Copy.cs" />
     <Compile Include="classes\Basic Graphics\Custom Effects\ICustomEffect.cs" />
+    <Compile Include="classes\Basic Graphics\UI Element Box\Background.cs" />
+    <Compile Include="classes\Basic Graphics\UI Element Box\EditorSelectorScreen.cs" />
+    <Compile Include="classes\Basic Graphics\UI Element Box\HomeScreen.cs" />
+    <Compile Include="classes\Basic Graphics\UI Element Box\IScreen.cs" />
+    <Compile Include="classes\Basic Graphics\UI Element Box\ScreenFromat.cs" />
+    <Compile Include="classes\Basic Graphics\UI Element Box\UIBoxElement.cs" />
     <Compile Include="classes\Level\ILevel.cs" />
     <Compile Include="classes\Managers\LevelManager.cs" />
     <Compile Include="classes\New Print.cs" />
@@ -58,12 +64,7 @@
     <Compile Include="classes\Basic Graphics\GridTexture.cs" />
     <Compile Include="classes\Level\Rooms\RoomClass.cs" />
     <Compile Include="classes\Level\PlatformerLevel.cs" />
-    <Compile Include="classes\Screens\Background.cs" />
-    <Compile Include="classes\Screens\EditorSelectorScreen.cs" />
-    <Compile Include="classes\Screens\HomeScreen.cs" />
-    <Compile Include="classes\Screens\IScreen.cs" />
     <Compile Include="classes\Managers\ScreenManager.cs" />
-    <Compile Include="classes\Screens\ScreenFromat.cs" />
     <Compile Include="DataConverter.cs" />
     <Compile Include="Foundational Classes\limit.cs" />
     <Compile Include="classes\Collision.cs" />
