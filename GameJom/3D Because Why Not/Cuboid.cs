@@ -9,11 +9,11 @@ namespace GameJom._3D_Because_Why_Not
     class Cuboid : TrigFun
     {
 
-        Renderer3D Engine;
-        public Cuboid(Renderer3D engine)
+        Renderer3D Render;
+        public Cuboid(Renderer3D render)
         {
             //loads the engine, vroom vroom
-            this.Engine = engine;
+            this.Render = render;
         }
         public void DrawCuboid(Vector3 center, Vector3 dimentions, int segments, int thickness, Vector3 rotation)
         {
@@ -35,20 +35,20 @@ namespace GameJom._3D_Because_Why_Not
 
 
             //uses the instance engine to render lines between select cubes
-            Engine.RenderSegmentedLine(corner1_1, corner2_1, segments, thickness);
-            Engine.RenderSegmentedLine(corner1_2, corner2_2, segments, thickness);
-            Engine.RenderSegmentedLine(corner1_4, corner2_4, segments, thickness);
-            Engine.RenderSegmentedLine(corner1_3, corner2_3, segments, thickness);
+            Render.RenderSegmentedLine(corner1_1, corner2_1, segments, thickness);
+            Render.RenderSegmentedLine(corner1_2, corner2_2, segments, thickness);
+            Render.RenderSegmentedLine(corner1_4, corner2_4, segments, thickness);
+            Render.RenderSegmentedLine(corner1_3, corner2_3, segments, thickness);
 
-            Engine.RenderSegmentedLine(corner1_1, corner1_2, segments, thickness);
-            Engine.RenderSegmentedLine(corner1_1, corner1_4, segments, thickness);
-            Engine.RenderSegmentedLine(corner1_3, corner1_2, segments, thickness);
-            Engine.RenderSegmentedLine(corner1_3, corner1_4, segments, thickness);
+            Render.RenderSegmentedLine(corner1_1, corner1_2, segments, thickness);
+            Render.RenderSegmentedLine(corner1_1, corner1_4, segments, thickness);
+            Render.RenderSegmentedLine(corner1_3, corner1_2, segments, thickness);
+            Render.RenderSegmentedLine(corner1_3, corner1_4, segments, thickness);
 
-            Engine.RenderSegmentedLine(corner2_1, corner2_2, segments, thickness);
-            Engine.RenderSegmentedLine(corner2_1, corner2_4, segments, thickness);
-            Engine.RenderSegmentedLine(corner2_3, corner2_2, segments, thickness);
-            Engine.RenderSegmentedLine(corner2_3, corner2_4, segments, thickness);
+            Render.RenderSegmentedLine(corner2_1, corner2_2, segments, thickness);
+            Render.RenderSegmentedLine(corner2_1, corner2_4, segments, thickness);
+            Render.RenderSegmentedLine(corner2_3, corner2_2, segments, thickness);
+            Render.RenderSegmentedLine(corner2_3, corner2_4, segments, thickness);
 
             /*
             Engine.RenderSegmentedLine(corner2_1, corner1_3, segments, thiccness);

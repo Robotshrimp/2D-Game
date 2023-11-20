@@ -70,7 +70,7 @@ namespace GameJom
                     || Processed.Bottom < DisplayLocation.Top || Processed.Top > DisplayLocation.Bottom))
                 {
                     if (!(Processed.Right < DisplayLocation.Right && Processed.Left > DisplayLocation.Left
-                    && Processed.Bottom < DisplayLocation.Bottom && Processed.Top > DisplayLocation.Top))
+                        && Processed.Bottom < DisplayLocation.Bottom && Processed.Top > DisplayLocation.Top))
                     {
                         // code that stops drawing objects that are offscreen
                         Rectangle overlapArea = OverlapCheck.OverlappedArea(Processed, DisplayLocation); // gets overlapped area
@@ -104,6 +104,13 @@ namespace GameJom
         public void Draw(Rectangle destination, Texture2D texture, float angle = 0, List<ICustomEffect> additionalEffects = null)
         {
             Draw(destination, texture, Color, angle, additionalEffects);
+        }
+        public void EffectDraw()
+        {
+            foreach (ICustomEffect effect in CustomEffects)
+            {
+                effect.GroupDraw();
+            }
         }
 
         public void DrawLine(LineClass line, string name = null)

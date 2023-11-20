@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,25 +8,18 @@ using System.Threading.Tasks;
 
 namespace GameJom
 {
-    internal class Background : IScreen
+    internal class Background : ScreenFromat, IScreen
     {
-
-        public HashSet<string> ActivateScreens()
-        {
-            throw new NotImplementedException();
-        }
+        Texture2D BGImage;
 
         public void Draw()
         {
+            Camera cam = new Camera();
+            cam.Draw(Game1.ScreenBounds, BGImage, Color.White);
         }
 
         public void Initialize()
         {
-        }
-
-        public HashSet<string> RemoveScreens()
-        {
-            throw new NotImplementedException();
         }
 
         public void Update()

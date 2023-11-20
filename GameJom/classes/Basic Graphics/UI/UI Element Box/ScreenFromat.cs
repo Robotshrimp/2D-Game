@@ -8,14 +8,14 @@ namespace GameJom
 {
     public class ScreenFromat
     {
-        public HashSet<string> addScreen = new HashSet<string>(); // denotes the screen to switch to if not null
+        public HashSet<string> addScreen { get; set; } = new HashSet<string>();// denotes the screen to switch to if not null
         public HashSet<string> ActivateScreens()
         {
             HashSet<string> placeHolderScreen = addScreen;
             addScreen = new HashSet<string>();
             return placeHolderScreen;
         }
-        public HashSet<string> removeScreen = new HashSet<string>(); // removes screens in this list from activeScreens
+        public HashSet<string> removeScreen { get; set; } = new HashSet<string>(); // removes screens in this list from activeScreens
         public HashSet<string> RemoveScreens()
         {
             return removeScreen;

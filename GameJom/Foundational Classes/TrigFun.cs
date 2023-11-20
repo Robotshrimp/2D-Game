@@ -35,7 +35,7 @@ namespace GameJom
             return new Vector2((float)(Math.Cos(angle) * length * horizontalScale), (float)(Math.Sin(angle) * length * verticalScale));
         }
         #region 3d-screen conversions
-        public static Vector2 Angle3(Vector3 Coordnet) // finds the angles of deviation from the x axis 
+        public static Vector2 Angle3D(Vector3 Coordnet) // finds the angles of deviation from the x axis 
         {
             double XZAngle = Angle2(new Vector2(Coordnet.Z, Coordnet.X));
             double hypotenus = pythag_hypotenus(new Vector2(Coordnet.Z, Coordnet.X));

@@ -48,14 +48,20 @@
     <Compile Include="3D Because Why Not\Triangle.cs" />
     <Compile Include="classes\Basic Graphics\Custom Effects\AfterImage.cs" />
     <Compile Include="classes\Basic Graphics\Custom Effects\BaseDraw.cs" />
+    <Compile Include="classes\Basic Graphics\Custom Effects\ScreenShake.cs" />
     <Compile Include="classes\Basic Graphics\LineClass - Copy.cs" />
     <Compile Include="classes\Basic Graphics\Custom Effects\ICustomEffect.cs" />
-    <Compile Include="classes\Basic Graphics\UI Element Box\Background.cs" />
-    <Compile Include="classes\Basic Graphics\UI Element Box\EditorSelectorScreen.cs" />
-    <Compile Include="classes\Basic Graphics\UI Element Box\HomeScreen.cs" />
-    <Compile Include="classes\Basic Graphics\UI Element Box\IScreen.cs" />
-    <Compile Include="classes\Basic Graphics\UI Element Box\ScreenFromat.cs" />
-    <Compile Include="classes\Basic Graphics\UI Element Box\UIBoxElement.cs" />
+    <Compile Include="classes\Basic Graphics\UI\Buttons\IButton.cs" />
+    <Compile Include="classes\Basic Graphics\UI\Buttons\IButtonEffect.cs" />
+    <Compile Include="classes\Basic Graphics\UI\Buttons\ScreenSwitch.cs" />
+    <Compile Include="classes\Basic Graphics\UI\Objects\InertObj.cs" />
+    <Compile Include="classes\Basic Graphics\UI\UI Element Box\Background.cs" />
+    <Compile Include="classes\Basic Graphics\UI\UI Element Box\EditorSelectorScreen.cs" />
+    <Compile Include="classes\Basic Graphics\UI\UI Element Box\HomeScreen.cs" />
+    <Compile Include="classes\Basic Graphics\UI\UI Element Box\IScreen.cs" />
+    <Compile Include="classes\Basic Graphics\UI\UI Element Box\ScreenFromat.cs" />
+    <Compile Include="classes\Basic Graphics\UI\UI Element Box\UIBoxElement.cs" />
+    <Compile Include="classes\Managers\InputMap.cs" />
     <Compile Include="classes\Level\ILevel.cs" />
     <Compile Include="classes\Managers\LevelManager.cs" />
     <Compile Include="classes\New Print.cs" />
@@ -128,6 +134,8 @@
     <None Include=".editorconfig" />
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="classes\Basic Graphics\Custom Effects\testAfterEffectJson.json" />
+    <None Include="classes\Basic Graphics\UI\UI Element Box\HomseScreen.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

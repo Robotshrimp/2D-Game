@@ -163,7 +163,7 @@ namespace GameJom
             */
             
         }
-
+        
         float test = 0;
         float roati = 0;
         float broati = 0;
@@ -174,7 +174,6 @@ namespace GameJom
         public FontPreset testFontPreset;
         protected override void Draw(GameTime gameTime)
         {
-
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
             ScreenManager.Draw();
 

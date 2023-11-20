@@ -5,21 +5,16 @@ using Microsoft.Xna.Framework.Input;
 using System.Windows.Forms.VisualStyles;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 namespace GameJom
 {
     class HomeScreen : ScreenFromat, IScreen 
     {
-
         //test values, remove later
 
 
-
-
-
-
-
-
+        // screen data
         public static string name = "HomeScreen";
         Folder GetAssets = new Folder();
         bool pause = false;
@@ -45,17 +40,12 @@ namespace GameJom
             Font = new FontPreset(GetAssets.SubFolders["Fonts"].SubFolders["TestFont"]);
             graphicsDevice = Game1.graphicsDevice;
             #region Afterimage trail color
-            afterImage.ColorKeys.Add(new ColorFrameData(Color.Red, 1));
-            afterImage.ColorKeys.Add(new ColorFrameData(Color.Orange, 4));
-            afterImage.ColorKeys.Add(new ColorFrameData(Color.Yellow, 4));
-            afterImage.ColorKeys.Add(new ColorFrameData(Color.Green, 4));
-            afterImage.ColorKeys.Add(new ColorFrameData(Color.Blue, 4));
-            afterImage.ColorKeys.Add(new ColorFrameData(Color.Purple, 4));
-            afterImage.ColorKeys.Add(new ColorFrameData(Color.White, 100));
+            afterImage.ColorKeys.Add(new ColorFrameData(Color.Purple, 1));
+            afterImage.ColorKeys.Add(new ColorFrameData(Color.Cyan, 20));
 
 
             #endregion
-
+            BaseDraw.CustomEffects.Add(afterImage);
             //File.Create(@"test").Dispose();
             //File.WriteAllText(@"test", "");
         }
@@ -67,12 +57,9 @@ namespace GameJom
         Camera BaseDraw = new Camera();
         public void Draw()
         {
-
-            afterImage.DrawTrail();
+            BaseDraw.EffectDraw();
             mouseState = Mouse.GetState();
             pointerLocation = new Rectangle((int)((float)mouseState.X / (float)Game1.ScreenSizeAdjustment), mouseState.Y, 1, 1);
-            if (!BaseDraw.CustomEffects.Contains(afterImage))
-                BaseDraw.CustomEffects.Add(afterImage);
             Font.AdvancedPresets(BaseDraw, 96, Color.White, 8);
             startButton = Font.Print("Start", new Point(100, 100));
             editButton = Font.Print("Edit", new Point(100, 250));

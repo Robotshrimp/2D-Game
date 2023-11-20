@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameJom.classes
+namespace GameJom.classes.Basic_Graphics.UI.Objects
 {
-    class PointDisplay
+    internal class InertObj
     {
-
     }
 }

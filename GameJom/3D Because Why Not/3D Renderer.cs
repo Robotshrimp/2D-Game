@@ -11,14 +11,13 @@ namespace GameJom._3D_Because_Why_Not
         static Vector3 CameraDirection = new Vector3(0, 0, 0);
         Camera DrawParam;
 
-
-        
+        /* if these values ever diviates from 0-1: the person configuring the settings is clinically insane and should 
+       * be put away in a maximum security mental hostpital or be put down to protect the rest of society, i have
+       * made a severe and continious lapse in my judgement and i will not and do not expect god to be merciful*/
         int fovHorizontal;
         int fovVertical;
 
-         /* if these values ever diviates from 1: the person configuring the settings is clinically insane and should 
-          * be put away in a maximum security mental hostpital or be put down to protect the rest of society, i have
-          * made a severe and continious lapse in my judgement and i will not and do not expect god to be merciful*/
+
 
         public Renderer3D(Camera drawParam, int FovHorozontal = 100, int FovVertical = 0)
         {
@@ -47,7 +46,7 @@ namespace GameJom._3D_Because_Why_Not
         public void LookAt(Vector3 location)
         {
             Vector3 relativePos = location - CameraLocation;
-            Vector2 direction = TrigFun.Angle3(relativePos);
+            Vector2 direction = TrigFun.Angle3D(relativePos);
             UpdateDirection(new Vector3(direction.Y, direction.X, CameraDirection.Z));
         }
         private Point ScreenProjection(Vector2 Angle)
@@ -60,7 +59,7 @@ namespace GameJom._3D_Because_Why_Not
         }
         public Vector2 CoordnetConvert(Vector3 coordnetLocation)
         {
-            Vector2 angleLocation = TrigFun.Angle3(TrigFun.RotateAxies3D(coordnetLocation, CameraLocation, CameraDirection)); // fix screen rotation later
+            Vector2 angleLocation = TrigFun.Angle3D(TrigFun.RotateAxies3D(coordnetLocation, CameraLocation, CameraDirection)); // fix screen rotation later
             return angleLocation;
         }
 

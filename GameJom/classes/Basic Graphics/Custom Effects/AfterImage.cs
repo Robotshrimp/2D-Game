@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GameJom.classes.Basic_Graphics.Custom_Effects;
 
 namespace GameJom
 {
@@ -16,20 +17,23 @@ namespace GameJom
         Single TrailShrinkOff; // multiplied by the previous image size to produce next image size
         float TrailFadeOff; // adds this to the alpha channel of the previous image to get the next image's alpha channel value
         public List<ColorFrameData> ColorKeys = new List<ColorFrameData>(); // the key denotes the frame, the color denotes what color the sprite should be by that frame
-         List<AfterImageData> AfterImages = new List<AfterImageData>(); // stored trail data of every call instance
+        List<AfterImageData> AfterImages = new List<AfterImageData>(); // stored trail data of every call instance
+
+        string CustomEffectsKey = string.Empty; // list of string marking custom effects to add to CustomEffects List
+        string EffectName = string.Empty; // string used to identify this effect in CustomEffectsKey
+        List<ICustomEffect> CustomEffects = new List<ICustomEffect>(); // list of effects to pass the draw param to for further processing, multiple ICustomEffect objects may result in multiple draw operations on the same draw instance
+
         public AfterImage(int afterImageLength = 20, int afterImageDuration = 1, Single trailShrinkOff = 0.9f, Single trailFadeOff = 0.9f, List<ColorFrameData> colorKeys = null) 
         {
             AfterImageLength = afterImageLength; AfterImageDuration = afterImageDuration; TrailShrinkOff = trailShrinkOff; TrailFadeOff = trailFadeOff;  ColorKeys = colorKeys;
-            if (colorKeys == null ) 
-            {
-            }
+            CustomEffects.Add(new BaseDraw());
         }
-        public void Draw(Rectangle destination, Texture2D texture, Rectangle usedTexture, Color color, float angle = 0, string callKey = null)
+        public void Draw(Rectangle destination, Texture2D texture, Rectangle usedTexture, Color color, float angle = 0)
         {
-
+            // to alter the output frame by frame, nest this custom effect into the desired effect(ie: if you wanted each frame to be offset by x pixels randomly, pass the input for this method through the screenshake effect)
             AfterImages.Insert(0, new AfterImageData(destination, texture, angle, usedTexture, 1, color));
         }
-        public void DrawTrail() // handles all the actrual drawing
+        public void GroupDraw() // handles all the actrual drawing
         {
             List<AfterImageData> removeList = new List<AfterImageData>();
             foreach (AfterImageData afterImage in AfterImages)
@@ -37,7 +41,10 @@ namespace GameJom
                 afterImage.Alpha = afterImage.Alpha * TrailFadeOff;
                 afterImage.Frame++;
                 afterImage.CurrentColor = GenerateColor(afterImage.StartColor, afterImage.Frame);
-                spriteBatch.Draw(afterImage.Texture, destinationRectangle: afterImage.Rectangle, rotation: afterImage.Rotation, sourceRectangle: afterImage.UsedTexture, color: afterImage.CurrentColor * afterImage.Alpha);
+                foreach (ICustomEffect customEffect in CustomEffects) // effect draw should always be where the draw is outputed in the effect, if an effect outputs in draw this foreach loop would be location in the draw method
+                {
+                    customEffect.Draw(afterImage.Rectangle, afterImage.Texture, afterImage.UsedTexture, afterImage.CurrentColor * afterImage.Alpha, afterImage.Rotation);
+                }
                 if(afterImage.Frame == AfterImageLength)
                 {
                     removeList.Add(afterImage);
@@ -47,16 +54,24 @@ namespace GameJom
             {
                 AfterImages.Remove(afterImage);
             }
+            foreach(ICustomEffect customEffect in CustomEffects)
+            {
+                customEffect.GroupDraw();
+            }
         }
         public void Update()
         {
             if (tick > AfterImageDuration)
                 tick = 0;
             tick++;
+            foreach (ICustomEffect customeEffect in CustomEffects)
+            {
+                customeEffect.Update();
+            }
         }
         Color GenerateColor(Color color, int frame)
         {
-            if (ColorKeys == null) return color;
+            if (ColorKeys.Count == 0) return color;
             Color Output = color;
             int currentKeyColor = 0;
             Color PreviousColor = color;
@@ -69,9 +84,10 @@ namespace GameJom
                 {
                     progressToNextColor = 0;
                     currentKeyColor++;
-                    nextColorDistance = ColorKeys[currentKeyColor].Frames;
+                    int withinListBounds = Math.Min(currentKeyColor, ColorKeys.Count - 1);
+                    nextColorDistance = ColorKeys[withinListBounds].Frames;
                     PreviousColor = NextColor;
-                    NextColor = ColorKeys[currentKeyColor].FrameColor;
+                    NextColor = ColorKeys[withinListBounds].FrameColor;
                 }
                 if (i == frame)
                 {
@@ -82,10 +98,6 @@ namespace GameJom
                 progressToNextColor++;
             }
             return Output;
-        }
-        string generateNewStorageKey()
-        {
-            return AfterImages.Count.ToString();
         }
     }
     internal class AfterImageData // storage class for all variables needed to run the draw method 
