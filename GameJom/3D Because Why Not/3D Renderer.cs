@@ -132,32 +132,34 @@ namespace GameJom._3D_Because_Why_Not
 
 
                 Vector3 direction = tri.SeenSideDirection(CameraLocation);
-                int recurance = 0;
                 for (int y = 0; y < Bounds.Height; y++)
                 {
                     for (int x = 0; x < Bounds.Width; x++)
                     {
-                        Vector3 ray = ScreenPointDirection(UnscaleResolution(new Point(x + Bounds.X, y + Bounds.Y)));
-                        // ray is vector from camera location to 1 away in a direction vector
-                        float distance;
-                        Vector3 intersectionPoint = tri.PlaneIntersection(CameraLocation, ray, out distance);
-                        // intersection point is from origin to intersection point
-                        // ray is not Q, it is a vector point towards it
 
-                        if (tri.Inside(intersectionPoint + CameraLocation))
-                        {
-                            recurance++;
-                            int pixelNum = (y + Bounds.Y) * RenderingResolution.X + (x + Bounds.X);
-                            if (RayDistance[pixelNum] == 0 ||
-                                distance < RayDistance[pixelNum]) // checks to see if the new pixel is closer than the current clossest pixel, the distance of each pixel starts at 0 and because of how unlikly it is for a float to land on 0, 0 is defacto null and singled out 
+
+
+                        if (OverlapCheck.Overlapped(new Rectangle(new Point(), RenderingResolution), new Rectangle(new Point(x + Bounds.X, y + Bounds.Y), new Point(1, 1))))
+                        { 
+                            Vector3 ray = ScreenPointDirection(UnscaleResolution(new Point(x + Bounds.X, y + Bounds.Y)));
+                            // ray is vector from camera location to 1 away in a direction vector
+                            float distance;
+                            Vector3 intersectionPoint = tri.PlaneIntersection(CameraLocation, ray, out distance);
+                            // intersection point is from origin to intersection point
+
+                            if (tri.Inside(intersectionPoint + CameraLocation))
                             {
-                                Render[pixelNum] = new Color((125 + (125 * direction.X)) / 255, (125 + (125 * direction.Y)) / 255, (125 + (125 * direction.Z)) / 255);
-                                RayDistance[pixelNum] = distance;
+                                int pixelNum = (y + Bounds.Y) * RenderingResolution.X + (x + Bounds.X);
+                                if (RayDistance[pixelNum] == 0 ||
+                                    distance < RayDistance[pixelNum]) // checks to see if the new pixel is closer than the current clossest pixel, the distance of each pixel starts at 0 and because of how unlikly it is for a float to land on 0, 0 is defacto null and singled out 
+                                {
+                                    Render[pixelNum] = new Color((125 + (125 * direction.X)) / 255, (125 + (125 * direction.Y)) / 255, (125 + (125 * direction.Z)) / 255);
+                                    RayDistance[pixelNum] = distance;
+                                }
                             }
                         }
                     }
                 }
-                recurance++;
             }
         }
     }

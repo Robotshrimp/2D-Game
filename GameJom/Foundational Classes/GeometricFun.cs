@@ -47,5 +47,10 @@ namespace GameJom.Foundational_Classes
             }
             return new Rectangle(leftmost, highest, rightmost - leftmost, lowest - highest);
         }
+        public static float TriangleAreaFinder(Vector2[] traingleVerticies)
+        {
+            //WIP, could help ruleout misses in 3D renderer and fill in holes
+            return 0;
+        }
     }
 }
