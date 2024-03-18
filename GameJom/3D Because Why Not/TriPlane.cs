@@ -20,7 +20,7 @@ namespace GameJom._3D_Because_Why_Not
             set 
             { 
                 point1 = value;
-                Direction = TrigFun.PlaneDirection(Point1 - Point3, Point2 - Point3); 
+                Direction = TrigFun.PlaneDirection(point2 - point1, point3 - point1); 
             }
         }
         private Vector3 point2;
@@ -34,7 +34,7 @@ namespace GameJom._3D_Because_Why_Not
             set
             {
                 point2 = value;
-                Direction = TrigFun.PlaneDirection(Point1 - Point3, Point2 - Point3);
+                Direction = TrigFun.PlaneDirection(point2 - point1, point3 - point1);
             }
         }
         private Vector3 point3;
@@ -48,7 +48,7 @@ namespace GameJom._3D_Because_Why_Not
             set
             {
                 point3 = value;
-                Direction = TrigFun.PlaneDirection(Point1 - Point3, Point2 - Point3);
+                Direction = TrigFun.PlaneDirection(point2 - point1, point3 - point1);
             }
         }
         public Vector3 Direction { get; set; }
@@ -79,8 +79,8 @@ namespace GameJom._3D_Because_Why_Not
         }
         public Vector3 PlaneIntersection(Vector3 rayStartPoint, Vector3 rayDirection, out float distance)
         {
-            rayDirection.Normalize();
-            distance = Vector3.Dot((rayDirection - Direction), rayStartPoint) / Vector3.Dot(Direction, rayDirection);
+            float D = -Vector3.Dot(Direction, point1);
+            distance = -(Vector3.Dot(Direction , rayStartPoint) + D) / Vector3.Dot(Direction, rayDirection);
             return rayDirection * distance;
         }
     }

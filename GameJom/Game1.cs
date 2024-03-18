@@ -186,18 +186,6 @@ namespace GameJom
             ScreenManager.Draw();
 
 
-            pixel = new Texture2D(GraphicsDevice, ScreenBounds.Width, ScreenBounds.Height);
-            Color[] screenprojection = new Color[ScreenBounds.Width * ScreenBounds.Height];
-            Camera testcam = new Camera();
-            for(int i = 0; i < ScreenBounds.Height; i++)
-            {
-                for(int j = 0; j < ScreenBounds.Width; j++)
-                {
-                    screenprojection[i * ScreenBounds.Width + j] = new Color(i,i,j);
-                }
-            }
-            pixel.SetData(screenprojection);
-            //spriteBatch.Draw(pixel,ScreenBounds, Color.White);
            
             // black bar to crop out excess screen space from non conformant screen sizes
             spriteBatch.Draw(BlankTexture, new Rectangle(0, 0, calculationScreenSize.X, ScreenBounds.Top), Color.Black);

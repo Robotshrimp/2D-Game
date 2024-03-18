@@ -85,18 +85,11 @@ namespace GameJom
             #region 3D grapnics
             // use functions for orbiting with params for orbiting height, speed, etc. should be the most straight forward way to add json compatability
             rend.UpdateLocation(new Vector3(0, 0 - 16 * (float)Math.Sin(Movement3D), 0 - 16 * (float)Math.Cos(Movement3D)));
-            rend.UpdateDirection(new Vector3(0, 0 - (float)Math.PI * (float)Math.Sin(Movement3D), 0 - (float)Math.PI * (float)Math.Sin(Movement3D)));
+            //rend.UpdateDirection(new Vector3(0, 0 - (float)Math.PI * (float)Math.Sin(Movement3D), 0 - (float)Math.PI * (float)Math.Sin(Movement3D)));
 
 
 
-            rend.InstaniatePlaneRendering(new Point(3840, 2160));
-            Vector3 start = new Vector3(10, -10, 100);
-            Vector3 end = new Vector3(-20, 0, 50);
-            rend.AddTriToRender(new TriPlane(start, end, new Vector3(10,10,100)) );
-            rend.RenderAll(new Rectangle(0, 0, 3840, 2160));
-            rend.RenderLine(start, end);
-            rend.RenderLine(new Vector3(10, 10, 100), end);
-            rend.RenderLine(start, new Vector3(10, 10, 100));
+            rend.InstaniatePlaneRendering(new Point(430, 270));
 
 
 
@@ -130,6 +123,7 @@ namespace GameJom
             cube.DrawCuboid(new Vector3(+4 * (float)Math.Cos(AnimationSpeed3D + 3 * n), +3 * (float)Math.Cos(AnimationSpeed3D + 3 * n), 16 - 4 * (float)Math.Sin(AnimationSpeed3D + 3 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D * 4, (float)Math.PI / 4));
             cube.DrawCuboid(new Vector3(+5 * (float)Math.Cos(AnimationSpeed3D + 2 * n), +3 * (float)Math.Cos(AnimationSpeed3D + 2 * n), 16 - 5 * (float)Math.Sin(AnimationSpeed3D + 2 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D * 5, (float)Math.PI / 4));
             cube.DrawCuboid(new Vector3(+6 * (float)Math.Cos(AnimationSpeed3D + 1 * n), +3 * (float)Math.Cos(AnimationSpeed3D + 1 * n), 16 - 6 * (float)Math.Sin(AnimationSpeed3D + 1 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D * 6, (float)Math.PI / 4));
+            rend.RenderAll(new Rectangle(0, 0, 3840, 2160));
             #endregion
 
             graphicsDevice.Clear(new Color((int)bgGradient, (int)bgGradient, (int)bgGradient)); // store in screen folder as the screen's own json

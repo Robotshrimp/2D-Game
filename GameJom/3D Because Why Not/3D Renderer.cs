@@ -10,8 +10,8 @@ namespace GameJom._3D_Because_Why_Not
     class Renderer3D
     {
         static GraphicsDeviceManager graphics = Game1.graphics;
-        public  Vector3 CameraLocation = new Vector3(100, 100, 100);
-        public  Vector3 CameraDirection = new Vector3(12, 12, 12);
+        public  Vector3 CameraLocation = new Vector3(0, 0, 0);
+        public  Vector3 CameraDirection = new Vector3(0, 0, 0);
         Camera DrawParam;
 
         /* if these values ever diviates from 0-1: the person configuring the settings is clinically insane and should 
@@ -27,7 +27,7 @@ namespace GameJom._3D_Because_Why_Not
             fovHorizontal = FovHorozontal;
             if (FovVertical <= 0)
             {
-                fovVertical = (int)(FovHorozontal * ((float)Game1.graphics.PreferredBackBufferHeight / (float)Game1.graphics.PreferredBackBufferWidth));
+                fovVertical = (int)(FovHorozontal * ((float)graphics.PreferredBackBufferHeight / (float)graphics.PreferredBackBufferWidth));
             }
             this.DrawParam = drawParam;
 
@@ -60,19 +60,19 @@ namespace GameJom._3D_Because_Why_Not
             Point projectionLocation = new Point((int)(screenOffset.X * (Angle.X / radFOVX)), (int)(screenOffset.Y * (Angle.Y / radFOVY))); // gives angle coordinates an x,y coornet scaled with fov. screen offset is used because i'm a lazy bastard who is too lazy to get the value straight from the source, it has no computational value and probably weakens the code
             return new Point(projectionLocation.X + screenOffset.X, -projectionLocation.Y + screenOffset.Y);// screen offset is applied to center around middle of screen
         }
-        public Vector3 ScreenPointDirection(Point ScreenPoint) // gets the direction vector a point on the screen represents
+        public Vector3 ScreenPointDirection(Point screenPoint) // gets the direction vector a point on the screen represents
         {
             float radFOVX = ((float)fovHorizontal / 360) * (float)Math.PI;
             float radFOVY = ((float)fovVertical / 360) * (float)Math.PI;
             Point screenOffset = new Point(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
-            float xAngle = (float)(ScreenPoint.X -screenOffset.X) / screenOffset.X * radFOVX;
-            float yAngle = (float)-(ScreenPoint.Y - screenOffset.Y) / screenOffset.Y * radFOVY;
+            float xAngle = (float)(screenPoint.X -screenOffset.X) / screenOffset.X * radFOVX;
+            float yAngle = (float)-(screenPoint.Y - screenOffset.Y) / screenOffset.Y * radFOVY;
             Vector3 rayVector = TrigFun.AnglePairToPoint3D(new Vector2(xAngle, yAngle));
-            return TrigFun.reverseEulerRotation(rayVector , new Vector3(), CameraDirection);
+            return TrigFun.reverseEulerRotation(rayVector, new Vector3(), CameraDirection); // if camera location is added to the return value, re-projecting the value will yield same screenPoint
         }
         public Vector2 CoordnetConvert(Vector3 coordnetLocation)
         {
-            Vector2 angleLocation = TrigFun.Point3DToAnglePair(TrigFun.eulerAngles3D(coordnetLocation, CameraLocation, CameraDirection) - CameraLocation); // fix screen rotation later
+            Vector2 angleLocation = TrigFun.Point3DToAnglePair(TrigFun.eulerAngles3D(coordnetLocation - CameraLocation, new Vector3(), CameraDirection)); // fix screen rotation later
             return angleLocation;
         }
 
@@ -94,7 +94,7 @@ namespace GameJom._3D_Because_Why_Not
         Color[] Render; // pixels from rendering tris are stored here and converted to a Texture2D when set to Rendered
         Texture2D Rendered; // the image of the 3D render that is drawn to screen 
         float[] RayDistance; // congruent to Render and tracks the distance of each pixel/ray
-        bool PlaneRenderingInstaniated = false; // makes sure the renderer has the parameters set for plane rendering, prevents unnescesary parameters for non-plane rendering
+        public bool PlaneRenderingInstaniated = false; // makes sure the renderer has the parameters set for plane rendering, prevents unnescesary parameters for non-plane rendering
         Point RenderingResolution; // a resolution of what's rendered   
         public void InstaniatePlaneRendering(Point renderingResolution) // Instaniate the renderer with nescessary information for plane rendering
         {
@@ -109,39 +109,49 @@ namespace GameJom._3D_Because_Why_Not
                 Rendered.SetData(Render);
                 DrawParam.Draw(renderLocation, Rendered);
         }
-        public void AddTriToRender(TriPlane tri) // only adds the tri to the render image, does not draw anything on screen to prevent tri intersection ambiguity
+        public Point ScaleToResolution(Point preScale)
+        {
+            return new Point((int)((float)preScale.X / graphics.PreferredBackBufferWidth * RenderingResolution.X),
+                (int)((float)preScale.Y / graphics.PreferredBackBufferHeight * RenderingResolution.Y));
+
+        }
+        public Point UnscaleResolution(Point preScale)
+        {
+            return new Point((int)((float)preScale.X /  RenderingResolution.X * graphics.PreferredBackBufferWidth),
+                (int)((float)preScale.Y / RenderingResolution.Y * graphics.PreferredBackBufferHeight ));
+        }
+        public void RenderTri(TriPlane tri) // only adds the tri to the render image, does not draw anything on screen to prevent tri intersection ambiguity
         {
             if (PlaneRenderingInstaniated)
             {
                 List<Point> points = new List<Point>();
-                points.Add(ScreenProjection(CoordnetConvert(tri.Point1)));
-                points.Add(ScreenProjection(CoordnetConvert(tri.Point2)));
-                points.Add(ScreenProjection(CoordnetConvert(tri.Point3)));
+                points.Add(ScaleToResolution(ScreenProjection(CoordnetConvert(tri.Point1))));
+                points.Add(ScaleToResolution(ScreenProjection(CoordnetConvert(tri.Point2))));
+                points.Add(ScaleToResolution(ScreenProjection(CoordnetConvert(tri.Point3))));
                 Rectangle Bounds = GeometricFun.Bounds(points);
 
 
-                Vector3 sceenSide = tri.SeenSideDirection(CameraLocation);
                 Vector3 direction = tri.SeenSideDirection(CameraLocation);
                 int recurance = 0;
                 for (int y = 0; y < Bounds.Height; y++)
                 {
                     for (int x = 0; x < Bounds.Width; x++)
                     {
-                        Vector3 ray = ScreenPointDirection(new Point(y + Bounds.Left, x + Bounds.Top));
-                            if (y == Bounds.Height - 1) // test break point code
-                        {
+                        Vector3 ray = ScreenPointDirection(UnscaleResolution(new Point(x + Bounds.X, y + Bounds.Y)));
+                        // ray is vector from camera location to 1 away in a direction vector
+                        float distance;
+                        Vector3 intersectionPoint = tri.PlaneIntersection(CameraLocation, ray, out distance);
+                        // intersection point is from origin to intersection point
+                        // ray is not Q, it is a vector point towards it
 
-                        }
-                        if (tri.Inside(ray))
+                        if (tri.Inside(intersectionPoint + CameraLocation))
                         {
                             recurance++;
-                            float distance;
-                            Vector3 intersectionPoint = tri.PlaneIntersection(CameraLocation, ray, out distance);
                             int pixelNum = (y + Bounds.Y) * RenderingResolution.X + (x + Bounds.X);
                             if (RayDistance[pixelNum] == 0 ||
                                 distance < RayDistance[pixelNum]) // checks to see if the new pixel is closer than the current clossest pixel, the distance of each pixel starts at 0 and because of how unlikly it is for a float to land on 0, 0 is defacto null and singled out 
                             {
-                                Render[pixelNum] = new Color(125, 125, 125);
+                                Render[pixelNum] = new Color((125 + (125 * direction.X)) / 255, (125 + (125 * direction.Y)) / 255, (125 + (125 * direction.Z)) / 255);
                                 RayDistance[pixelNum] = distance;
                             }
                         }

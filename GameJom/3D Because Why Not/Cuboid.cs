@@ -34,20 +34,23 @@ namespace GameJom._3D_Because_Why_Not
 
 
             //uses the instance engine to render lines between select cubes
-            Render.RenderSegmentedLine(corner1_1, corner2_1, segments, thickness);
-            Render.RenderSegmentedLine(corner1_2, corner2_2, segments, thickness);
-            Render.RenderSegmentedLine(corner1_4, corner2_4, segments, thickness);
-            Render.RenderSegmentedLine(corner1_3, corner2_3, segments, thickness);
+                Render.RenderTri(new TriPlane(corner1_1, corner1_2, corner1_3));
+                Render.RenderTri(new TriPlane(corner1_1, corner1_4, corner1_3));
 
-            Render.RenderSegmentedLine(corner1_1, corner1_2, segments, thickness);
-            Render.RenderSegmentedLine(corner1_1, corner1_4, segments, thickness);
-            Render.RenderSegmentedLine(corner1_3, corner1_2, segments, thickness);
-            Render.RenderSegmentedLine(corner1_3, corner1_4, segments, thickness);
+                Render.RenderTri(new TriPlane(corner2_2, corner2_1, corner2_4));
+                Render.RenderTri(new TriPlane(corner2_2, corner2_3, corner2_4));
 
-            Render.RenderSegmentedLine(corner2_1, corner2_2, segments, thickness);
-            Render.RenderSegmentedLine(corner2_1, corner2_4, segments, thickness);
-            Render.RenderSegmentedLine(corner2_3, corner2_2, segments, thickness);
-            Render.RenderSegmentedLine(corner2_3, corner2_4, segments, thickness);
+                Render.RenderTri(new TriPlane(corner1_1, corner1_2, corner2_2));
+                Render.RenderTri(new TriPlane(corner1_1, corner2_1, corner2_2));
+
+                Render.RenderTri(new TriPlane(corner1_3, corner1_2, corner2_2));
+                Render.RenderTri(new TriPlane(corner1_3, corner2_3, corner2_2));
+
+                Render.RenderTri(new TriPlane(corner1_1, corner2_1, corner2_4));
+                Render.RenderTri(new TriPlane(corner1_1, corner1_4, corner2_4));
+
+                Render.RenderTri(new TriPlane(corner1_3, corner1_4, corner2_4));
+                Render.RenderTri(new TriPlane(corner1_3, corner2_3, corner2_4));
 
             /*
             Engine.RenderSegmentedLine(corner2_1, corner1_3, segments, thiccness);
