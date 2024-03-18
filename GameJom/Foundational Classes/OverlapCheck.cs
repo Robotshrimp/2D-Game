@@ -40,7 +40,7 @@ namespace GameJom
         static public Rectangle OverlappedArea(Rectangle Base, Rectangle Selection) // gets the overlaping area between two rectangles
         {
             if (Overlapped(Base, Selection))
-                return new Rectangle();
+                return Selection;
             int top = Math.Max(Selection.Top, Base.Top);
             int left = Math.Max(Selection.Left, Base.Left);
             int width = Math.Min(Selection.Right, Base.Right) - left;

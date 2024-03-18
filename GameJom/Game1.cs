@@ -7,6 +7,8 @@ using System;
 using System.IO;
 using GameJom.classes;
 using System.Diagnostics;
+using GameJom._3D_Because_Why_Not;
+using System.Windows.Forms;
 
 namespace GameJom
 {
@@ -69,6 +71,18 @@ namespace GameJom
             graphics.ApplyChanges();
             this.IsMouseVisible = true;
             base.Initialize();
+
+
+
+
+            TriPlane testplane = new TriPlane(new Vector3(10,10,10), new Vector3(10,10,10), new Vector3(0,0,0));
+
+
+
+
+
+
+
         }
         public static Texture2D Text1;
         public static Texture2D Text2;
@@ -87,17 +101,15 @@ namespace GameJom
             {
                 Assets.Add(file, Content.Load<Texture2D>(file));
             }
-            BlankTexture = (Texture2D)AssetStorage.ContentAssets.Storage["BasicShape"];
+            BlankTexture = (Texture2D)AssetStorage.ContentAssets.SubFolders["Assets"].SubFolders["UI Assets"].Storage["BasicShape"];
             //clas.Load("bad poggie"); 
             Text1 = Content.Load<Texture2D>("font(pressed)");
             Text2 = Content.Load<Texture2D>("font(hold)");
             Text3 = Content.Load<Texture2D>("Font");
 
-            testFonts = new FontTexture(Text1, Text2, Text3);
             Griddy = Content.Load<Texture2D>("transparent");
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            testFontPreset = new FontPreset(AssetStorage.ContentAssets.SearchForFolder("TestFont"));
-            ScreenManager.Initialize();
+            ScreenManager.Initialize(HomeScreen.name);
             // TODO: use this.Content to load your game content here
         }
 
@@ -161,23 +173,34 @@ namespace GameJom
             InputManager.Update();
             base.Update(gameTime);
             */
-            
+
         }
-        
-        float test = 0;
-        float roati = 0;
-        float broati = 0;
-        int bgGradientChange = 100;
-        int direction = 1;
         public static FontSettings textFormat = new FontSettings(20, Color.White, new Point(40, 80));
         public static FontTexture testFonts;
         public FontPreset testFontPreset;
+
+        public Texture2D pixel;
         protected override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
             ScreenManager.Draw();
 
-            spriteBatch.Draw(BlankTexture, new Rectangle(0, 0, calculationScreenSize.X, ScreenBounds.Top), Color.Black);//
+
+            pixel = new Texture2D(GraphicsDevice, ScreenBounds.Width, ScreenBounds.Height);
+            Color[] screenprojection = new Color[ScreenBounds.Width * ScreenBounds.Height];
+            Camera testcam = new Camera();
+            for(int i = 0; i < ScreenBounds.Height; i++)
+            {
+                for(int j = 0; j < ScreenBounds.Width; j++)
+                {
+                    screenprojection[i * ScreenBounds.Width + j] = new Color(i,i,j);
+                }
+            }
+            pixel.SetData(screenprojection);
+            //spriteBatch.Draw(pixel,ScreenBounds, Color.White);
+           
+            // black bar to crop out excess screen space from non conformant screen sizes
+            spriteBatch.Draw(BlankTexture, new Rectangle(0, 0, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
             spriteBatch.Draw(BlankTexture, new Rectangle(0, ScreenBounds.Bottom, calculationScreenSize.X, ScreenBounds.Top), Color.Black);
             spriteBatch.End();
             /*

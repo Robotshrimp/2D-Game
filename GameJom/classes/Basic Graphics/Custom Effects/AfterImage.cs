@@ -11,21 +11,26 @@ namespace GameJom
 {
     public class AfterImage : Global, ICustomEffect
     {
-        int AfterImageLength; // number of after images
-        int AfterImageDuration; // number of frames between each after image
-        int tick = 0; // helps keep track of when the next afterimage should be added in conjunction with AfterImageDuration
-        Single TrailShrinkOff; // multiplied by the previous image size to produce next image size
-        float TrailFadeOff; // adds this to the alpha channel of the previous image to get the next image's alpha channel value
-        public List<ColorFrameData> ColorKeys = new List<ColorFrameData>(); // the key denotes the frame, the color denotes what color the sprite should be by that frame
-        List<AfterImageData> AfterImages = new List<AfterImageData>(); // stored trail data of every call instance
+        public int AfterImageLength { get; set; } // number of after images
+        public int AfterImageDuration { get; set; } // number of frames between each after image
+        public Single TrailShrinkOff { get; set; } // multiplied by the previous image size to produce next image size
+        public float TrailFadeOff { get; set; } // adds this to the alpha channel of the previous image to get the next image's alpha channel value
+        public List<ColorFrameData> ColorKeys { get; set; } // the key denotes the frame, the color denotes what color the sprite should be by that frame
+        public string EffectName { get; set; } // the name the program uses to get this effect
 
-        string CustomEffectsKey = string.Empty; // list of string marking custom effects to add to CustomEffects List
-        string EffectName = string.Empty; // string used to identify this effect in CustomEffectsKey
-        List<ICustomEffect> CustomEffects = new List<ICustomEffect>(); // list of effects to pass the draw param to for further processing, multiple ICustomEffect objects may result in multiple draw operations on the same draw instance
+        public string Name { get; } = "AfterImage";
+
+        // ICustomEffect does not need to be loaded for an effect format, it only needs to exist when effects is compiled within an effect tree
+
+        public List<ICustomEffect> CustomEffects = new List<ICustomEffect>(); // list of effects to pass the draw param to for further processing, multiple ICustomEffect objects may result in multiple draw operations on the same draw instance
+        List<AfterImageData> AfterImages = new List<AfterImageData>(); // stored trail data of every call instance
+        int tick = 0; // helps keep track of when the next afterimage should be added in conjunction with AfterImageDuration
+
 
         public AfterImage(int afterImageLength = 20, int afterImageDuration = 1, Single trailShrinkOff = 0.9f, Single trailFadeOff = 0.9f, List<ColorFrameData> colorKeys = null) 
         {
             AfterImageLength = afterImageLength; AfterImageDuration = afterImageDuration; TrailShrinkOff = trailShrinkOff; TrailFadeOff = trailFadeOff;  ColorKeys = colorKeys;
+            
             CustomEffects.Add(new BaseDraw());
         }
         public void Draw(Rectangle destination, Texture2D texture, Rectangle usedTexture, Color color, float angle = 0)
@@ -35,17 +40,27 @@ namespace GameJom
         }
         public void GroupDraw() // handles all the actrual drawing
         {
+            foreach (AfterImageData afterImage in AfterImages)
+            {
+                foreach (ICustomEffect customEffect in CustomEffects) // effect draw should always be where the draw is outputed in the effect, if an effect outputs in draw this foreach loop would be location in the draw method
+                {
+                    customEffect.Draw(afterImage.Rectangle, afterImage.Texture, afterImage.UsedTexture, afterImage.CurrentColor * afterImage.Alpha, afterImage.Rotation);
+                }
+            }
+            foreach(ICustomEffect customEffect in CustomEffects)
+            {
+                customEffect.GroupDraw();
+            }
+        }
+        public void Update() // use for once per frame calculations, should only be used once per frame durring implimentation
+        {
             List<AfterImageData> removeList = new List<AfterImageData>();
             foreach (AfterImageData afterImage in AfterImages)
             {
                 afterImage.Alpha = afterImage.Alpha * TrailFadeOff;
                 afterImage.Frame++;
                 afterImage.CurrentColor = GenerateColor(afterImage.StartColor, afterImage.Frame);
-                foreach (ICustomEffect customEffect in CustomEffects) // effect draw should always be where the draw is outputed in the effect, if an effect outputs in draw this foreach loop would be location in the draw method
-                {
-                    customEffect.Draw(afterImage.Rectangle, afterImage.Texture, afterImage.UsedTexture, afterImage.CurrentColor * afterImage.Alpha, afterImage.Rotation);
-                }
-                if(afterImage.Frame == AfterImageLength)
+                if (afterImage.Frame == AfterImageLength)
                 {
                     removeList.Add(afterImage);
                 }
@@ -54,16 +69,7 @@ namespace GameJom
             {
                 AfterImages.Remove(afterImage);
             }
-            foreach(ICustomEffect customEffect in CustomEffects)
-            {
-                customEffect.GroupDraw();
-            }
-        }
-        public void Update()
-        {
-            if (tick > AfterImageDuration)
-                tick = 0;
-            tick++;
+                tick++;
             foreach (ICustomEffect customeEffect in CustomEffects)
             {
                 customeEffect.Update();
@@ -110,18 +116,14 @@ namespace GameJom
         public Color StartColor { get; set; }
         public Color CurrentColor { get; set; }
         public int Frame { get; set; }
-        public AfterImageData(Rectangle rectangle, Texture2D texture, float rotation, Rectangle usedTexture, Single alpha, Color startColor, int frame = 0) 
+        public AfterImageData(Rectangle rectangle, Texture2D texture, float rotation, Rectangle usedTexture, Single alpha, Color startColor, int frame = 0) // use for quick assign
         { 
             Rectangle = rectangle; Texture = texture; Rotation = rotation; UsedTexture = usedTexture; Alpha = alpha; StartColor = startColor; Frame = frame;
-            }
+        }
     }
     public class ColorFrameData // class used to store a color value and a int value used to mark the frame
     {
         public Color FrameColor { get; set; }
         public int Frames { get; set; } // marks for the number of frames it should take to get to this, not which frame this color will be fully realized
-        public ColorFrameData(Color frameColor, int frame)
-        {
-            FrameColor = frameColor; Frames = frame;
-        }
     }
 }

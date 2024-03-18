@@ -11,6 +11,7 @@ namespace GameJom.classes.Basic_Graphics.Custom_Effects
 {
     internal class BaseDraw : Global, ICustomEffect
     {
+        public string Name { get; } = "BaseDraw";
         public List<ICustomEffect> CustomEffects { get; set; }
 
         public void Draw(Rectangle destination, Texture2D texture, Rectangle usedTexture, Color color, float angle = 0)

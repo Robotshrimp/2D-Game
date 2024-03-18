@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +13,7 @@ namespace GameJom
     {
         Dictionary<string, IScreen> UsedScreens = new Dictionary<string, IScreen>();
         HashSet<string> ActiveScreens = new HashSet<string>();
-        public void Initialize()
+        public void Initialize(string StartScreen)
         {
 
             HomeScreen homeScreen = new HomeScreen();
@@ -22,7 +24,7 @@ namespace GameJom
             {
                 UsedScreens[screen].Initialize();
             }
-            ActiveScreens.Add(HomeScreen.name);
+            ActiveScreens.Add(StartScreen);
         }
         public void Update()
         {

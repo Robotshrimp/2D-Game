@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GameJom
 {
-    class ScreenSwitch : IButton
+    class ScreenSwitch
     {
         public Rectangle Bounds { get ; set ; }
         string SwitchToScreen;
@@ -18,17 +18,17 @@ namespace GameJom
 
         // place holder for animations
         Texture2D ButtonTexture;
-        ICustomEffect pressEffect;
-        ICustomEffect unpressEffect;
-        ICustomEffect selectEffect;
-        ICustomEffect unselectEffect;
+        IButtonEffect pressEffect;
+        IButtonEffect unpressEffect;
+        IButtonEffect selectEffect;
+        IButtonEffect unselectEffect;
         public void Pressed()
         {
             ButtonLocation.addScreen.Add(SwitchToScreen);
             ButtonLocation.removeScreen.Add(RemoveScreen);
         }
 
-        public void Selected()
+        public void Hover()
         {
             
         }

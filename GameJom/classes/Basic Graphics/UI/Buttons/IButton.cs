@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace GameJom.classes.Basic_Graphics.UI.Buttons
 {
-    interface IButton
+    public interface IButtonEffect
     {
-        Rectangle Bounds { get; set; }
+        //used to set a collection of animations used by the button when conditions are met
         void Pressed();
         void Unpressed();
-        void Selected();
+        void Hover();
         void Unselected();
     }
 }

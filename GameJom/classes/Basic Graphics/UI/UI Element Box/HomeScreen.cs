@@ -6,25 +6,27 @@ using System.Windows.Forms.VisualStyles;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
+using GameJom._3D_Because_Why_Not;
 
 namespace GameJom
 {
     class HomeScreen : ScreenFromat, IScreen 
     {
-        //test values, remove later
+        //turn this into a screen type with specific screen settings stored in jsons
 
 
         // screen data
         public static string name = "HomeScreen";
-        Folder GetAssets = new Folder();
+        Folder GetAssets = new Folder(); // not a place to save to files, does not directly take from contentassets. 
         bool pause = false;
         
 
         Texture2D BlankTexture;
         Texture2D PointerTexture;
         FontPreset Font;
-        float roati = 0;
-        float test = 0;
+        float Movement3D = 0;
+        float AnimationSpeed3D = 0;
         GraphicsDevice graphicsDevice;
 
 
@@ -40,12 +42,24 @@ namespace GameJom
             Font = new FontPreset(GetAssets.SubFolders["Fonts"].SubFolders["TestFont"]);
             graphicsDevice = Game1.graphicsDevice;
             #region Afterimage trail color
-            afterImage.ColorKeys.Add(new ColorFrameData(Color.Purple, 1));
-            afterImage.ColorKeys.Add(new ColorFrameData(Color.Cyan, 20));
-
+            ColorFrameData color1 = new ColorFrameData();
+            color1.Frames = 1; color1.FrameColor = Color.DarkRed;
+            ColorFrameData color2 = new ColorFrameData();
+            color2.Frames = 10; color2.FrameColor = Color.PaleGoldenrod;
+            afterImage.ColorKeys.Add(color1);
+            afterImage.ColorKeys.Add(color2);
 
             #endregion
-            BaseDraw.CustomEffects.Add(afterImage);
+            /*
+             for each game object, load in during initialize as json, each draw element would have it's location, color, etc, listed.
+            new elements would be added using a seperate dev edit UI overlap listed under a different screen that is hard coded, the job of that screen would be
+            to generate the json files that comprise a normal screen. this special screen should be removed on release with option to re-enable by editing a json to set dev mode to true
+            the problem now is how do i add in functions using only json files, perhaps coding in functions to be called by name in jsons
+            */
+
+            string jsonString = JsonSerializer.Serialize(afterImage);
+            JsonSerializer.Deserialize<AfterImage>(jsonString);
+            BaseDraw.CustomEffects.Add(JsonSerializer.Deserialize<AfterImage>(jsonString));
             //File.Create(@"test").Dispose();
             //File.WriteAllText(@"test", "");
         }
@@ -64,55 +78,69 @@ namespace GameJom
             startButton = Font.Print("Start", new Point(100, 100));
             editButton = Font.Print("Edit", new Point(100, 250));
 
+            Renderer3D testrenderer = new Renderer3D(new Camera());
+            Camera cam = new Camera();
 
             _3D_Because_Why_Not.Renderer3D rend = new _3D_Because_Why_Not.Renderer3D(BaseDraw);
             #region 3D grapnics
+            // use functions for orbiting with params for orbiting height, speed, etc. should be the most straight forward way to add json compatability
+            rend.UpdateLocation(new Vector3(0, 0 - 16 * (float)Math.Sin(Movement3D), 0 - 16 * (float)Math.Cos(Movement3D)));
+            rend.UpdateDirection(new Vector3(0, 0 - (float)Math.PI * (float)Math.Sin(Movement3D), 0 - (float)Math.PI * (float)Math.Sin(Movement3D)));
 
-            rend.UpdateLocation(new Vector3(0, 0 - 16 * (float)Math.Sin(roati), 16 - 16 * (float)Math.Cos(roati)));
-            rend.UpdateDirection(new Vector3(0, 0 - 16 * (float)Math.Sin(roati), 16 - 16 * (float)Math.Cos(roati)));
+
+
+            rend.InstaniatePlaneRendering(new Point(3840, 2160));
+            Vector3 start = new Vector3(10, -10, 100);
+            Vector3 end = new Vector3(-20, 0, 50);
+            rend.AddTriToRender(new TriPlane(start, end, new Vector3(10,10,100)) );
+            rend.RenderAll(new Rectangle(0, 0, 3840, 2160));
+            rend.RenderLine(start, end);
+            rend.RenderLine(new Vector3(10, 10, 100), end);
+            rend.RenderLine(start, new Vector3(10, 10, 100));
+
+
+
+
             _3D_Because_Why_Not.Cuboid cube = new _3D_Because_Why_Not.Cuboid(rend);
             float suroundingsize = 1.5f;
             int segments = 1;
-            cube.DrawCuboid(new Vector3(2, -2, 14), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, -test - (float)Math.PI / 3, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(-2, -2, 14), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, test, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(2, 2, 14), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, -test, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(-2, 2, 14), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, test + (float)Math.PI / 3, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(2, -2, 18), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, test - (float)Math.PI / 3, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(-2, -2, 18), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, -test, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(2, 2, 18), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, test, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(-2, 2, 18), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, -test + (float)Math.PI / 3, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(2, -2, 14), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D - (float)Math.PI / 3, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-2, -2, 14), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, AnimationSpeed3D, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(2, 2, 14), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-2, 2, 14), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, AnimationSpeed3D + (float)Math.PI / 3, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(2, -2, 18), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, AnimationSpeed3D - (float)Math.PI / 3, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-2, -2, 18), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(2, 2, 18), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, AnimationSpeed3D, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-2, 2, 18), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D + (float)Math.PI / 3, (float)Math.PI / 4));
 
-            cube.DrawCuboid(new Vector3(0, 0, 16), new Vector3(3, 3, 3), segments, 3, new Vector3((float)Math.PI / 5, test, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(0, 0, 16), new Vector3(2.5f, 2.5f, 2.5f), segments, 3, new Vector3((float)Math.PI / 5, test * 2, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(0, 0, 16), new Vector3(2, 2, 2), segments, 3, new Vector3((float)Math.PI / 5, test * 3, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(0, 0, 16), new Vector3(1.5f, 1.5f, 1.5f), segments, 3, new Vector3((float)Math.PI / 5, test * 4, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(0, 0, 16), new Vector3(3, 3, 3), segments, 3, new Vector3((float)Math.PI / 5, AnimationSpeed3D, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(0, 0, 16), new Vector3(2.5f, 2.5f, 2.5f), segments, 3, new Vector3((float)Math.PI / 5, AnimationSpeed3D * 2, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(0, 0, 16), new Vector3(2, 2, 2), segments, 3, new Vector3((float)Math.PI / 5, AnimationSpeed3D * 3, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(0, 0, 16), new Vector3(1.5f, 1.5f, 1.5f), segments, 3, new Vector3((float)Math.PI / 5, AnimationSpeed3D * 4, (float)Math.PI / 4));
 
             //cube.DrawCuboid(new Vector3(0 - 16 * (float)Math.Sin(broati)*y, 0 - 16 * (float)Math.Sin(roati), 16 - 16 * (z*y)), new Vector3(1.5f, 1.5f, 1.5f), 5, 3, new Vector3(-broati, 0, roati));
 
             double n = 0.4;
-            cube.DrawCuboid(new Vector3(-3 * (float)Math.Cos(test + 4 * n), 3 * (float)Math.Cos(test + 4 * n), 16 + 3 * (float)Math.Sin(test + 4 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -test * 3, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(-4 * (float)Math.Cos(test + 3 * n), 3 * (float)Math.Cos(test + 3 * n), 16 + 4 * (float)Math.Sin(test + 3 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -test * 4, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(-5 * (float)Math.Cos(test + 2 * n), 3 * (float)Math.Cos(test + 2 * n), 16 + 5 * (float)Math.Sin(test + 2 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -test * 5, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(-6 * (float)Math.Cos(test + 1 * n), 3 * (float)Math.Cos(test + 1 * n), 16 + 6 * (float)Math.Sin(test + 1 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -test * 6, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-3 * (float)Math.Cos(AnimationSpeed3D + 4 * n), 3 * (float)Math.Cos(AnimationSpeed3D + 4 * n), 16 + 3 * (float)Math.Sin(AnimationSpeed3D + 4 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D * 3, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-4 * (float)Math.Cos(AnimationSpeed3D + 3 * n), 3 * (float)Math.Cos(AnimationSpeed3D + 3 * n), 16 + 4 * (float)Math.Sin(AnimationSpeed3D + 3 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D * 4, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-5 * (float)Math.Cos(AnimationSpeed3D + 2 * n), 3 * (float)Math.Cos(AnimationSpeed3D + 2 * n), 16 + 5 * (float)Math.Sin(AnimationSpeed3D + 2 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D * 5, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(-6 * (float)Math.Cos(AnimationSpeed3D + 1 * n), 3 * (float)Math.Cos(AnimationSpeed3D + 1 * n), 16 + 6 * (float)Math.Sin(AnimationSpeed3D + 1 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D * 6, (float)Math.PI / 4));
 
-            cube.DrawCuboid(new Vector3(+3 * (float)Math.Cos(test + 4 * n), +3 * (float)Math.Cos(test + 4 * n), 16 - 3 * (float)Math.Sin(test + 4 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -test * 3, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(+4 * (float)Math.Cos(test + 3 * n), +3 * (float)Math.Cos(test + 3 * n), 16 - 4 * (float)Math.Sin(test + 3 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -test * 4, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(+5 * (float)Math.Cos(test + 2 * n), +3 * (float)Math.Cos(test + 2 * n), 16 - 5 * (float)Math.Sin(test + 2 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -test * 5, (float)Math.PI / 4));
-            cube.DrawCuboid(new Vector3(+6 * (float)Math.Cos(test + 1 * n), +3 * (float)Math.Cos(test + 1 * n), 16 - 6 * (float)Math.Sin(test + 1 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -test * 6, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(+3 * (float)Math.Cos(AnimationSpeed3D + 4 * n), +3 * (float)Math.Cos(AnimationSpeed3D + 4 * n), 16 - 3 * (float)Math.Sin(AnimationSpeed3D + 4 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D * 3, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(+4 * (float)Math.Cos(AnimationSpeed3D + 3 * n), +3 * (float)Math.Cos(AnimationSpeed3D + 3 * n), 16 - 4 * (float)Math.Sin(AnimationSpeed3D + 3 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D * 4, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(+5 * (float)Math.Cos(AnimationSpeed3D + 2 * n), +3 * (float)Math.Cos(AnimationSpeed3D + 2 * n), 16 - 5 * (float)Math.Sin(AnimationSpeed3D + 2 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D * 5, (float)Math.PI / 4));
+            cube.DrawCuboid(new Vector3(+6 * (float)Math.Cos(AnimationSpeed3D + 1 * n), +3 * (float)Math.Cos(AnimationSpeed3D + 1 * n), 16 - 6 * (float)Math.Sin(AnimationSpeed3D + 1 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D * 6, (float)Math.PI / 4));
             #endregion
 
-            graphicsDevice.Clear(new Color((int)bgGradient, (int)bgGradient, (int)bgGradient));
+            graphicsDevice.Clear(new Color((int)bgGradient, (int)bgGradient, (int)bgGradient)); // store in screen folder as the screen's own json
             BaseDraw.Draw(new Rectangle(pointerLocation.Location, new Point(30, 40)), PointerTexture, color: Color.White);
+
+
         }
-
-
         public void Update()
         {
             if (!pause)
             {
-                BaseDraw.Update();
-                roati += (float).002;
-                test += (float).01;
                 if (OverlapCheck.Overlapped(startButton, pointerLocation))
                 {
                     if (Mouse.GetState().LeftButton == ButtonState.Pressed)
@@ -128,6 +156,12 @@ namespace GameJom
                         removeScreen.Add(name);
                     }
                 }
+
+
+                // temperary, should be stored as json
+                BaseDraw.Update();
+                //Movement3D += (float).0005;
+                AnimationSpeed3D += (float).01;
                 if (bgGradient >= 30)
                     changeRate = -0.1f;
                 if (bgGradient <= 1)

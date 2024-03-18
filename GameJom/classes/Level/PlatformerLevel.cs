@@ -13,7 +13,7 @@ using GameJom.classes.Level;
 
 namespace GameJom
 {
-    public class PlatformerLevel
+    public class PlatformerLevel // handles running a room list, including inter-room interactions
     { 
         public List<Room> Rooms= new List<Room>();
         int CurrentRoom;

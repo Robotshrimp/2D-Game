@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameJom.classes.Basic_Graphics.UI.Buttons
+namespace GameJom.classes.Basic_Graphics.Custom_Effects
 {
-    internal class IButtonEffect
+    internal class CustomEffectPresets
     {
     }
 }

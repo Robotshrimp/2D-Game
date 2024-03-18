@@ -14,7 +14,7 @@ namespace GameJom.classes.Basic_Graphics.Custom_Effects
         int XVariation;
         int YRValue;
         int XRValue;
-        
+        public string Name { get; } = "ScreenShake";
         public List<ICustomEffect> CustomEffects { get ; set ; }
         public ScreenShake(int yVariation, int xVariation)
         {

@@ -1,4 +1,5 @@
 ﻿using GameJom.classes.Basic_Graphics.Custom_Effects;
+using GameJom.Foundational_Classes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -56,12 +57,7 @@ namespace GameJom
         {
             if (Drawn)
             {
-                if (additionalEffects != null)
-                {
-                    CustomEffects.AddRange(additionalEffects);
-                }
                 // the size, shape, and location of the object on the screen
-
                 Rectangle Processed = DisplayRectangle(destination);
 
                 // code that stops drawing objects that are offscreen
@@ -94,6 +90,13 @@ namespace GameJom
                     {
                         effect.Draw(Processed, texture, usedTexture, color, angle);
                     }
+                    if (additionalEffects != null)
+                    {
+                        foreach (ICustomEffect effect in additionalEffects)
+                        {
+                            effect.Draw(Processed, texture, usedTexture, color, angle);
+                        }
+                    }
                 }
             }
         }
@@ -112,13 +115,19 @@ namespace GameJom
                 effect.GroupDraw();
             }
         }
-
+        public void Update()
+        {
+            foreach (ICustomEffect customEffect in CustomEffects)
+            {
+                customEffect.Update();
+            }
+        }
         public void DrawLine(LineClass line, string name = null)
         {
             if (Drawn)
             {
                 // TODO add integration for automated draw
-                line = new LineClass(/*DisplayPoint*/(line.Start), /*DisplayPoint*/(line.End), line.thiccness);// 3D renderer renders based off screen size already so no need for this extra scaling
+                line = new LineClass(/*this is a DisplayPoint*/(line.Start), /*this is a DisplayPoint*/(line.End), line.thiccness);// 3D renderer renders based off screen size already so no need for this extra scaling
                 this.Draw(texture: Game1.BlankTexture, destination: new Rectangle(line.Start, new Point((int)line.length, line.thiccness)), angle: line.angle, color: Color.White);
             }
         }
@@ -130,13 +139,7 @@ namespace GameJom
         }
         Dictionary<string, List<Rectangle>> StaggeredDrawStorages = new Dictionary<string, List<Rectangle>>();
         #endregion
-        public void Update()
-        {
-            foreach (ICustomEffect customEffect in CustomEffects)
-            {
-                customEffect.Update();
-            }
-        }
+
 
         public Rectangle RatioRectangle(Vector2 Location, Vector2 Size)// draws using the percentage of the screen width
         {
