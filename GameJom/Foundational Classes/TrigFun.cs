@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+
 namespace GameJom
 {
 
@@ -45,9 +46,9 @@ namespace GameJom
                 (float)(startingPoint.X * Math.Cos(rotation) + (startingPoint.Y * -Math.Sin(rotation))) * horizontalRotationScale, 
                 (float)(startingPoint.X * Math.Sin(rotation) + (startingPoint.Y * Math.Cos(rotation))) * vertialRotationScale);
         }
-        public static Vector2 angleToPoint(float angle, double length, float horizontalScale = 1, float verticalScale = 1)// find the coordnet location of a 2d point when given the angle and distance from origin
+        public static Vector2 angleToPoint(float angle, double length)// find the coordnet location of a 2d point when given the angle and distance from origin
         {
-            return new Vector2((float)(Math.Cos(angle) * length * horizontalScale), (float)(Math.Sin(angle) * length * verticalScale));
+            return new Vector2((float)(Math.Cos(angle) * length), (float)(Math.Sin(angle) * length));
         }
         #region 3d-screen conversions
         public static Vector2 Point3DToAnglePair(Vector3 Coordnet) // finds the angles of deviation from the x axis 

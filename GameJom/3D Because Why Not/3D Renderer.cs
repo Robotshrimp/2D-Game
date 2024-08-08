@@ -9,8 +9,11 @@ namespace GameJom._3D_Because_Why_Not
 {
     class Renderer3D
     {
+        // try to condense all rendering to matrix transfromations
+        
         static GraphicsDeviceManager graphics = Game1.graphics;
         public  Vector3 CameraLocation = new Vector3(0, 0, 0);
+        //change this to direction system instead of offset system
         public  Vector3 CameraDirection = new Vector3(0, 0, 0);
         Camera DrawParam;
 
@@ -98,16 +101,20 @@ namespace GameJom._3D_Because_Why_Not
         Point RenderingResolution; // a resolution of what's rendered   
         public void InstaniatePlaneRendering(Point renderingResolution) // Instaniate the renderer with nescessary information for plane rendering
         {
-            Rendered = new Texture2D(Game1.graphicsDevice, renderingResolution.X, renderingResolution.Y);
             RenderingResolution = renderingResolution;
-            Render = new Color[RenderingResolution.X * RenderingResolution.Y]; // sets the confines of a color array used for composing the 2d texture of the render
-            RayDistance = new float[RenderingResolution.X * RenderingResolution.Y];
+            Clear();
             PlaneRenderingInstaniated = true;
         }
         public void RenderAll(Rectangle renderLocation) // only in charge of drawing the already made 2d texture image
         {
                 Rendered.SetData(Render);
                 DrawParam.Draw(renderLocation, Rendered);
+        }
+        public void Clear()
+        {
+            Rendered = new Texture2D(Game1.graphicsDevice, RenderingResolution.X, RenderingResolution.Y);
+            Render = new Color[RenderingResolution.X * RenderingResolution.Y];
+            RayDistance = new float[RenderingResolution.X * RenderingResolution.Y];
         }
         public Point ScaleToResolution(Point preScale)
         {
@@ -139,22 +146,21 @@ namespace GameJom._3D_Because_Why_Not
 
 
 
-                        if (OverlapCheck.Overlapped(new Rectangle(new Point(), RenderingResolution), new Rectangle(new Point(x + Bounds.X, y + Bounds.Y), new Point(1, 1))))
+                        if (OverlapCheck.Overlapped(new Rectangle(new Point(), RenderingResolution), new Rectangle(new Point(x + Bounds.X, y + Bounds.Y), new Point(1, 1)))) // check to see if pixel is on screen
                         { 
                             Vector3 ray = ScreenPointDirection(UnscaleResolution(new Point(x + Bounds.X, y + Bounds.Y)));
                             // ray is vector from camera location to 1 away in a direction vector
-                            float distance;
-                            Vector3 intersectionPoint = tri.PlaneIntersection(CameraLocation, ray, out distance);
+                            (float, Vector3) intersectionPoint = tri.PlaneIntersection(CameraLocation, ray);
                             // intersection point is from origin to intersection point
 
-                            if (tri.Inside(intersectionPoint + CameraLocation))
+                            if (tri.Inside(intersectionPoint.Item2 + CameraLocation))
                             {
                                 int pixelNum = (y + Bounds.Y) * RenderingResolution.X + (x + Bounds.X);
                                 if (RayDistance[pixelNum] == 0 ||
-                                    distance < RayDistance[pixelNum]) // checks to see if the new pixel is closer than the current clossest pixel, the distance of each pixel starts at 0 and because of how unlikly it is for a float to land on 0, 0 is defacto null and singled out 
+                                    intersectionPoint.Item1 < RayDistance[pixelNum]) // checks to see if the new pixel is closer than the current clossest pixel, the distance of each pixel starts at 0 and because of how unlikly it is for a float to land on 0, 0 is defacto null and singled out 
                                 {
                                     Render[pixelNum] = new Color((125 + (125 * direction.X)) / 255, (125 + (125 * direction.Y)) / 255, (125 + (125 * direction.Z)) / 255);
-                                    RayDistance[pixelNum] = distance;
+                                    RayDistance[pixelNum] = intersectionPoint.Item1;
                                 }
                             }
                         }

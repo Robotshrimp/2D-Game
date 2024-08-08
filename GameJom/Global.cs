@@ -10,6 +10,7 @@ namespace GameJom
 {
     public class Global
     {
+        // add base assets like a base text format to allow easy implimentation of text
         private static SpriteBatch SpriteBatch = Game1.spriteBatch;
         public static SpriteBatch spriteBatch { get { return SpriteBatch; } }
 

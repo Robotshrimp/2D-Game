@@ -77,11 +77,11 @@ namespace GameJom._3D_Because_Why_Not
                 return true;
             return false;
         }
-        public Vector3 PlaneIntersection(Vector3 rayStartPoint, Vector3 rayDirection, out float distance)
+        public (float, Vector3) PlaneIntersection(Vector3 rayStartPoint, Vector3 rayDirection)
         {
-            float D = -Vector3.Dot(Direction, point1);
-            distance = -(Vector3.Dot(Direction , rayStartPoint) + D) / Vector3.Dot(Direction, rayDirection);
-            return rayDirection * distance;
+            float dotProduct = -Vector3.Dot(Direction, point1);
+            float distance = -(Vector3.Dot(Direction , rayStartPoint) + dotProduct) / Vector3.Dot(Direction, rayDirection);
+            return (distance, rayDirection * distance);
         }
     }
 }

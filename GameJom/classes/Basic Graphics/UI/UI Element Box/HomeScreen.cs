@@ -60,6 +60,9 @@ namespace GameJom
             string jsonString = JsonSerializer.Serialize(afterImage);
             JsonSerializer.Deserialize<AfterImage>(jsonString);
             BaseDraw.CustomEffects.Add(JsonSerializer.Deserialize<AfterImage>(jsonString));
+            testRenderer = new Renderer3D(BaseDraw);
+
+            testRenderer.InstaniatePlaneRendering(new Point(120, 70));
             //File.Create(@"test").Dispose();
             //File.WriteAllText(@"test", "");
         }
@@ -67,6 +70,7 @@ namespace GameJom
         float changeRate = 0.1f;
         MouseState mouseState = new MouseState();
         Rectangle startButton, editButton, pointerLocation = new Rectangle();
+        Renderer3D testRenderer;
 
         Camera BaseDraw = new Camera();
         public void Draw()
@@ -78,24 +82,20 @@ namespace GameJom
             startButton = Font.Print("Start", new Point(100, 100));
             editButton = Font.Print("Edit", new Point(100, 250));
 
-            Renderer3D testrenderer = new Renderer3D(new Camera());
             Camera cam = new Camera();
 
-            _3D_Because_Why_Not.Renderer3D rend = new _3D_Because_Why_Not.Renderer3D(BaseDraw);
             #region 3D grapnics
             // use functions for orbiting with params for orbiting height, speed, etc. should be the most straight forward way to add json compatability
-            rend.UpdateLocation(new Vector3(0, 0 - 16 * (float)Math.Sin(Movement3D), 0 - 16 * (float)Math.Cos(Movement3D)));
-            rend.UpdateDirection(new Vector3(0, 0 - (float)Math.PI * (float)Math.Sin(Movement3D), 0 - (float)Math.PI * (float)Math.Sin(Movement3D)));
-            rend.LookAt(new Vector3());
-
-
-
-            rend.InstaniatePlaneRendering(new Point(215, 135));
+            //testRenderer.UpdateLocation(new Vector3(0, 0 - 16 * (float)Math.Sin(Movement3D), 0 - 16 * (float)Math.Cos(Movement3D)));
+            //testRenderer.UpdateDirection(new Vector3(0, 0 - (float)Math.PI * (float)Math.Sin(Movement3D), 0 - (float)Math.PI * (float)Math.Sin(Movement3D)));
+            //testRenderer.LookAt(new Vector3());
+            testRenderer.UpdateLocation(new Vector3(0 - 16 * (float)Math.Sin(-Movement3D), 0, 0 - 16 * (float)Math.Cos(-Movement3D)));
 
 
 
 
-            _3D_Because_Why_Not.Cuboid cube = new _3D_Because_Why_Not.Cuboid(rend);
+
+            _3D_Because_Why_Not.Cuboid cube = new _3D_Because_Why_Not.Cuboid(testRenderer);
             float suroundingsize = 1.5f;
             int segments = 1;
             cube.DrawCuboid(new Vector3(2, -2, -2), new Vector3(suroundingsize, suroundingsize, suroundingsize), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D - (float)Math.PI / 3, (float)Math.PI / 4));
@@ -124,7 +124,8 @@ namespace GameJom
             cube.DrawCuboid(new Vector3(+4 * (float)Math.Cos(AnimationSpeed3D + 3 * n), +3 * (float)Math.Cos(AnimationSpeed3D + 3 * n), 4 * (float)Math.Sin(AnimationSpeed3D + 3 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D * 4, (float)Math.PI / 4));
             cube.DrawCuboid(new Vector3(+5 * (float)Math.Cos(AnimationSpeed3D + 2 * n), +3 * (float)Math.Cos(AnimationSpeed3D + 2 * n), 5 * (float)Math.Sin(AnimationSpeed3D + 2 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D * 5, (float)Math.PI / 4));
             cube.DrawCuboid(new Vector3(+6 * (float)Math.Cos(AnimationSpeed3D + 1 * n), +3 * (float)Math.Cos(AnimationSpeed3D + 1 * n), 6 * (float)Math.Sin(AnimationSpeed3D + 1 * n)), new Vector3(1, 1, 1), segments, 3, new Vector3((float)Math.PI / 5, -AnimationSpeed3D * 6, (float)Math.PI / 4));
-            rend.RenderAll(new Rectangle(0, 0, 3840, 2160));
+            testRenderer.RenderAll(new Rectangle(0, 0, 3840, 2160));
+            testRenderer.Clear();
             #endregion
 
             graphicsDevice.Clear(new Color((int)bgGradient, (int)bgGradient, (int)bgGradient)); // store in screen folder as the screen's own json
